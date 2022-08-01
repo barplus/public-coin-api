@@ -1,0 +1,3 @@
+com\coin\req\CommonReq.class
+com\coin\entity\Coin.class
+com\coin\rsp\CoinRsp.class
