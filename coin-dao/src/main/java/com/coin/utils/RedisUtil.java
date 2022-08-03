@@ -12,7 +12,9 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RedisUtil {
 
+    @Resource
     private RedisTemplate<String, Object> redisTemplate;
+    @Resource
     private StringRedisTemplate stringRedisTemplate;
     private String namespace = "public-api:";
     private String namespace_office = "public-office:";
