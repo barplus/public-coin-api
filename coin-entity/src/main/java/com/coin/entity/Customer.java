@@ -15,7 +15,7 @@ public class Customer implements Serializable {
     /**轮盘抽奖次数*/
     private Integer rouletteTotalTime;
     /**剩余抽奖次数*/
-    private Integer rouletteSurplusTime;
+    private Integer rouletteUsedTime;
     /**状态 1-正常 0-禁用*/
     private Integer status;
     private String createUser;
@@ -55,12 +55,12 @@ public class Customer implements Serializable {
         this.rouletteTotalTime = rouletteTotalTime;
     }
 
-    public Integer getRouletteSurplusTime() {
-        return rouletteSurplusTime;
+    public Integer getRouletteUsedTime() {
+        return rouletteUsedTime;
     }
 
-    public void setRouletteSurplusTime(Integer rouletteSurplusTime) {
-        this.rouletteSurplusTime = rouletteSurplusTime;
+    public void setRouletteUsedTime(Integer rouletteUsedTime) {
+        this.rouletteUsedTime = rouletteUsedTime;
     }
 
     public Integer getStatus() {

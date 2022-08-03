@@ -73,6 +73,9 @@ public class BizUtil {
                 String fieldName = fieldAndVals[i].toString();
                 Object fieldVal = fieldAndVals[i+1];
                 i++;
+                if(fieldVal == null){
+                    continue;
+                }
                 String methodName = "set" + fieldName.substring(0,1).toUpperCase()+fieldName.substring(1);
                 Method method = clazz.getMethod(methodName, fieldVal.getClass());
                 method.invoke(t, fieldVal);
@@ -86,7 +89,7 @@ public class BizUtil {
 
     public static <T> T getInsertInfo(T t, String createUser, Date date){
         try{
-            BizUtil.getUpdateInfo(t, createUser, date);
+            BizUtil.getUpdateInfo(t, null, createUser, date);
             BizUtil.getNewInfo(t, "createUser", createUser, "createDate", date);
         }catch(Exception e){
             logger.error("BizUtil-getInsertInfo-error", e);
@@ -95,9 +98,9 @@ public class BizUtil {
         return t;
     }
 
-    public static <T> T getUpdateInfo(T t, String updateUser, Date date){
+    public static <T> T getUpdateInfo(T t, Integer id, String updateUser, Date date){
         try{
-            BizUtil.getNewInfo(t, "updateUser", updateUser, "updateDate", date);
+            BizUtil.getNewInfo(t, "id", id, "updateUser", updateUser, "updateDate", date);
         }catch(Exception e){
             logger.error("BizUtil-getUpdateInfo-error", e);
             return null;

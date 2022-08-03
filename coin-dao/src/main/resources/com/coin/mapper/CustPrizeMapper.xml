@@ -6,7 +6,7 @@
         <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
         <result column="login_pass" property="loginPass" jdbcType="VARCHAR"/>
         <result column="roulette_total_time" property="rouletteTotalTime" jdbcType="INTEGER"/>
-        <result column="roulette_surplus_time" property="rouletteSurplusTime" jdbcType="INTEGER"/>
+        <result column="roulette_used_time" property="rouletteUsedTime" jdbcType="INTEGER"/>
         <result column="status" property="status" jdbcType="INTEGER"/>
         <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>

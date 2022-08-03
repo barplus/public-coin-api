@@ -15,9 +15,10 @@ public class PrizeReq extends OfficeReq implements Serializable {
     /**最大数量*/
     private Integer maxNum;
     /**剩余数量*/
-    private Integer surplusNum;
+    private Integer usedNum;
     /**中奖率*/
     private BigDecimal rate;
+    private Integer status;
 
     public String getPrizeName() {
         return prizeName;
@@ -43,12 +44,12 @@ public class PrizeReq extends OfficeReq implements Serializable {
         this.maxNum = maxNum;
     }
 
-    public Integer getSurplusNum() {
-        return surplusNum;
+    public Integer getUsedNum() {
+        return usedNum;
     }
 
-    public void setSurplusNum(Integer surplusNum) {
-        this.surplusNum = surplusNum;
+    public void setUsedNum(Integer usedNum) {
+        this.usedNum = usedNum;
     }
 
     public BigDecimal getRate() {
@@ -57,5 +58,13 @@ public class PrizeReq extends OfficeReq implements Serializable {
 
     public void setRate(BigDecimal rate) {
         this.rate = rate;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

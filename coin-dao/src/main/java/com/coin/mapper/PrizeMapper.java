@@ -9,11 +9,8 @@ import java.util.List;
 public interface PrizeMapper {
 
     Prize getInfoById(@Param("id") Integer id);
-
     Prize getInfoByName(@Param("prizeName") String prizeName);
-
-    void addPrize(Prize prize);
-
     List<Prize> getPrizeList(PrizeReq req);
-
+    void addPrize(Prize prize);
+    void updateById(Prize prize);
 }

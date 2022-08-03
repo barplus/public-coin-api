@@ -16,7 +16,7 @@ public class Prize implements Serializable {
     /**最大投放数*/
     private Integer maxNum;
     /**剩余投放数*/
-    private Integer surplusNum;
+    private Integer usedNum;
     /**中奖率*/
     private BigDecimal rate;
     /**状态：1-正常 0-禁用*/
@@ -58,12 +58,12 @@ public class Prize implements Serializable {
         this.maxNum = maxNum;
     }
 
-    public Integer getSurplusNum() {
-        return surplusNum;
+    public Integer getUsedNum() {
+        return usedNum;
     }
 
-    public void setSurplusNum(Integer surplusNum) {
-        this.surplusNum = surplusNum;
+    public void setUsedNum(Integer usedNum) {
+        this.usedNum = usedNum;
     }
 
     public BigDecimal getRate() {

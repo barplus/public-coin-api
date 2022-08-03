@@ -11,6 +11,7 @@ public class OfficeReq implements Serializable {
     private String loginName;
     private Integer pageNum;
     private Integer pageSize;
+    private Integer id;
 
     public String getLoginName() {
         return loginName;
@@ -34,5 +35,13 @@ public class OfficeReq implements Serializable {
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

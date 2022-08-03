@@ -6,7 +6,7 @@
         <result column="prize_name" property="prizeName" jdbcType="VARCHAR"/>
         <result column="amount" property="amount" jdbcType="INTEGER"/>
         <result column="max_num" property="maxNum" jdbcType="INTEGER"/>
-        <result column="surplus_num" property="surplusNum" jdbcType="INTEGER"/>
+        <result column="used_num" property="usedNum" jdbcType="INTEGER"/>
         <result column="rate" property="rate" jdbcType="DECIMAL"/>
         <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
@@ -27,7 +27,6 @@
             prize_name,
             amount,
             max_num,
-            surplus_num,
             rate,
             create_user,
             create_date,
@@ -38,7 +37,6 @@
 	        #{prizeName},
 	        #{amount},
 	        #{maxNum},
-	        #{surplusNum},
 	        #{rate},
 	        #{createUser},
 	        #{createDate},
@@ -46,6 +44,33 @@
 	        #{updateDate}
 	    )
     </insert>
+
+    <update id="updateById">
+        update t_prize
+        <set>
+            update_user=#{updateUser},
+            update_date=#{updateDate},
+            <if test="prizeName != null">
+                prize_name = #{prizeName},
+            </if>
+            <if test="amount != null">
+                amount = #{amount},
+            </if>
+            <if test="maxNum != null">
+                max_num = #{maxNum},
+            </if>
+            <if test="usedNum != null">
+                used_num = #{usedNum},
+            </if>
+            <if test="rate != null">
+                rate = #{rate},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 
     <select id="getPrizeList" resultMap="prizeMap" parameterType="com.coin.req.office.PrizeReq">
         select *

@@ -32,7 +32,7 @@ public class PrizeController {
     public MyResp login(@RequestBody PrizeReq req) {
         try {
             MyResp valid = ParamUtil.NotBlankValid(req.getPrizeName(), "奖品名称", req.getAmount(), "奖品价值",
-                    req.getMaxNum(), "最大投放数", req.getSurplusNum(), "剩余投放数", req.getRate(), "中奖率");
+                    req.getMaxNum(), "最大投放数", req.getRate(), "中奖率");
             if (valid != null) {
                 return valid;
             }
@@ -43,6 +43,44 @@ public class PrizeController {
             return new MyResp(CodeCons.ERROR, e.getErrMsg());
         }catch(Exception e){
             logger.error("prize-add-Exception", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
+    @PostMapping("/updateStatus")
+    @OfficeSecure
+    public MyResp updateStatus(@RequestBody PrizeReq req) {
+        try {
+            MyResp valid = ParamUtil.NotBlankValid(req.getId(), "id", req.getStatus(), "状态");
+            if (valid != null) {
+                return valid;
+            }
+            prizeService.updateStatus(req);
+            return new MyResp(CodeCons.SUCCESS, "修改成功");
+        }catch (BizException e){
+            logger.error("prize-updateStatus-BizException", e);
+            return new MyResp(CodeCons.ERROR, e.getErrMsg());
+        }catch(Exception e){
+            logger.error("prize-updateStatus-Exception", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
+    @PostMapping("/updateInfo")
+    @OfficeSecure
+    public MyResp updateInfo(@RequestBody PrizeReq req) {
+        try {
+            MyResp valid = ParamUtil.NotBlankValid(req.getId(), "id");
+            if (valid != null) {
+                return valid;
+            }
+            prizeService.updateInfo(req);
+            return new MyResp(CodeCons.SUCCESS, "保存成功");
+        }catch (BizException e){
+            logger.error("prize-updateInfo-BizException", e);
+            return new MyResp(CodeCons.ERROR, e.getErrMsg());
+        }catch(Exception e){
+            logger.error("prize-updateInfo-Exception", e);
         }
         return new MyResp(CodeCons.ERROR, "请求失败");
     }
