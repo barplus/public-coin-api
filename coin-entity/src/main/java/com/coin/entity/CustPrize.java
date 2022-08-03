@@ -8,8 +8,11 @@ public class CustPrize implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
+    /**奖品id*/
     private Integer prizeId;
+    /**奖品名称*/
     private String prizeName;
+    /**会员登录名*/
     private String loginName;
     private String createUser;
     private Date createDate;

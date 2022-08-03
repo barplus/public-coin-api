@@ -1,7 +1,6 @@
 package com.coin.utils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.coin.entity.Coin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -122,10 +121,6 @@ public class BizUtil {
 
     public static void main(String[] args) {
 
-        Coin coin = new Coin();
-        BizUtil.getNewInfo(coin, "loginName", "zhangsan");
-        logger.error("main-zhangsan", coin.getLoginName());
-        System.out.println(coin.getLoginName());
     }
 
 }

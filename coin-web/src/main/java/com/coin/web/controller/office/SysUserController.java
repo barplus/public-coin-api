@@ -29,7 +29,7 @@ public class SysUserController {
     @PostMapping("/login")
     public MyResp login(@RequestBody SysUserReq req){
         try{
-            MyResp valid = ParamUtil.NotBlankValid(req.getLoginName(), "loginName", req.getLoginPass(), "loginPass");
+            MyResp valid = ParamUtil.NotBlankValid(req.getLoginName(), "登录名", req.getLoginPass(), "登陆密码");
             if(valid != null){
                 return valid;
             }

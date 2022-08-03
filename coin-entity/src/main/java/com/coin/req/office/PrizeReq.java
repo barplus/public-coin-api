@@ -1,19 +1,22 @@
 package com.coin.req.office;
 
-import com.coin.req.api.CommonReq;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * 业务用户请求对象
  */
-public class PrizeReq extends CommonReq implements Serializable {
+public class PrizeReq extends OfficeReq implements Serializable {
 
+    /**奖品名*/
     private String prizeName;
+    /**价值*/
     private Integer amount;
+    /**最大数量*/
     private Integer maxNum;
+    /**剩余数量*/
     private Integer surplusNum;
+    /**中奖率*/
     private BigDecimal rate;
 
     public String getPrizeName() {

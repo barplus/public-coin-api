@@ -10,7 +10,7 @@ public class ParamUtil {
     public static MyResp NotNullValid(Object... objs) throws Exception {
         for(int i=0; i<objs.length; i++){
             if(objs[i] == null){
-                return new MyResp(CodeCons.ERROR, objs[i+1]+" 不能为空");
+                return new MyResp(CodeCons.PARAM_ERROR, objs[i+1]+" 不能为空");
             }
         }
         return null;
@@ -19,7 +19,7 @@ public class ParamUtil {
     public static MyResp NotBlankValid(Object... objs) throws Exception {
         for(int i=0; i<objs.length; i++){
             if(StringUtils.isBlank(StrUtil.getStr(objs[i]))){
-                return new MyResp(CodeCons.ERROR, objs[i+1]+" 不能为空");
+                return new MyResp(CodeCons.PARAM_ERROR, objs[i+1]+" 不能为空");
             }
         }
         return null;

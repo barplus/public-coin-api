@@ -9,11 +9,18 @@ public class Prize implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
+    /**奖品名称*/
     private String prizeName;
+    /**奖品价值*/
     private Integer amount;
+    /**最大投放数*/
     private Integer maxNum;
+    /**剩余投放数*/
     private Integer surplusNum;
+    /**中奖率*/
     private BigDecimal rate;
+    /**状态：1-正常 0-禁用*/
+    private Integer status;
     private String createUser;
     private Date createDate;
     private String updateUser;
@@ -97,5 +104,13 @@ public class Prize implements Serializable {
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

@@ -18,4 +18,23 @@
         select * from t_customer t where t.login_name = #{loginName}
     </select>
 
+    <insert id="createCustomer">
+        INSERT INTO t_customer(
+            login_name,
+            login_pass,
+            create_user,
+            create_date,
+            update_user,
+            update_date
+        )
+	    VALUES(
+	        #{loginName},
+	        #{loginPass},
+	        #{createUser},
+	        #{createDate},
+	        #{updateUser},
+	        #{updateDate}
+	    )
+    </insert>
+
 </mapper>

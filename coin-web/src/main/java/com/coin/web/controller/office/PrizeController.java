@@ -1,0 +1,66 @@
+package com.coin.web.controller.office;
+
+import com.coin.entity.Prize;
+import com.coin.req.office.PrizeReq;
+import com.coin.service.BizEntity.MyResp;
+import com.coin.service.PrizeService;
+import com.coin.service.constant.CodeCons;
+import com.coin.service.exception.BizException;
+import com.coin.service.util.ParamUtil;
+import com.coin.web.annotation.OfficeSecure;
+import com.github.pagehelper.PageInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+
+@RestController
+@RequestMapping("/prize")
+public class PrizeController {
+
+    private static final Logger logger = LoggerFactory.getLogger(PrizeController.class);
+
+    @Resource
+    private PrizeService prizeService;
+
+    @PostMapping("/add")
+    @OfficeSecure
+    public MyResp login(@RequestBody PrizeReq req) {
+        try {
+            MyResp valid = ParamUtil.NotBlankValid(req.getPrizeName(), "奖品名称", req.getAmount(), "奖品价值",
+                    req.getMaxNum(), "最大投放数", req.getSurplusNum(), "剩余投放数", req.getRate(), "中奖率");
+            if (valid != null) {
+                return valid;
+            }
+            prizeService.addPrize(req);
+            return new MyResp(CodeCons.SUCCESS, "保存成功");
+        }catch (BizException e){
+            logger.error("prize-add-BizException", e);
+            return new MyResp(CodeCons.ERROR, e.getErrMsg());
+        }catch(Exception e){
+            logger.error("prize-add-Exception", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
+    @PostMapping("/pageList")
+    @OfficeSecure
+    public MyResp pageList(@RequestBody PrizeReq req){
+        try{
+            MyResp valid = ParamUtil.NotBlankValid(req.getPageNum(), "页码", req.getPageSize(), "分页大小");
+            if(valid != null){
+                return valid;
+            }
+            PageInfo<Prize> page = prizeService.pageList(req);
+            return new MyResp(CodeCons.SUCCESS, "", page);
+        }catch(Exception e){
+            logger.error("prize-add-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
+}
