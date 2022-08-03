@@ -7,6 +7,7 @@ import com.coin.service.SysUserService;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.util.MD5Util;
 import com.coin.service.util.ParamUtil;
+import com.coin.utils.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,11 +25,15 @@ public class SysUserController {
 
     @Resource
     private SysUserService userService;
+    @Resource
+    private RedisUtil redisUtil;
 
     @PostMapping("/login")
     public MyResp login(@RequestBody SysUserReq req){
         try{
-            MyResp valid = ParamUtil.NotEmptyValid(req.getLoginName(), "loginName", req.getLoginPass(), "loginPass");
+            redisUtil.set("name", "zhangsan");
+            Object o = redisUtil.get("name");
+            MyResp valid = ParamUtil.NotBlankValid(req.getLoginName(), "loginName", req.getLoginPass(), "loginPass");
             if(valid != null){
                 return valid;
             }

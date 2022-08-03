@@ -85,6 +85,27 @@ public class BizUtil {
         return t;
     }
 
+    public static <T> T getInsertInfo(T t, String createUser, Date date){
+        try{
+            BizUtil.getUpdateInfo(t, createUser, date);
+            BizUtil.getNewInfo(t, "createUser", createUser, "createDate", date);
+        }catch(Exception e){
+            logger.error("BizUtil-getInsertInfo-error", e);
+            return null;
+        }
+        return t;
+    }
+
+    public static <T> T getUpdateInfo(T t, String updateUser, Date date){
+        try{
+            BizUtil.getNewInfo(t, "updateUser", updateUser, "updateDate", date);
+        }catch(Exception e){
+            logger.error("BizUtil-getUpdateInfo-error", e);
+            return null;
+        }
+        return t;
+    }
+
     /**
      * 对象转fastjson
      * @param obj

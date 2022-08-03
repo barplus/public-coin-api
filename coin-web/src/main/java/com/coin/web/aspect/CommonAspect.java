@@ -1,6 +1,6 @@
 package com.coin.web.aspect;
 
-import com.coin.req.CommonReq;
+import com.coin.req.api.CommonReq;
 import com.coin.utils.StrUtil;
 import com.coin.web.annotation.CommonSecure;
 import org.aspectj.lang.ProceedingJoinPoint;

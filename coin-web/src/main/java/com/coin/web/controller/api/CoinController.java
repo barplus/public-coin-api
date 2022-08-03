@@ -1,7 +1,7 @@
 package com.coin.web.controller.api;
 
 import com.coin.entity.Coin;
-import com.coin.req.CommonReq;
+import com.coin.req.api.CommonReq;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.CoinService;
 import com.coin.service.constant.CodeCons;

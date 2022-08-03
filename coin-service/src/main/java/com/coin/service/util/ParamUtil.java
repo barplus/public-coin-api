@@ -16,7 +16,7 @@ public class ParamUtil {
         return null;
     }
 
-    public static MyResp NotEmptyValid(Object... objs) throws Exception {
+    public static MyResp NotBlankValid(Object... objs) throws Exception {
         for(int i=0; i<objs.length; i++){
             if(StringUtils.isBlank(StrUtil.getStr(objs[i]))){
                 return new MyResp(CodeCons.ERROR, objs[i+1]+" 不能为空");

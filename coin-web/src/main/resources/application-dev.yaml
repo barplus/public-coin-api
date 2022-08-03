@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8088
 spring:
   datasource:
     username: root
@@ -10,6 +10,18 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 20MB
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password:
+    timeout: 2000
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
 mybatis:
   mapper-locations: classpath*:/com/coin/mapper/*.xml
   type-aliases-package: com.coin.entity
