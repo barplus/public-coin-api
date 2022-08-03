@@ -1,4 +1,4 @@
-package com.coin.web.controller.office;
+package com.coin.web.controller;
 
 import com.coin.entity.Prize;
 import com.coin.req.office.PrizeReq;

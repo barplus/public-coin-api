@@ -1,9 +1,9 @@
-package com.coin.web.controller.api;
+package com.coin.web.controller;
 
-import com.coin.entity.Customer;
-import com.coin.req.api.CustomerReq;
+import com.coin.entity.SysUser;
+import com.coin.req.office.SysUserReq;
 import com.coin.service.BizEntity.MyResp;
-import com.coin.service.CustomerService;
+import com.coin.service.SysUserService;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.util.MD5Util;
 import com.coin.service.util.ParamUtil;
@@ -17,33 +17,36 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 @RestController
-@RequestMapping("/customer")
-public class CustomerController {
+@RequestMapping("/user")
+public class SysUserController {
 
-    private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
+    private static final Logger logger = LoggerFactory.getLogger(SysUserController.class);
 
     @Resource
-    private CustomerService customerService;
+    private SysUserService userService;
 
     @PostMapping("/login")
-    public MyResp login(@RequestBody CustomerReq req){
+    public MyResp login(@RequestBody SysUserReq req){
         try{
             MyResp valid = ParamUtil.NotBlankValid(req.getLoginName(), "登录名", req.getLoginPass(), "登陆密码");
             if(valid != null){
                 return valid;
             }
-            Customer customer = customerService.getInfoByLoginName(req.getLoginName());
-            if(customer == null){
-                customerService.createCustomer(req.getLoginName(), MD5Util.MD5(req.getLoginPass()));
-                customer = customerService.getInfoByLoginName(req.getLoginName());
+            SysUser user = userService.getUserByLoginName(req.getLoginName());
+            if(user == null){
+                return new MyResp(CodeCons.ERROR, "用户不存在");
             }
-            if(!MD5Util.MD5(req.getLoginPass()).equals(customer.getLoginPass())){
+
+            if(!MD5Util.MD5(req.getLoginPass()).equals(user.getLoginPass())){
                 return new MyResp(CodeCons.ERROR, "密码输入错误");
             }
-            customer.setLoginPass(null);
-            return new MyResp(CodeCons.SUCCESS, "", customer);
+            if(user.getStatus().intValue() == 0){
+                return new MyResp(CodeCons.ERROR, "用户已被禁用");
+            }
+            user.setLoginPass(null);
+            return new MyResp(CodeCons.SUCCESS, "", user);
         }catch(Exception e){
-            logger.error("customer-login-error", e);
+            logger.error("getCoins-error", e);
         }
         return new MyResp(CodeCons.ERROR, "请求失败");
     }

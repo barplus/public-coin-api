@@ -29,7 +29,7 @@ public class OfficeAspect {
     @Resource
     private SysUserService sysUserService;
 
-    @Around(value="within(com.coin.web.controller.office.*Controller) && @annotation(officeSecure)")
+    @Around(value="within(com.coin.web.controller.*Controller) && @annotation(officeSecure)")
     public Object officeSecure(ProceedingJoinPoint pj, OfficeSecure officeSecure){
         try{
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();

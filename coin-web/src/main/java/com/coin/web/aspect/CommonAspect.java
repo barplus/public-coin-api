@@ -23,7 +23,7 @@ public class CommonAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(CommonAspect.class);
 
-    @Around(value="within(com.coin.web.controller.api.*Controller) && @annotation(commonSecure)")
+    @Around(value="within(com.coin.web.controller.*Controller) && @annotation(commonSecure)")
     public Object commonSecure(ProceedingJoinPoint pj, CommonSecure commonSecure){
         try{
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
