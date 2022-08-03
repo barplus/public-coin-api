@@ -13,3 +13,8 @@ spring:
 mybatis:
   mapper-locations: classpath*:/com/coin/mapper/*.xml
   type-aliases-package: com.coin.entity
+pagehelper:
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countsql
+  auto-dialect: mysql

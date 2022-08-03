@@ -1,9 +1,9 @@
 package com.coin.service;
 
-import com.coin.entity.Prize;
+import com.coin.entity.Customer;
 
 public interface CustomerService {
 
-    Prize getInfoById(Integer id) throws Exception;
+    Customer getInfoByLoginName(String loginName) throws Exception;
 
 }
