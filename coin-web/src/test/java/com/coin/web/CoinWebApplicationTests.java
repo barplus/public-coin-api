@@ -1,12 +1,12 @@
 package com.coin.web;
 
-import com.coin.service.BizEntity.MyResp;
 import com.coin.utils.BizUtil;
-import com.coin.web.controller.api.CoinController;
+import com.coin.web.controller.CoinController;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 @SpringBootTest
 class CoinWebApplicationTests {
@@ -16,8 +16,8 @@ class CoinWebApplicationTests {
 
     @Test
     void test() {
-        MyResp resp = controller.getCoins(null);
-        System.out.println(BizUtil.objToJson(resp).toJSONString());
+        Map<String, Object> map = controller.getCoins(null);
+        System.out.println(BizUtil.objToJson(map).toJSONString());
     }
 
 }

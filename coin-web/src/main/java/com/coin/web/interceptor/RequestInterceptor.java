@@ -1,6 +1,5 @@
 package com.coin.web.interceptor;
 
-import com.coin.service.constant.CodeCons;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +15,7 @@ public class RequestInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handle) throws Exception{
         int i = 0;
         if(i == 1){
-            setJsonMessage(response, CodeCons.ERROR, "请求失败，异常");
+            setJsonMessage(response, "9999", "请求失败，异常");
             return false;
         }
         return true;

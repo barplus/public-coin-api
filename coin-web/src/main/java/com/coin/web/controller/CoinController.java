@@ -1,17 +1,15 @@
-package com.coin.web.controller.api;
+package com.coin.web.controller;
 
-import com.coin.entity.Coin;
-import com.coin.req.api.CommonReq;
-import com.coin.service.BizEntity.MyResp;
+import com.coin.req.CommonReq;
 import com.coin.service.CoinService;
-import com.coin.service.constant.CodeCons;
 import com.coin.web.annotation.CommonSecure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/coin")
@@ -22,16 +20,20 @@ public class CoinController {
     @Resource
     private CoinService coinService;
 
+    @ResponseBody
     @PostMapping("/getCoins")
     @CommonSecure
-    public MyResp getCoins(@RequestBody CommonReq req){
+    public Map<String, Object> getCoins(CommonReq req){
+        Map<String, Object> map = new HashMap<>();
         try{
-            List<Coin> list = coinService.getCoins();
-            return new MyResp(CodeCons.SUCCESS, "", list);
+            map.put("status", 0000);
+            map.put("body", coinService.getCoins());
+            return map;
         }catch(Exception e){
             logger.error("getCoins-error", e);
+            map.put("status", 9999);
         }
-        return new MyResp(CodeCons.ERROR, "请求失败");
+        return map;
     }
 
 }
