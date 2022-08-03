@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coin.mapper.PrizeMapper">
+    <resultMap id="prizeMap" type="com.coin.entity.Prize">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="prize_name" property="prizeName" jdbcType="VARCHAR"/>
+        <result column="amount" property="amount" jdbcType="INTEGER"/>
+        <result column="maxNum" property="maxNum" jdbcType="INTEGER"/>
+        <result column="surplusNum" property="surplusNum" jdbcType="INTEGER"/>
+        <result column="rate" property="rate" jdbcType="DECIMAL"/>
+        <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="getInfoById" resultMap="prizeMap">
+        select * from t_prize t where t.id = #{id}
+    </select>
+
+</mapper>

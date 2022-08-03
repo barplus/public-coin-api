@@ -1,6 +1,6 @@
 package com.coin.web.controller;
 
-import com.coin.req.CommonReq;
+import com.coin.req.api.CommonReq;
 import com.coin.service.CoinService;
 import com.coin.web.annotation.CommonSecure;
 import org.slf4j.Logger;

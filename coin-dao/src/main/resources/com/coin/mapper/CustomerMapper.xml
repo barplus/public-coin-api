@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coin.mapper.CustomerMapper">
+    <resultMap id="customerMap" type="com.coin.entity.Customer">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
+        <result column="login_pass" property="loginPass" jdbcType="VARCHAR"/>
+        <result column="roulette_total_time" property="rouletteTotalTime" jdbcType="INTEGER"/>
+        <result column="roulette_surplus_time" property="rouletteSurplusTime" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="getInfoByLoginName" resultMap="customerMap">
+        select * from t_customer t where t.login_name = #{loginName}
+    </select>
+
+</mapper>

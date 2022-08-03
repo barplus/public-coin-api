@@ -1,17 +1,14 @@
 package com.coin.web.aspect;
 
-import com.coin.req.CommonReq;
+import com.coin.req.api.CommonReq;
 import com.coin.utils.StrUtil;
 import com.coin.web.annotation.CommonSecure;
-import com.coin.web.controller.CoinController;
-import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
