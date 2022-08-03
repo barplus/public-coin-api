@@ -1,8 +1,7 @@
 package com.coin.web.aspect;
 
-import com.coin.req.api.CommonReq;
-import com.coin.utils.StrUtil;
-import com.coin.web.annotation.CommonSecure;
+import com.coin.req.office.OfficeReq;
+import com.coin.web.annotation.OfficeSecure;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -18,30 +17,31 @@ import javax.servlet.http.HttpServletResponse;
 
 @Aspect
 @Component
-@Order(3)
-public class CommonAspect {
+@Order(6)
+public class OfficeAspect {
 
-    private static final Logger logger = LoggerFactory.getLogger(CommonAspect.class);
+    private static final Logger logger = LoggerFactory.getLogger(OfficeAspect.class);
 
-    @Around(value="within(com.coin.web.controller.api.*Controller) && @annotation(commonSecure)")
-    public Object commonSecure(ProceedingJoinPoint pj, CommonSecure commonSecure){
+    @Around(value="within(com.coin.web.controller.office.*Controller) && @annotation(officeSecure)")
+    public Object officeSecure(ProceedingJoinPoint pj, OfficeSecure officeSecure){
         try{
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
             HttpServletResponse response = attributes.getResponse();
-            CommonReq req = null;
+            OfficeReq req = null;
             for(Object obj:pj.getArgs()){
-                if(obj instanceof CommonReq){
-                    req = (CommonReq)obj;
+                if(obj instanceof OfficeReq){
+                    req = (OfficeReq)obj;
                     break;
                 }
             }
-            String token = StrUtil.getStr(request.getAttribute("token"));
+            String loginName = request.getHeader("loginName");
+            req.setLoginName(loginName);
             return pj.proceed();
         } catch (Exception e){
-            logger.error("commonSecure-ex", e);
+            logger.error("officeSecure-ex", e);
         } catch (Throwable t) {
-            logger.error("commonSecure-tb", t);
+            logger.error("officeSecure-tb", t);
         }
         return null;
     }
