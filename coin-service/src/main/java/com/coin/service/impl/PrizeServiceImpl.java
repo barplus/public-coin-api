@@ -2,12 +2,12 @@ package com.coin.service.impl;
 
 import com.coin.entity.Prize;
 import com.coin.mapper.PrizeMapper;
-import com.coin.req.office.PrizeReq;
+import com.coin.req.PrizeReq;
 import com.coin.service.PrizeService;
 import com.coin.service.constant.BizCons;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.exception.BizException;
-import com.coin.utils.BizUtil;
+import com.coin.service.util.BizUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;

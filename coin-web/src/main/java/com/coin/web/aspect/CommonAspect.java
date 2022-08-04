@@ -1,12 +1,12 @@
 package com.coin.web.aspect;
 
 import com.coin.entity.Customer;
-import com.coin.req.api.CommonReq;
+import com.coin.req.CommonReq;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.CustomerService;
 import com.coin.service.constant.CodeCons;
-import com.coin.utils.RedisUtil;
-import com.coin.utils.StrUtil;
+import com.coin.service.util.RedisUtil;
+import com.coin.service.util.StrUtil;
 import com.coin.web.annotation.CommonSecure;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;

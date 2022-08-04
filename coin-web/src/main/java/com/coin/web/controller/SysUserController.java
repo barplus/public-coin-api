@@ -1,7 +1,7 @@
 package com.coin.web.controller;
 
 import com.coin.entity.SysUser;
-import com.coin.req.office.SysUserReq;
+import com.coin.req.SysUserReq;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.SysUserService;
 import com.coin.service.constant.CodeCons;
@@ -27,6 +27,7 @@ public class SysUserController {
 
     @PostMapping("/login")
     public MyResp login(@RequestBody SysUserReq req){
+        logger.info("user-login-req={}", req);
         try{
             MyResp valid = ParamUtil.NotBlankValid(req.getLoginName(), "登录名", req.getLoginPass(), "登陆密码");
             if(valid != null){

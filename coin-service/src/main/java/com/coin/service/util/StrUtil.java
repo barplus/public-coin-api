@@ -1,4 +1,4 @@
-package com.coin.utils;
+package com.coin.service.util;
 
 public class StrUtil {
 

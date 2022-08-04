@@ -1,8 +1,8 @@
 package com.coin.web;
 
-import com.coin.req.office.SysUserReq;
+import com.coin.req.SysUserReq;
 import com.coin.service.BizEntity.MyResp;
-import com.coin.utils.BizUtil;
+import com.coin.service.util.BizUtil;
 import com.coin.web.controller.SysUserController;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

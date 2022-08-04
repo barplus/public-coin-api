@@ -2,15 +2,15 @@ package com.coin.web.controller;
 
 import com.coin.entity.Customer;
 import com.coin.entity.Prize;
-import com.coin.req.api.CommonReq;
-import com.coin.req.api.CustomerReq;
+import com.coin.req.CommonReq;
+import com.coin.req.CustomerReq;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.CustomerService;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.exception.BizException;
 import com.coin.service.util.MD5Util;
 import com.coin.service.util.ParamUtil;
-import com.coin.utils.RedisUtil;
+import com.coin.service.util.RedisUtil;
 import com.coin.web.annotation.CommonSecure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +35,7 @@ public class CustomerController {
     @PostMapping("/login")
     @CommonSecure
     public MyResp login(@RequestBody CustomerReq req){
+        logger.info("customer-login-req={}", req);
         try{
             MyResp valid = ParamUtil.NotBlankValid(req.getLoginName(), "登录名", req.getLoginPass(), "登陆密码");
             if(valid != null){
@@ -61,6 +62,7 @@ public class CustomerController {
     @PostMapping("/doLottery")
     @CommonSecure
     public MyResp doLottery(@RequestBody CommonReq req){
+        logger.info("customer-doLottery-req={}", req);
         try{
             Prize prize = customerService.doLottery(req.getLoginName());
             if(prize == null){

@@ -1,7 +1,7 @@
 package com.coin.web.aspect;
 
 import com.coin.entity.SysUser;
-import com.coin.req.office.OfficeReq;
+import com.coin.req.OfficeReq;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.SysUserService;
 import com.coin.service.constant.CodeCons;

@@ -2,7 +2,6 @@ package com.coin.service.util;
 
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.constant.CodeCons;
-import com.coin.utils.StrUtil;
 import org.apache.commons.lang3.StringUtils;
 
 public class ParamUtil {

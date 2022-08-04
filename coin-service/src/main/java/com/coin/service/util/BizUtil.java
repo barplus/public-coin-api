@@ -1,12 +1,16 @@
-package com.coin.utils;
+package com.coin.service.util;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.coin.entity.Prize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 public class BizUtil {
@@ -122,8 +126,26 @@ public class BizUtil {
         return json;
     }
 
-    public static void main(String[] args) {
+    public static JSONArray objToJsonArr(Object obj){
+        if(obj == null){
+            return null;
+        }
+        String jsonStr = JSONObject.toJSONString(obj);
+        JSONArray array = JSONArray.parseArray(jsonStr);
+        return array;
+    }
 
+    public static void main(String[] args) {
+        List<Prize> list = new ArrayList<>();
+        Prize p = new Prize();
+        p.setMaxNum(1);
+        p.setPrizeName("A");
+        Prize p1 = new Prize();
+        p1.setMaxNum(2);
+        p1.setPrizeName("B");
+        list.add(p);
+        list.add(p1);
+        System.out.println(BizUtil.objToJsonArr(list));
     }
 
 }

@@ -4,7 +4,7 @@ import com.coin.entity.CustPrize;
 import com.coin.entity.Prize;
 import com.coin.mapper.CustPrizeMapper;
 import com.coin.service.CustPrizeService;
-import com.coin.utils.BizUtil;
+import com.coin.service.util.BizUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

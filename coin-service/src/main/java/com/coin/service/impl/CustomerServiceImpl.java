@@ -4,12 +4,12 @@ import com.coin.entity.Customer;
 import com.coin.entity.Prize;
 import com.coin.mapper.CustomerMapper;
 import com.coin.mapper.PrizeMapper;
-import com.coin.req.office.PrizeReq;
+import com.coin.req.PrizeReq;
 import com.coin.service.CustPrizeService;
 import com.coin.service.CustomerService;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.exception.BizException;
-import com.coin.utils.BizUtil;
+import com.coin.service.util.BizUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -69,8 +69,9 @@ public class CustomerServiceImpl implements CustomerService {
             list.add(num);
             maxNum += num;
         }
-        int randomNum = new Random().nextInt(10000)+1;
-        logger.info("{} - doLottery, maxNum={}, randomNum={}, prizeList={}", loginName, maxNum, randomNum, prizeList);
+        int randomBaseNum = maxNum>10000?maxNum:10000;
+        int randomNum = new Random().nextInt(randomBaseNum)+1;
+        logger.info("{} - doLottery, maxNum={}, randomNum={}, prizeList={}", loginName, maxNum, randomNum, BizUtil.objToJsonArr(prizeList));
         if(randomNum > maxNum){
             this.addCustPrize(loginName, null, "addCustPrize-2");
             return null;

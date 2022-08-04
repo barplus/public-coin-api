@@ -1,7 +1,7 @@
 package com.coin.web.controller;
 
 import com.coin.entity.Prize;
-import com.coin.req.office.PrizeReq;
+import com.coin.req.PrizeReq;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.PrizeService;
 import com.coin.service.constant.CodeCons;
@@ -30,6 +30,7 @@ public class PrizeController {
     @PostMapping("/add")
     @OfficeSecure
     public MyResp login(@RequestBody PrizeReq req) {
+        logger.info("prize-login-req={}", req);
         try {
             MyResp valid = ParamUtil.NotBlankValid(req.getPrizeName(), "奖品名称", req.getAmount(), "奖品价值",
                     req.getMaxNum(), "最大投放数", req.getRate(), "中奖率");
@@ -50,6 +51,7 @@ public class PrizeController {
     @PostMapping("/updateStatus")
     @OfficeSecure
     public MyResp updateStatus(@RequestBody PrizeReq req) {
+        logger.info("prize-updateStatus-req={}", req);
         try {
             MyResp valid = ParamUtil.NotBlankValid(req.getId(), "id", req.getStatus(), "状态");
             if (valid != null) {
@@ -69,6 +71,7 @@ public class PrizeController {
     @PostMapping("/updateInfo")
     @OfficeSecure
     public MyResp updateInfo(@RequestBody PrizeReq req) {
+        logger.info("prize-updateInfo-req={}", req);
         try {
             MyResp valid = ParamUtil.NotBlankValid(req.getId(), "id");
             if (valid != null) {
@@ -88,11 +91,13 @@ public class PrizeController {
     @PostMapping("/pageList")
     @OfficeSecure
     public MyResp pageList(@RequestBody PrizeReq req){
+        logger.info("prize-pageList-req={}", req);
         try{
             MyResp valid = ParamUtil.NotBlankValid(req.getPageNum(), "页码", req.getPageSize(), "分页大小");
             if(valid != null){
                 return valid;
             }
+            req.setNameLike("Y");
             PageInfo<Prize> page = prizeService.pageList(req);
             return new MyResp(CodeCons.SUCCESS, "", page);
         }catch(Exception e){

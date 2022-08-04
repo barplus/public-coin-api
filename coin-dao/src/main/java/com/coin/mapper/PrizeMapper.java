@@ -1,7 +1,7 @@
 package com.coin.mapper;
 
 import com.coin.entity.Prize;
-import com.coin.req.office.PrizeReq;
+import com.coin.req.PrizeReq;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
