@@ -1,7 +1,7 @@
 package com.coin.web.aspect;
 
 import com.coin.entity.SysUser;
-import com.coin.req.OfficeReq;
+import com.coin.req.CommonReq;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.SysUserService;
 import com.coin.service.constant.CodeCons;
@@ -34,10 +34,10 @@ public class OfficeAspect {
         try{
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
-            OfficeReq req = null;
+            CommonReq req = null;
             for(Object obj:pj.getArgs()){
-                if(obj instanceof OfficeReq){
-                    req = (OfficeReq)obj;
+                if(obj instanceof CommonReq){
+                    req = (CommonReq)obj;
                     break;
                 }
             }

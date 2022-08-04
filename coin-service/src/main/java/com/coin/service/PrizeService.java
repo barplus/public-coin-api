@@ -1,7 +1,7 @@
 package com.coin.service;
 
 import com.coin.entity.Prize;
-import com.coin.req.office.PrizeReq;
+import com.coin.req.PrizeReq;
 import com.github.pagehelper.PageInfo;
 
 public interface PrizeService {

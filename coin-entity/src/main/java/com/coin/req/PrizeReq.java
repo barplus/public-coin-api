@@ -9,7 +9,7 @@ import java.math.BigDecimal;
  * 业务用户请求对象
  */
 @Data
-public class PrizeReq extends OfficeReq implements Serializable {
+public class PrizeReq extends CommonReq implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

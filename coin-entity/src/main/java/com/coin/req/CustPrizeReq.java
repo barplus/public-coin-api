@@ -8,7 +8,7 @@ import java.io.Serializable;
  * 客户抽奖记录请求对象
  */
 @Data
-public class CustPrizeReq extends OfficeReq implements Serializable {
+public class CustPrizeReq extends CommonReq implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
