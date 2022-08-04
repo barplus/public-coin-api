@@ -5,6 +5,7 @@ import com.coin.entity.Prize;
 import com.coin.req.CommonReq;
 import com.coin.req.CustomerReq;
 import com.coin.service.BizEntity.MyResp;
+import com.coin.service.CustPrizeService;
 import com.coin.service.CustomerService;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.exception.BizException;
@@ -30,6 +31,8 @@ public class CustomerController {
     @Resource
     private CustomerService customerService;
     @Resource
+    private CustPrizeService custPrizeService;
+    @Resource
     private RedisUtil redisUtil;
 
     @PostMapping("/login")
@@ -40,6 +43,9 @@ public class CustomerController {
             MyResp valid = ParamUtil.NotBlankValid(req.getLoginName(), "登录名", req.getLoginPass(), "登陆密码");
             if(valid != null){
                 return valid;
+            }
+            if(req.getLoginName().length() < 4){
+                return new MyResp(CodeCons.ERROR, "登录名格式错误");
             }
             Customer customer = customerService.getInfoByLoginName(req.getLoginName());
             if(customer == null){
@@ -64,7 +70,7 @@ public class CustomerController {
     public MyResp doLottery(@RequestBody CommonReq req){
         logger.info("customer-doLottery-req={}", req);
         try{
-            Prize prize = customerService.doLottery(req.getLoginName());
+            Prize prize = custPrizeService.doLottery(req.getLoginName());
             if(prize == null){
                 return new MyResp(CodeCons.SUCCESS, "本次抽奖未中奖，请您再接再厉", null);
             }

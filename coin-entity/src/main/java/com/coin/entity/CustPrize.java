@@ -17,6 +17,8 @@ public class CustPrize implements Serializable {
     private String prizeName;
     /**会员登录名*/
     private String loginName;
+    /**滚动条获取时间*/
+    private Date requestDate;
     private String createUser;
     private Date createDate;
     private String updateUser;

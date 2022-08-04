@@ -56,9 +56,9 @@ public class CommonAspect {
             if(StringUtils.isBlank(loginName)){
                 return new MyResp(CodeCons.LOGIN_OUT, "登录已过期，请重新登录");
             }
-//            if(!redisUtil.setNx(loginName+method, "1", 3)){
-//                return new MyResp(CodeCons.ERROR, "请求太快，请稍后");
-//            }
+            if(!redisUtil.setNx(loginName+method, "1", 3)){
+                return new MyResp(CodeCons.ERROR, "请求太快，请稍后");
+            }
             if(!ArrayUtils.contains(noLoginPath, method)){
                 Customer customer = customerService.getInfoByLoginName(loginName);
                 if(customer == null || customer.getStatus() != 1){

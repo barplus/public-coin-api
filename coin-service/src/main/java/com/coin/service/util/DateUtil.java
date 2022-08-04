@@ -1,5 +1,6 @@
 package com.coin.service.util;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +28,10 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(DateUtil.getNoTimeDate(new Date()));
+        Date date = DateUtil.getNoTimeDate(new Date());
+        date = DateUtil.addDays(date, -1);
+        String dateStr = DateFormatUtils.format(date, "yyyy-MM-dd");
+        System.out.println(dateStr);
     }
 
 }

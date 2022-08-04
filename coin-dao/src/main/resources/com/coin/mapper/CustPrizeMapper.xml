@@ -3,11 +3,10 @@
 <mapper namespace="com.coin.mapper.CustPrizeMapper">
     <resultMap id="custPrizeMap" type="com.coin.entity.CustPrize">
         <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="prize_id" property="prizeId" jdbcType="INTEGER"/>
+        <result column="prize_name" property="prizeName" jdbcType="VARCHAR"/>
         <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
-        <result column="login_pass" property="loginPass" jdbcType="VARCHAR"/>
-        <result column="roulette_total_time" property="rouletteTotalTime" jdbcType="INTEGER"/>
-        <result column="roulette_used_time" property="rouletteUsedTime" jdbcType="INTEGER"/>
-        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="request_date" property="requestDate" jdbcType="TIMESTAMP"/>
         <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
         <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
@@ -17,6 +16,52 @@
     <select id="getInfoById" resultMap="custPrizeMap">
         select * from t_cust_prize t where t.id = #{id}
     </select>
+
+    <select id="getCustPrizeList" resultMap="custPrizeMap" parameterType="com.coin.req.CustPrizeReq">
+        select *
+        from t_cust_prize t
+        where t.login_name = #{loginName}
+        and t.create_date &lt; #{maxDate}
+        and t.create_date &gt;= #{minDate}
+        <if test="dataType != null">
+            <if test="dataType == 1">
+                and t.prize_name is not null
+            </if>
+            <if test="dataType == 0">
+                and t.prize_name is null
+            </if>
+        </if>
+        order by id desc
+    </select>
+
+    <select id="getTwoCustPrize30s" resultMap="custPrizeMap">
+        select *
+        from t_cust_prize t
+        where t.request_date > DATE_SUB(NOW(),INTERVAL 30 SECOND)
+        order by t.request_date desc
+        limit 2
+    </select>
+
+    <select id="getTwoCustPrize" resultMap="custPrizeMap">
+        select *
+        from t_cust_prize t
+        where t.request_date is null
+        and t.prize_id is not null
+        order by t.create_date
+        limit 2
+    </select>
+
+    <update id="updateById">
+        update t_cust_prize
+        <set>
+            update_user=#{updateUser},
+            update_date=#{updateDate},
+            <if test="requestDate != null">
+                request_date = #{requestDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 
     <insert id="addCustPrize">
         INSERT INTO t_cust_prize(

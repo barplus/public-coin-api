@@ -15,31 +15,11 @@ public class RedisUtil {
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
-    @Resource
-    private StringRedisTemplate stringRedisTemplate;
     private String namespace = "public-api-office:";
-
-    public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {
-        this.redisTemplate = redisTemplate;
-    }
-
-    public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
-        this.stringRedisTemplate = stringRedisTemplate;
-    }
-
-    public void setNamespace(String namespace) {
-        if (namespace != null)
-            this.namespace = namespace + ":";
-    }
 
     public void set(String k, Object v, long time) {
         String key = namespace + k;
-        if (v instanceof String && stringRedisTemplate != null) {
-            stringRedisTemplate.opsForValue().set(key, (String) v);
-        } else {
-            redisTemplate.opsForValue().set(key, v);
-        }
-        if (time > 0) redisTemplate.expire(key, time, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(key, v, time, TimeUnit.SECONDS);
     }
 
     public void set(String k, Object v) {
@@ -51,11 +31,7 @@ public class RedisUtil {
     }
 
     public String get(String k) {
-        if (stringRedisTemplate != null) {
-            return stringRedisTemplate.opsForValue().get(namespace + k);
-        } else {
-            return (String) redisTemplate.opsForValue().get(namespace + k);
-        }
+        return (String) redisTemplate.opsForValue().get(namespace + k);
     }
 
     public <T> T getObject(String k) {

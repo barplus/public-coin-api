@@ -3,6 +3,7 @@ package com.coin.req;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 客户抽奖记录请求对象
@@ -16,5 +17,9 @@ public class CustPrizeReq extends CommonReq implements Serializable {
     private Integer dateType;
     /**请求数据类型：*/
     private Integer dataType;
+    /**最小时间*/
+    private Date minDate;
+    /**最大时间*/
+    private Date maxDate;
 
 }

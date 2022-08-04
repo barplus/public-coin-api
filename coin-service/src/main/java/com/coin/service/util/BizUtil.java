@@ -135,17 +135,52 @@ public class BizUtil {
         return array;
     }
 
+    /**
+     * 生成指定长度随机串，
+     * @param length 长度
+     * @param type 1-固定是字母 2-固定是数字 0-数字或字母
+     * @return
+     */
+    public static String getStringRandom(int length, int type) {
+        String val = "";
+        Random random = new Random();
+        // 参数length，表示生成几位随机数
+        for (int i = 0; i < length; i++) {
+            String charOrNum = random.nextInt(2) % 2 == 0 ? "char" : "num";
+            if(type == 1){
+                charOrNum = "char";
+            }
+            if(type == 2){
+                charOrNum = "num";
+            }
+            // 输出字母还是数字
+            if ("char".equalsIgnoreCase(charOrNum)) {
+                // 输出是大写字母还是小写字母
+                int temp = random.nextInt(2) % 2 == 0 ? 65 : 97;
+                val += (char) (random.nextInt(26) + temp);
+            } else if ("num".equalsIgnoreCase(charOrNum)) {
+                val += String.valueOf(random.nextInt(10));
+            }
+        }
+        return val;
+    }
+
+    /**
+     * 对一个字符串进行遮罩，如果长度小于4返回原字符串
+     * @param oldStr
+     * @return
+     */
+    public static String maskString(String oldStr) {
+        if(oldStr.length() < 4){
+            return oldStr;
+        }
+        String aStr = oldStr.substring(0, 2);
+        String bStr = oldStr.substring(oldStr.length()-2);
+        return aStr + "****" + bStr;
+    }
+
     public static void main(String[] args) {
-        List<Prize> list = new ArrayList<>();
-        Prize p = new Prize();
-        p.setMaxNum(1);
-        p.setPrizeName("A");
-        Prize p1 = new Prize();
-        p1.setMaxNum(2);
-        p1.setPrizeName("B");
-        list.add(p);
-        list.add(p1);
-        System.out.println(BizUtil.objToJsonArr(list));
+
     }
 
 }
