@@ -19,6 +19,10 @@ public class PrizeReq extends OfficeReq implements Serializable {
     /**中奖率*/
     private BigDecimal rate;
     private Integer status;
+    /**查询中奖概率大于0的奖品*/
+    private Integer rateNoZero;
+    /**剩余数量大于0*/
+    private Integer numNoZero;
 
     public String getPrizeName() {
         return prizeName;
@@ -66,5 +70,21 @@ public class PrizeReq extends OfficeReq implements Serializable {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getRateNoZero() {
+        return rateNoZero;
+    }
+
+    public void setRateNoZero(Integer rateNoZero) {
+        this.rateNoZero = rateNoZero;
+    }
+
+    public Integer getNumNoZero() {
+        return numNoZero;
+    }
+
+    public void setNumNoZero(Integer numNoZero) {
+        this.numNoZero = numNoZero;
     }
 }

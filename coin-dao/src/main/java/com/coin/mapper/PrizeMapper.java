@@ -13,4 +13,5 @@ public interface PrizeMapper {
     List<Prize> getPrizeList(PrizeReq req);
     void addPrize(Prize prize);
     void updateById(Prize prize);
+    int addUsedNum(Prize prize);
 }

@@ -18,4 +18,33 @@
         select * from t_cust_prize t where t.id = #{id}
     </select>
 
+    <insert id="addCustPrize">
+        INSERT INTO t_cust_prize(
+            <if test="prizeId != null">
+                prize_id,
+            </if>
+            <if test="prizeName != null">
+                prize_name,
+            </if>
+            login_name,
+            create_user,
+            create_date,
+            update_user,
+            update_date
+        )
+	    VALUES(
+            <if test="prizeId != null">
+                #{prizeId},
+            </if>
+            <if test="prizeName != null">
+                #{prizeName},
+            </if>
+            #{loginName},
+	        #{createUser},
+	        #{createDate},
+	        #{updateUser},
+	        #{updateDate}
+	    )
+    </insert>
+
 </mapper>

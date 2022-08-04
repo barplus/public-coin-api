@@ -1,8 +1,15 @@
 package com.coin.web.aspect;
 
+import com.coin.entity.Customer;
 import com.coin.req.api.CommonReq;
+import com.coin.service.BizEntity.MyResp;
+import com.coin.service.CustomerService;
+import com.coin.service.constant.CodeCons;
+import com.coin.utils.RedisUtil;
 import com.coin.utils.StrUtil;
 import com.coin.web.annotation.CommonSecure;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -13,8 +20,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Aspect
 @Component
@@ -22,13 +29,16 @@ import javax.servlet.http.HttpServletResponse;
 public class CommonAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(CommonAspect.class);
+    @Resource
+    private RedisUtil redisUtil;
+    @Resource
+    private CustomerService customerService;
 
     @Around(value="within(com.coin.web.controller.*Controller) && @annotation(commonSecure)")
     public Object commonSecure(ProceedingJoinPoint pj, CommonSecure commonSecure){
         try{
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
-            HttpServletResponse response = attributes.getResponse();
             CommonReq req = null;
             for(Object obj:pj.getArgs()){
                 if(obj instanceof CommonReq){
@@ -36,7 +46,27 @@ public class CommonAspect {
                     break;
                 }
             }
-            String token = StrUtil.getStr(request.getAttribute("token"));
+            String token = StrUtil.getStr(request.getHeader("token"));
+            String loginName = redisUtil.get(token);
+            String[] noLoginPath = {"/customer/login"};
+            String method = request.getServletPath();
+            if(ArrayUtils.contains(noLoginPath, method)){
+                loginName = req.getLoginName();
+            }
+            if(StringUtils.isBlank(loginName)){
+                return new MyResp(CodeCons.LOGIN_OUT, "登录已过期，请重新登录");
+            }
+//            if(!redisUtil.setNx(loginName+method, "1", 3)){
+//                return new MyResp(CodeCons.ERROR, "请求太快，请稍后");
+//            }
+            if(!ArrayUtils.contains(noLoginPath, method)){
+                Customer customer = customerService.getInfoByLoginName(loginName);
+                if(customer == null || customer.getStatus() != 1){
+                    return new MyResp(CodeCons.CUSTOMER_NO_EXISTS, "用户不存在或已失效");
+                }
+            }
+            redisUtil.setExpire(token, 1800l);
+            req.setLoginName(loginName);
             return pj.proceed();
         } catch (Exception e){
             logger.error("commonSecure-ex", e);

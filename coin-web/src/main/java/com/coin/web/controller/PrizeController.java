@@ -40,7 +40,7 @@ public class PrizeController {
             return new MyResp(CodeCons.SUCCESS, "保存成功");
         }catch (BizException e){
             logger.error("prize-add-BizException", e);
-            return new MyResp(CodeCons.ERROR, e.getErrMsg());
+            return new MyResp(e.getCode(), e.getErrMsg());
         }catch(Exception e){
             logger.error("prize-add-Exception", e);
         }
@@ -59,7 +59,7 @@ public class PrizeController {
             return new MyResp(CodeCons.SUCCESS, "修改成功");
         }catch (BizException e){
             logger.error("prize-updateStatus-BizException", e);
-            return new MyResp(CodeCons.ERROR, e.getErrMsg());
+            return new MyResp(e.getCode(), e.getErrMsg());
         }catch(Exception e){
             logger.error("prize-updateStatus-Exception", e);
         }
@@ -78,7 +78,7 @@ public class PrizeController {
             return new MyResp(CodeCons.SUCCESS, "保存成功");
         }catch (BizException e){
             logger.error("prize-updateInfo-BizException", e);
-            return new MyResp(CodeCons.ERROR, e.getErrMsg());
+            return new MyResp(e.getCode(), e.getErrMsg());
         }catch(Exception e){
             logger.error("prize-updateInfo-Exception", e);
         }

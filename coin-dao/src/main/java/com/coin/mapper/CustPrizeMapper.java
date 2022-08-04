@@ -7,4 +7,6 @@ public interface CustPrizeMapper {
 
     CustPrize getInfoById(@Param("id") Integer loginName);
 
+    int addCustPrize(CustPrize prize);
+
 }

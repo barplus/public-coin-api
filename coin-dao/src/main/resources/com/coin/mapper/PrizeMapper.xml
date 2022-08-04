@@ -72,12 +72,25 @@
         where id = #{id}
     </update>
 
+    <update id="addUsedNum">
+        update t_prize set used_num=used_num+1 where id = #{id} and used_num = #{usedNum} and used_num &lt; max_num
+    </update>
+
     <select id="getPrizeList" resultMap="prizeMap" parameterType="com.coin.req.office.PrizeReq">
         select *
         from t_prize t
         where 1=1
         <if test="prizeName != null">
             and t.prize_name = #{prizeName}
+        </if>
+        <if test="status != null">
+            and t.status = #{status}
+        </if>
+        <if test="rateNoZero != null">
+            and t.rate > 0
+        </if>
+        <if test="numNoZero != null">
+            and t.max_num > t.used_num
         </if>
         order by id
     </select>

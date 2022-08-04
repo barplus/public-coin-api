@@ -6,6 +6,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.time.Duration;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -16,8 +17,7 @@ public class RedisUtil {
     private RedisTemplate<String, Object> redisTemplate;
     @Resource
     private StringRedisTemplate stringRedisTemplate;
-    private String namespace = "public-api:";
-    private String namespace_office = "public-office:";
+    private String namespace = "public-api-office:";
 
     public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
@@ -71,6 +71,10 @@ public class RedisUtil {
         return redisTemplate.getExpire(key);
     }
 
+    public boolean setExpire(String key, long time) {
+        return redisTemplate.expire(namespace + key, time, TimeUnit.SECONDS);
+    }
+
     public Set<String> keys(String pattern) {
         return redisTemplate.keys(namespace + pattern);
     }
@@ -81,6 +85,10 @@ public class RedisUtil {
 
     public Double increment(String key, double delta) {
         return redisTemplate.opsForValue().increment(namespace + key, delta);
+    }
+
+    public boolean setNx(String key, String val, int sec){
+        return redisTemplate.opsForValue().setIfAbsent(namespace + key, val, Duration.ofSeconds(sec));
     }
 
 }

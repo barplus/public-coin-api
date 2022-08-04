@@ -6,4 +6,6 @@ public interface CustPrizeService {
 
     Prize getInfoById(Integer id) throws Exception;
 
+    int addCustPrize(String loginName, Prize prize) throws Exception;
+
 }

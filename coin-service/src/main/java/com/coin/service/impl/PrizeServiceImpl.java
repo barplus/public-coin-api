@@ -5,6 +5,7 @@ import com.coin.mapper.PrizeMapper;
 import com.coin.req.office.PrizeReq;
 import com.coin.service.PrizeService;
 import com.coin.service.constant.BizCons;
+import com.coin.service.constant.CodeCons;
 import com.coin.service.exception.BizException;
 import com.coin.utils.BizUtil;
 import com.github.pagehelper.PageHelper;
@@ -32,10 +33,10 @@ public class PrizeServiceImpl implements PrizeService {
     public void addPrize(PrizeReq req) throws Exception {
         Prize oldPrize = prizeMapper.getInfoByName(req.getPrizeName());
         if(oldPrize != null){
-            throw new BizException("9999", "重复的奖品名");
+            throw new BizException(CodeCons.ERROR, "重复的奖品名");
         }
         if(req.getRate().compareTo(new BigDecimal("1")) == 1){
-            throw new BizException("9999", "中奖率不能大于100%");
+            throw new BizException(CodeCons.ERROR, "中奖率不能大于100%");
         }
         Prize prize = BizUtil.getInsertInfo(new Prize(), req.getLoginName(), new Date());
         prize.setPrizeName(req.getPrizeName());
@@ -48,7 +49,7 @@ public class PrizeServiceImpl implements PrizeService {
     @Override
     public void updateStatus(PrizeReq req) throws Exception {
         if(!BizCons.COMMON_DATA_STATUS.containsKey(req.getStatus())){
-            throw new BizException("9999", "状态值错误");
+            throw new BizException(CodeCons.ERROR, "状态值错误");
         }
         Prize updatePrize = BizUtil.getUpdateInfo(new Prize(), req.getId(), req.getLoginName(), new Date());
         updatePrize.setStatus(req.getStatus());
@@ -61,7 +62,7 @@ public class PrizeServiceImpl implements PrizeService {
         Prize updatePrize = BizUtil.getUpdateInfo(new Prize(), req.getId(), req.getLoginName(), new Date());
         if(req.getRate() !=null){
             if(req.getRate().compareTo(new BigDecimal("1")) == 1){
-                throw new BizException("9999", "中奖率不能大于100%");
+                throw new BizException(CodeCons.ERROR, "中奖率不能大于100%");
             }
             updatePrize.setRate(req.getRate());
         }
@@ -73,7 +74,7 @@ public class PrizeServiceImpl implements PrizeService {
         }
         if(req.getMaxNum() != null){
             if(req.getMaxNum() < oldPrize.getUsedNum()){
-                throw new BizException("9999", "最大投放量不能小于已被抽取的数量");
+                throw new BizException(CodeCons.ERROR, "最大投放量不能小于已被抽取的数量");
             }
             updatePrize.setMaxNum(req.getMaxNum());
         }

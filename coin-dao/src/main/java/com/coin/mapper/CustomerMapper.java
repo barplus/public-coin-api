@@ -9,4 +9,6 @@ public interface CustomerMapper {
 
     void createCustomer(Customer customer);
 
+    int addUsedNum(@Param("loginName") String loginName, @Param("rouletteUsedTime") Integer rouletteUsedTime);
+
 }

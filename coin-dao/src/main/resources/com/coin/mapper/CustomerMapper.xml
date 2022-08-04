@@ -37,4 +37,10 @@
 	    )
     </insert>
 
+    <update id="addUsedNum">
+        update t_customer t set t.roulette_used_time = t.roulette_used_time+1
+        where t.roulette_used_time = #{rouletteUsedTime}
+        and t.roulette_total_time > t.roulette_used_time
+    </update>
+
 </mapper>
