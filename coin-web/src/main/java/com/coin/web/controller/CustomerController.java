@@ -13,6 +13,8 @@ import com.coin.service.util.MD5Util;
 import com.coin.service.util.ParamUtil;
 import com.coin.service.util.RedisUtil;
 import com.coin.web.annotation.CommonSecure;
+import com.coin.web.annotation.OfficeSecure;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,6 +67,20 @@ public class CustomerController {
         return new MyResp(CodeCons.ERROR, "请求失败");
     }
 
+    @PostMapping("/getCustInfo")
+    @CommonSecure
+    public MyResp getCustInfo(@RequestBody CommonReq req){
+        logger.info("customer-getCustInfo-req={}", req);
+        try{
+            Customer customer = customerService.getInfoByLoginName(req.getLoginName());
+            customer.setLoginPass(null);
+            return new MyResp(CodeCons.SUCCESS, "", customer);
+        }catch(Exception e){
+            logger.error("customer-getCustInfo-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
     @PostMapping("/doLottery")
     @CommonSecure
     public MyResp doLottery(@RequestBody CommonReq req){
@@ -80,6 +96,23 @@ public class CustomerController {
             return new MyResp(e.getCode(), e.getErrMsg());
         }catch(Exception e){
             logger.error("customer-doLottery-Exception", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
+    @PostMapping("/pageList")
+    @OfficeSecure
+    public MyResp pageList(@RequestBody CustomerReq req){
+        logger.info("customer-pageList-req={}", req);
+        try{
+            MyResp valid = ParamUtil.NotBlankValid(req.getPageNum(), "页码", req.getPageSize(), "分页大小");
+            if(valid != null){
+                return valid;
+            }
+            PageInfo<Prize> page = customerService.pageList(req);
+            return new MyResp(CodeCons.SUCCESS, "", page);
+        }catch(Exception e){
+            logger.error("customer-pageList-error", e);
         }
         return new MyResp(CodeCons.ERROR, "请求失败");
     }

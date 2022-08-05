@@ -22,7 +22,9 @@
         from t_cust_prize t
         where t.login_name = #{loginName}
         and t.create_date &lt; #{maxDate}
-        and t.create_date &gt;= #{minDate}
+        <if test="minDate != null">
+            and t.create_date &gt;= #{minDate}
+        </if>
         <if test="dataType != null">
             <if test="dataType == 1">
                 and t.prize_name is not null

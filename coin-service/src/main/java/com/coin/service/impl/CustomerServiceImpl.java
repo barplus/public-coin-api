@@ -3,25 +3,16 @@ package com.coin.service.impl;
 import com.coin.entity.Customer;
 import com.coin.entity.Prize;
 import com.coin.mapper.CustomerMapper;
-import com.coin.mapper.PrizeMapper;
-import com.coin.req.PrizeReq;
-import com.coin.service.CustPrizeService;
+import com.coin.req.CustomerReq;
 import com.coin.service.CustomerService;
-import com.coin.service.constant.CodeCons;
-import com.coin.service.exception.BizException;
 import com.coin.service.util.BizUtil;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Random;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -34,6 +25,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer getInfoByLoginName(String loginName) throws Exception {
         return customerMapper.getInfoByLoginName(loginName);
+    }
+
+    @Override
+    public PageInfo<Prize> pageList(CustomerReq req) throws Exception {
+        return null;
     }
 
     @Override
