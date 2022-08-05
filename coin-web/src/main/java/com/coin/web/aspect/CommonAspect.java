@@ -66,6 +66,7 @@ public class CommonAspect {
                 }
             }
             redisUtil.setExpire(token, 1800l);
+            redisUtil.setExpire(loginName+":token", 1800);
             req.setLoginName(loginName);
             return pj.proceed();
         } catch (Exception e){

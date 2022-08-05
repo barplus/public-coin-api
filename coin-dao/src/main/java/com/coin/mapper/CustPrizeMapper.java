@@ -2,6 +2,7 @@ package com.coin.mapper;
 
 import com.coin.entity.CustPrize;
 import com.coin.req.CustPrizeReq;
+import com.coin.rsp.CustPrizeRsp;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -11,6 +12,8 @@ public interface CustPrizeMapper {
     CustPrize getInfoById(@Param("id") Integer loginName);
 
     List<CustPrize> getCustPrizeList(CustPrizeReq req);
+
+    List<CustPrizeRsp> getDatas(CustPrizeReq req);
 
     List<CustPrize> getTwoCustPrize30s();
 

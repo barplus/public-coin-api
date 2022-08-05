@@ -8,7 +8,7 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
     <!-- 定义日志的根目录 -->
     <property name="LOG_HOME" value="/app/log"/>
     <!-- 定义日志文件名称 -->
-    <property name="appName" value="bianchengbang-spring-boot-logging"></property>
+    <property name="appName" value="public-coin-api-logging"></property>
     <!-- ch.qos.logback.core.ConsoleAppender 表示控制台输出 -->
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <!--
@@ -54,7 +54,7 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
         </rollingPolicy>
         <!-- 日志输出格式： -->
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [ %thread ] ------------------ [ %-5level ] [ %logger{50} : %line ] -
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [ %thread ] [%X{TRACE_ID}] ------------------ [ %-5level ] [ %logger{50} : %line ] -
                 %msg%n
             </pattern>
         </layout>

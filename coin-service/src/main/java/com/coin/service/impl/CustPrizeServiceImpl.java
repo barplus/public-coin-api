@@ -8,6 +8,7 @@ import com.coin.mapper.CustomerMapper;
 import com.coin.mapper.PrizeMapper;
 import com.coin.req.CustPrizeReq;
 import com.coin.req.PrizeReq;
+import com.coin.rsp.CustPrizeRsp;
 import com.coin.service.CustPrizeService;
 import com.coin.service.constant.BizCons;
 import com.coin.service.constant.CodeCons;
@@ -73,6 +74,14 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
         List<CustPrize> custPrizes = custPrizeMapper.getCustPrizeList(req);
         PageInfo<CustPrize> page = new PageInfo<>(custPrizes);
+        return page;
+    }
+
+    @Override
+    public PageInfo<CustPrizeRsp> pageDatas(CustPrizeReq req) throws Exception {
+        PageHelper.startPage(req.getPageNum(), req.getPageSize());
+        List<CustPrizeRsp> custPrizes = custPrizeMapper.getDatas(req);
+        PageInfo<CustPrizeRsp> page = new PageInfo<>(custPrizes);
         return page;
     }
 

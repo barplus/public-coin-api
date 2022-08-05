@@ -18,6 +18,19 @@
         select * from t_customer t where t.login_name = #{loginName}
     </select>
 
+    <select id="getInfoById" resultMap="customerMap">
+        select * from t_customer t where t.id = #{id}
+    </select>
+
+    <select id="getCustomerList" resultMap="customerMap">
+        select id,login_name,roulette_total_time,roulette_used_time,status,create_user,create_date,update_user,update_date
+        from t_customer t
+        where 1= 1
+        <if test="queryLoginName != null and queryLoginName != ''">
+            and t.login_name = #{queryLoginName}
+        </if>
+    </select>
+
     <insert id="createCustomer">
         INSERT INTO t_customer(
             login_name,
@@ -42,6 +55,13 @@
         where t.login_name = #{loginName}
         and t.roulette_used_time = #{rouletteUsedTime}
         and t.roulette_total_time > t.roulette_used_time
+    </update>
+
+    <update id="updateTotalNum">
+        update t_customer t
+        set t.roulette_total_time = #{rouletteTotalTime}
+        where t.id = #{id}
+        and t.roulette_used_time &lt;= #{rouletteTotalTime}
     </update>
 
 </mapper>

@@ -57,9 +57,18 @@ public class CustomerController {
             if(!MD5Util.MD5(req.getLoginPass()).equals(customer.getLoginPass())){
                 return new MyResp(CodeCons.ERROR, "密码输入错误");
             }
+            String tokenKey = customer.getLoginName()+":token";
+            if(redisUtil.get(tokenKey) != null){
+                String oldToken = redisUtil.get(redisUtil.get(tokenKey));
+                if(oldToken != null){
+                    redisUtil.remove(redisUtil.get(tokenKey));
+                }
+                redisUtil.remove(tokenKey);
+            }
             customer.setLoginPass(null);
             String token = MD5Util.MD5(customer.getLoginName() + System.currentTimeMillis());
             redisUtil.set(token, customer.getLoginName(), 1800);
+            redisUtil.set(customer.getLoginName()+":token", token, 1800);
             return new MyResp(CodeCons.SUCCESS, token, customer);
         }catch(Exception e){
             logger.error("customer-login-error", e);
@@ -109,10 +118,30 @@ public class CustomerController {
             if(valid != null){
                 return valid;
             }
-            PageInfo<Prize> page = customerService.pageList(req);
+            PageInfo<Customer> page = customerService.pageList(req);
             return new MyResp(CodeCons.SUCCESS, "", page);
         }catch(Exception e){
             logger.error("customer-pageList-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
+    @PostMapping("/update")
+    @OfficeSecure
+    public MyResp update(@RequestBody CustomerReq req){
+        logger.info("customer-update-req={}", req);
+        try{
+            MyResp valid = ParamUtil.NotBlankValid(req.getId(), "id", req.getRouletteTotalTime(), "抽奖次数");
+            if(valid != null){
+                return valid;
+            }
+            customerService.update(req);
+            return new MyResp(CodeCons.SUCCESS, "保存成功");
+        }catch(BizException e){
+            logger.error("customer-update-BizException", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("customer-update-Exception", e);
         }
         return new MyResp(CodeCons.ERROR, "请求失败");
     }

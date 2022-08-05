@@ -1,11 +1,12 @@
 package com.coin.service.impl;
 
 import com.coin.entity.Customer;
-import com.coin.entity.Prize;
 import com.coin.mapper.CustomerMapper;
 import com.coin.req.CustomerReq;
 import com.coin.service.CustomerService;
+import com.coin.service.exception.BizException;
 import com.coin.service.util.BizUtil;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -28,8 +30,25 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public PageInfo<Prize> pageList(CustomerReq req) throws Exception {
-        return null;
+    public PageInfo<Customer> pageList(CustomerReq req) throws Exception {
+        PageHelper.startPage(req.getPageNum(), req.getPageSize());
+        List<Customer> customers = customerMapper.getCustomerList(req);
+        PageInfo<Customer> page = new PageInfo<>(customers);
+        return page;
+    }
+
+    @Override
+    public void update(CustomerReq req) throws Exception {
+        Customer oldCustomer = customerMapper.getInfoById(req.getId());
+        if(oldCustomer.getRouletteUsedTime().intValue() > req.getRouletteTotalTime().intValue()){
+            throw new BizException("9999", "总次数不能小于已使用的次数");
+        }
+        Customer updateCustomer = BizUtil.getUpdateInfo(new Customer(), req.getId(), req.getLoginName(), new Date());
+        updateCustomer.setRouletteTotalTime(req.getRouletteTotalTime());
+        int count = customerMapper.updateTotalNum(updateCustomer);
+        if(count != 1){
+            throw new BizException("9999", "修改失败，用户信息已变化，请刷新后再修改");
+        }
     }
 
     @Override

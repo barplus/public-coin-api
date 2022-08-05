@@ -16,7 +16,7 @@ public class TraceIdInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        MDC.put(TRACE_ID, UUID.randomUUID().toString());
+        MDC.put(TRACE_ID, UUID.randomUUID().toString().replace("-", ""));
         return true;
     }
 
