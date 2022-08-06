@@ -1,6 +1,7 @@
 package com.coin.req;
 
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -8,6 +9,7 @@ import java.io.Serializable;
  * 业务用户请求对象
  */
 @Data
+@ToString(callSuper=true)
 public class SysUserReq extends CommonReq implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -1,6 +1,7 @@
 package com.coin.req;
 
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
  * 业务用户请求对象
  */
 @Data
+@ToString(callSuper=true)
 public class PrizeReq extends CommonReq implements Serializable {
 
     private static final long serialVersionUID = 1L;
