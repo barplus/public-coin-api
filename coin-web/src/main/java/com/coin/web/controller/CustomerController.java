@@ -1,9 +1,9 @@
 package com.coin.web.controller;
 
 import com.coin.entity.Customer;
-import com.coin.entity.Prize;
 import com.coin.req.CommonReq;
 import com.coin.req.CustomerReq;
+import com.coin.rsp.PrizeRsp;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.CustPrizeService;
 import com.coin.service.CustomerService;
@@ -95,11 +95,11 @@ public class CustomerController {
     public MyResp doLottery(@RequestBody CommonReq req){
         logger.info("customer-doLottery-req={}", req);
         try{
-            Prize prize = custPrizeService.doLottery(req.getLoginName());
-            if(prize == null){
+            PrizeRsp prizeRsp = custPrizeService.doLottery(req.getLoginName());
+            if(prizeRsp == null){
                 return new MyResp(CodeCons.SUCCESS, "本次抽奖未中奖，请您再接再厉", null);
             }
-            return new MyResp(CodeCons.SUCCESS, "", prize);
+            return new MyResp(CodeCons.SUCCESS, "", prizeRsp);
         }catch(BizException e){
             logger.error("customer-doLottery-BizException", e);
             return new MyResp(e.getCode(), e.getErrMsg());

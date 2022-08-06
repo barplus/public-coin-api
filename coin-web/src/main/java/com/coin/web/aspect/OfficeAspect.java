@@ -5,7 +5,9 @@ import com.coin.req.CommonReq;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.SysUserService;
 import com.coin.service.constant.CodeCons;
+import com.coin.service.exception.BizException;
 import com.coin.service.util.RedisUtil;
+import com.coin.service.util.StrUtil;
 import com.coin.web.annotation.OfficeSecure;
 import com.coin.web.utils.IpUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -37,46 +39,61 @@ public class OfficeAspect {
     @Around(value="within(com.coin.web.controller.*Controller) && @annotation(officeSecure)")
     public Object officeSecure(ProceedingJoinPoint pj, OfficeSecure officeSecure){
         try{
+            CommonReq req = this.getReq(pj);
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
-            CommonReq req = null;
-            for(Object obj:pj.getArgs()){
-                if(obj instanceof CommonReq){
-                    req = (CommonReq)obj;
-                    break;
-                }
-            }
             String method = request.getServletPath();
-            String[] noLoginPath = {"/user/login"};
-            String loginName = request.getHeader("loginName");
-            if(!ArrayUtils.contains(noLoginPath, method) && StringUtils.isBlank(loginName)){
-                return new MyResp(CodeCons.ERROR, "登录名 不能为空");
+            String[] noNeedLoginPath = {"/user/login"};
+            String token = StrUtil.getStr(request.getHeader("token"));
+            String loginName = redisUtil.get(token);
+            if(StringUtils.isBlank(loginName)){
+                if(!ArrayUtils.contains(noNeedLoginPath, method)){
+                    return new MyResp(CodeCons.ERROR, "登录名 不能为空");
+                }
+                loginName = req.getLoginName();
             }
-            String[] fastQueryPath = {""};
-            long waitSec = 2000l;
+            String[] fastQueryPath = {"/prize/pageList"};
+            long waitMill = 2000l;
             if(ArrayUtils.contains(fastQueryPath, method)){
-                waitSec = 300l;
+                waitMill = 300l;
             }
-            if(!redisUtil.setNx(loginName+method, "1", waitSec)){
+            if(!redisUtil.setNx(loginName+method, "1", waitMill)){
                 return new MyResp(CodeCons.ERROR, "请求太快，请稍后");
             }
-            if(!ArrayUtils.contains(noLoginPath, method)){
+            if(!ArrayUtils.contains(noNeedLoginPath, method)){
                 SysUser sysUser = sysUserService.getUserByLoginName(loginName);
                 if(sysUser == null){
                     return new MyResp(CodeCons.ERROR, "非法用户请求");
                 }
             }
             logger.info("loginName={}, request-ip={}", loginName, IpUtils.getIpAddr(request));
-            if(StringUtils.isNotBlank(loginName)){
-                req.setLoginName(loginName);
-            }
+            redisUtil.setExpire(token, 1800l);
+            redisUtil.setExpire(loginName+":office:token", 1800l);
+            req.setLoginName(loginName);
             return pj.proceed();
+        } catch (BizException e){
+            logger.error("officeSecure-be", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
         } catch (Exception e){
             logger.error("officeSecure-ex", e);
         } catch (Throwable t) {
             logger.error("officeSecure-tb", t);
         }
         return null;
+    }
+
+    private CommonReq getReq(ProceedingJoinPoint pj){
+        CommonReq req = null;
+        for(Object obj:pj.getArgs()){
+            if(obj instanceof CommonReq){
+                req = (CommonReq)obj;
+                break;
+            }
+        }
+        if(req == null){
+            throw new BizException(CodeCons.ERROR, "请求参数格式错误");
+        }
+        return req;
     }
 
 }

@@ -7,6 +7,7 @@ import com.coin.service.SysUserService;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.util.MD5Util;
 import com.coin.service.util.ParamUtil;
+import com.coin.service.util.RedisUtil;
 import com.coin.web.annotation.OfficeSecure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,8 @@ public class SysUserController {
 
     @Resource
     private SysUserService userService;
+    @Resource
+    private RedisUtil redisUtil;
 
     @PostMapping("/login")
     @OfficeSecure
@@ -47,7 +50,10 @@ public class SysUserController {
                 return new MyResp(CodeCons.ERROR, "用户已被禁用");
             }
             user.setLoginPass(null);
-            return new MyResp(CodeCons.SUCCESS, "", user);
+            String token = MD5Util.MD5(user.getLoginName() + System.currentTimeMillis());
+            redisUtil.set(token, user.getLoginName(), 1800);
+            redisUtil.set(user.getLoginName()+":office:token", token, 1800);
+            return new MyResp(CodeCons.SUCCESS, token, user);
         }catch(Exception e){
             logger.error("getCoins-error", e);
         }

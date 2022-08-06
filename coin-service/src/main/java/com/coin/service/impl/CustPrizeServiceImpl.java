@@ -9,6 +9,7 @@ import com.coin.mapper.PrizeMapper;
 import com.coin.req.CustPrizeReq;
 import com.coin.req.PrizeReq;
 import com.coin.rsp.CustPrizeRsp;
+import com.coin.rsp.PrizeRsp;
 import com.coin.service.CustPrizeService;
 import com.coin.service.constant.BizCons;
 import com.coin.service.constant.CodeCons;
@@ -21,6 +22,7 @@ import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -87,7 +89,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Prize doLottery(String loginName) throws Exception {
+    public PrizeRsp doLottery(String loginName) throws Exception {
         Customer customer = customerMapper.getInfoByLoginName(loginName);
         if(customer.getRouletteTotalTime() - customer.getRouletteUsedTime() <= 0){
             throw new BizException(CodeCons.NO_ROULETTE_TIME, "您已无抽奖次数 请您继续游戏获取更多抽奖次数");
@@ -100,7 +102,9 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         }
         Prize prize = this.getPrize(loginName, false);
         this.addCustPrize(loginName, prize, "addCustPrize");
-        return prize;
+        PrizeRsp rsp = new PrizeRsp();
+        BeanUtils.copyProperties(prize, rsp);
+        return rsp;
     }
 
     @Transactional(rollbackFor = Exception.class)

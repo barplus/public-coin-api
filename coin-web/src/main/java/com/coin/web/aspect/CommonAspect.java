@@ -49,7 +49,7 @@ public class CommonAspect {
             String[] fastQueryPath = {"/custPrize/pageList"};
             long waitMill = 3000l;
             if(ArrayUtils.contains(fastQueryPath, method)){
-                waitMill = 500l;
+                waitMill = 300l;
             }
             if(ArrayUtils.contains(noNeedLoginPath, method)){
                 loginName = req.getLoginName();

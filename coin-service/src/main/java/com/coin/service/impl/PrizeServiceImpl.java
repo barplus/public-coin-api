@@ -3,6 +3,7 @@ package com.coin.service.impl;
 import com.coin.entity.Prize;
 import com.coin.mapper.PrizeMapper;
 import com.coin.req.PrizeReq;
+import com.coin.rsp.PrizeRsp;
 import com.coin.service.PrizeService;
 import com.coin.service.constant.BizCons;
 import com.coin.service.constant.CodeCons;
@@ -10,6 +11,7 @@ import com.coin.service.exception.BizException;
 import com.coin.service.util.BizUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,9 +26,11 @@ public class PrizeServiceImpl implements PrizeService {
     private PrizeMapper prizeMapper;
 
     @Override
-    public Prize getInfoById(Integer id) throws Exception {
+    public PrizeRsp getInfoById(Integer id) throws Exception {
         Prize prize = prizeMapper.getInfoById(id);
-        return prize;
+        PrizeRsp rsp = new PrizeRsp();
+        BeanUtils.copyProperties(prize, rsp);
+        return rsp;
     }
 
     @Override
@@ -67,6 +71,10 @@ public class PrizeServiceImpl implements PrizeService {
             updatePrize.setRate(req.getRate());
         }
         if(req.getPrizeName() != null){
+            Prize prize = prizeMapper.getInfoByName(req.getPrizeName());
+            if(prize.getId() != req.getId()){
+                throw new BizException(CodeCons.ERROR, "奖品名称不能和其他奖品一致");
+            }
             updatePrize.setPrizeName(req.getPrizeName());
         }
         if(req.getAmount() != null){
