@@ -55,7 +55,7 @@ public class CustomerController {
                 customer = customerService.getInfoByLoginName(req.getLoginName());
             }
             if(!MD5Util.MD5(req.getLoginPass()).equals(customer.getLoginPass())){
-                return new MyResp(CodeCons.ERROR, "密码输入错误");
+                return new MyResp(CodeCons.ERROR, "登录失败，请输入正确专用码");
             }
             String tokenKey = customer.getLoginName()+":token";
             if(redisUtil.get(tokenKey) != null){

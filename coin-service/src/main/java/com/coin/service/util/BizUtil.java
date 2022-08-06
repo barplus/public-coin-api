@@ -175,7 +175,7 @@ public class BizUtil {
             return oldStr;
         }
         String aStr = oldStr.substring(0, 2);
-        String bStr = oldStr.substring(oldStr.length()-2);
+        String bStr = oldStr.substring(oldStr.length()-3);
         return aStr + "****" + bStr;
     }
 

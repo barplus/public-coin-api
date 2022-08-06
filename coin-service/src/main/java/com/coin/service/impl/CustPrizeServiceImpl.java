@@ -127,7 +127,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         for(CustPrize custPrize:custPrizes){
             String maskLoginName = BizUtil.maskString(custPrize.getLoginName());
             String prizeName = custPrize.getPrizeName();
-            list.add("恭喜\""+ maskLoginName +"\"抽中奖品\""+prizeName+"\"");
+            list.add("恭喜“"+ maskLoginName +"”抽中奖品“"+prizeName+"”");
             if(!isFake && custPrize.getRequestDate() == null){
                 CustPrize updateInfo = BizUtil.getUpdateInfo(new CustPrize(), custPrize.getId(), "sys-api", now);
                 updateInfo.setRequestDate(now);
