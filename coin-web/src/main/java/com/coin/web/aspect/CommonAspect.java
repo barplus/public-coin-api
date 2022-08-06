@@ -8,6 +8,7 @@ import com.coin.service.constant.CodeCons;
 import com.coin.service.util.RedisUtil;
 import com.coin.service.util.StrUtil;
 import com.coin.web.annotation.CommonSecure;
+import com.coin.web.utils.IpUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -46,17 +47,22 @@ public class CommonAspect {
                     break;
                 }
             }
+            String method = request.getServletPath();
             String token = StrUtil.getStr(request.getHeader("token"));
             String loginName = redisUtil.get(token);
             String[] noLoginPath = {"/customer/login"};
-            String method = request.getServletPath();
+            String[] fastQueryPath = {"/custPrize/pageList"};
+            long waitSec = 3000l;
+            if(ArrayUtils.contains(fastQueryPath, method)){
+                waitSec = 500l;
+            }
             if(ArrayUtils.contains(noLoginPath, method)){
                 loginName = req.getLoginName();
             }
             if(StringUtils.isBlank(loginName)){
                 return new MyResp(CodeCons.LOGIN_OUT, "登录已过期，请重新登录");
             }
-            if(!redisUtil.setNx(loginName+method, "1", 3)){
+            if(!redisUtil.setNx(loginName+method, "1", waitSec)){
                 return new MyResp(CodeCons.ERROR, "请求太快，请稍后");
             }
             if(!ArrayUtils.contains(noLoginPath, method)){
@@ -65,6 +71,7 @@ public class CommonAspect {
                     return new MyResp(CodeCons.CUSTOMER_NO_EXISTS, "用户不存在或已失效");
                 }
             }
+            logger.info("loginName={}, request-ip={}", loginName, IpUtils.getIpAddr(request));
             redisUtil.setExpire(token, 1800l);
             redisUtil.setExpire(loginName+":token", 1800);
             req.setLoginName(loginName);

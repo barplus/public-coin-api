@@ -7,6 +7,7 @@ import com.coin.service.SysUserService;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.util.MD5Util;
 import com.coin.service.util.ParamUtil;
+import com.coin.web.annotation.OfficeSecure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,7 @@ public class SysUserController {
     private SysUserService userService;
 
     @PostMapping("/login")
+    @OfficeSecure
     public MyResp login(@RequestBody SysUserReq req){
         logger.info("user-login-req={}", req);
         try{

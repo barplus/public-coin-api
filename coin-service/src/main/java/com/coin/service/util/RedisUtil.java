@@ -67,4 +67,9 @@ public class RedisUtil {
         return redisTemplate.opsForValue().setIfAbsent(namespace + key, val, Duration.ofSeconds(sec));
     }
 
+    public boolean setNx(String key, String val, long mil){
+        return redisTemplate.opsForValue().setIfAbsent(namespace + key, val, Duration.ofMillis(mil));
+    }
+
+
 }

@@ -18,7 +18,7 @@ public class Prize implements Serializable {
     private Integer amount;
     /**最大投放数*/
     private Integer maxNum;
-    /**剩余投放数*/
+    /**已抽取数量*/
     private Integer usedNum;
     /**中奖率*/
     private BigDecimal rate;
