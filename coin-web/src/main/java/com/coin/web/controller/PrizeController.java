@@ -2,6 +2,7 @@ package com.coin.web.controller;
 
 import com.coin.entity.Prize;
 import com.coin.req.PrizeReq;
+import com.coin.rsp.PrizeRsp;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.PrizeService;
 import com.coin.service.constant.CodeCons;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/prize")
@@ -101,7 +103,19 @@ public class PrizeController {
             PageInfo<Prize> page = prizeService.pageList(req);
             return new MyResp(CodeCons.SUCCESS, "", page);
         }catch(Exception e){
-            logger.error("prize-add-error", e);
+            logger.error("prize-pageList-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
+    @PostMapping("/prizeList")
+    public MyResp prizeList(@RequestBody PrizeReq req){
+        logger.info("prize-prizeList-req={}", req);
+        try{
+            List<PrizeRsp> list = prizeService.pageDatas(req);
+            return new MyResp(CodeCons.SUCCESS, "", list);
+        }catch(Exception e){
+            logger.error("prize-prizeList-error", e);
         }
         return new MyResp(CodeCons.ERROR, "请求失败");
     }

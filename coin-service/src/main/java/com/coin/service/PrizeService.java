@@ -5,6 +5,8 @@ import com.coin.req.PrizeReq;
 import com.coin.rsp.PrizeRsp;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
+
 public interface PrizeService {
 
     PrizeRsp getInfoById(Integer id) throws Exception;
@@ -12,5 +14,6 @@ public interface PrizeService {
     void updateStatus(PrizeReq req) throws Exception;
     void updateInfo(PrizeReq req) throws Exception;
     PageInfo<Prize> pageList(PrizeReq req) throws Exception;
+    List<PrizeRsp> pageDatas(PrizeReq req) throws Exception;
 
 }

@@ -18,6 +18,7 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PrizeServiceImpl implements PrizeService {
@@ -95,6 +96,22 @@ public class PrizeServiceImpl implements PrizeService {
         List<Prize> prizes = prizeMapper.getPrizeList(req);
         PageInfo<Prize> page = new PageInfo<>(prizes);
         return page;
+    }
+
+    @Override
+    public List<PrizeRsp> pageDatas(PrizeReq req) throws Exception {
+        req.setStatus(1);
+        req.setRateNoZero(1);
+        req.setNumNoZero(1);
+        List<Prize> prizes = prizeMapper.getPrizeList(req);
+        List<PrizeRsp> list = prizes.stream().map(prize->this.convertRsp(prize)).collect(Collectors.toList());
+        return list;
+    }
+
+    private PrizeRsp convertRsp(Prize prize){
+        PrizeRsp rsp = new PrizeRsp();
+        BeanUtils.copyProperties(prize, rsp);
+        return rsp;
     }
 
 }
