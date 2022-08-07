@@ -5,6 +5,7 @@ import com.coin.req.SysUserReq;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.SysUserService;
 import com.coin.service.constant.CodeCons;
+import com.coin.service.util.BizUtil;
 import com.coin.service.util.MD5Util;
 import com.coin.service.util.ParamUtil;
 import com.coin.service.util.RedisUtil;
@@ -50,7 +51,7 @@ public class SysUserController {
                 return new MyResp(CodeCons.ERROR, "用户已被禁用");
             }
             user.setLoginPass(null);
-            String token = MD5Util.MD5(user.getLoginName() + System.currentTimeMillis());
+            String token = MD5Util.MD5(user.getLoginName() + System.currentTimeMillis() + BizUtil.getStringRandom(5, 1));
             redisUtil.set(token, user.getLoginName(), 1800);
             redisUtil.set(user.getLoginName()+":office:token", token, 1800);
             return new MyResp(CodeCons.SUCCESS, token, user);

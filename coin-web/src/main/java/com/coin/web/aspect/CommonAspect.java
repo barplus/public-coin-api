@@ -46,6 +46,9 @@ public class CommonAspect {
             String token = StrUtil.getStr(request.getHeader("token"));
             String loginName = redisUtil.get(token);
             String[] noNeedLoginPath = {"/customer/login"};
+            if(StringUtils.isBlank(loginName) && !ArrayUtils.contains(noNeedLoginPath, method)){
+                return new MyResp(CodeCons.LOGIN_OUT, "登录已过期，请重新登录");
+            }
             String[] fastQueryPath = {"/custPrize/pageList"};
             long waitMill = 3000l;
             if(ArrayUtils.contains(fastQueryPath, method)){
@@ -53,9 +56,6 @@ public class CommonAspect {
             }
             if(ArrayUtils.contains(noNeedLoginPath, method)){
                 loginName = req.getLoginName();
-            }
-            if(StringUtils.isBlank(loginName)){
-                return new MyResp(CodeCons.LOGIN_OUT, "登录已过期，请重新登录");
             }
             if(!redisUtil.setNx(loginName+method, "1", waitMill)){
                 return new MyResp(CodeCons.ERROR, "请求太快，请稍后");

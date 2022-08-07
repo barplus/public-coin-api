@@ -46,6 +46,9 @@ public class OfficeAspect {
             String[] noNeedLoginPath = {"/user/login"};
             String token = StrUtil.getStr(request.getHeader("token"));
             String loginName = redisUtil.get(token);
+            if(StringUtils.isBlank(loginName) && !ArrayUtils.contains(noNeedLoginPath, method)){
+                return new MyResp(CodeCons.LOGIN_OUT, "登录已过期，请重新登录");
+            }
             if(StringUtils.isBlank(loginName)){
                 if(!ArrayUtils.contains(noNeedLoginPath, method)){
                     return new MyResp(CodeCons.ERROR, "登录名 不能为空");

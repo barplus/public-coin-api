@@ -9,6 +9,7 @@ import com.coin.service.CustPrizeService;
 import com.coin.service.CustomerService;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.exception.BizException;
+import com.coin.service.util.BizUtil;
 import com.coin.service.util.MD5Util;
 import com.coin.service.util.ParamUtil;
 import com.coin.service.util.RedisUtil;
@@ -66,7 +67,7 @@ public class CustomerController {
                 redisUtil.remove(tokenKey);
             }
             customer.setLoginPass(null);
-            String token = MD5Util.MD5(customer.getLoginName() + System.currentTimeMillis());
+            String token = MD5Util.MD5(customer.getLoginName() + System.currentTimeMillis() + BizUtil.getStringRandom(5, 1));
             redisUtil.set(token, customer.getLoginName(), 1800);
             redisUtil.set(customer.getLoginName()+":token", token, 1800);
             return new MyResp(CodeCons.SUCCESS, token, customer);
