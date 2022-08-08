@@ -35,7 +35,7 @@ public class SysUserController {
     public MyResp login(@RequestBody SysUserReq req){
         logger.info("user-login-req={}", req);
         try{
-            MyResp valid = ParamUtil.NotBlankValid(req.getLoginName(), "登录名", req.getLoginPass(), "登陆密码");
+            MyResp valid = ParamUtil.NotBlankValid(req.getLoginName(), "登录名", req.getLoginPass(), "登录密码");
             if(valid != null){
                 return valid;
             }

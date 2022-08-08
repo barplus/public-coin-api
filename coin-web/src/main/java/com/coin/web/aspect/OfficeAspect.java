@@ -55,7 +55,7 @@ public class OfficeAspect {
                 }
                 loginName = req.getLoginName();
             }
-            String[] fastQueryPath = {"/prize/pageList"};
+            String[] fastQueryPath = {"/prize/pageList", "/customer/pageList", "/custPrize/pageDatas"};
             long waitMill = 2000l;
             if(ArrayUtils.contains(fastQueryPath, method)){
                 waitMill = 300l;

@@ -61,6 +61,12 @@
         <if test="maxDate != null">
             and t.create_date &lt; #{maxDate}
         </if>
+        <if test="isWin != null and isWin=='1'.toString()">
+            and t.prize_id is not null
+        </if>
+        <if test="isWin != null and isWin=='0'.toString()">
+            and t.prize_id is null
+        </if>
         order by id desc
     </select>
 

@@ -25,5 +25,7 @@ public class CustPrizeReq extends CommonReq implements Serializable {
     private Date maxDate;
     /**抽奖会员登录名*/
     private String queryLoginName;
+    /**是否中奖：1-中奖 0-未中奖*/
+    private String isWin;
 
 }

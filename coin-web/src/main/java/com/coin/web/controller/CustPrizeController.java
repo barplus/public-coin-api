@@ -78,7 +78,7 @@ public class CustPrizeController {
         logger.info("custPrize-exportDatas-req={}", req);
         try{
             req.setPageNum(1);
-            req.setPageSize(50000);
+            req.setPageSize(20000);
             PageInfo<CustPrizeRsp> page = custPrizeService.pageDatas(req);
             List<CustPrizeRsp> custPrizeRsps = page.getList();
             FileUtil.exportExcel(custPrizeRsps, CustPrizeRsp.class, "中奖记录.xlsx", response);

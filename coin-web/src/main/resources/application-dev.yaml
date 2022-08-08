@@ -25,3 +25,7 @@ spring:
 mybatis:
   mapper-locations: classpath*:/com/coin/mapper/*.xml
   type-aliases-package: com.coin.entity
+  #configuration:
+    #local-cache-scope: statement
+  #configuration:
+    #cache-enabled: true
