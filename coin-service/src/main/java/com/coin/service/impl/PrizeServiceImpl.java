@@ -64,6 +64,9 @@ public class PrizeServiceImpl implements PrizeService {
     @Override
     public void updateInfo(PrizeReq req) throws Exception {
         Prize oldPrize = prizeMapper.getInfoById(req.getId());
+        if(oldPrize == null){
+            throw new BizException(CodeCons.ERROR, "奖品信息不存在");
+        }
         Prize updatePrize = BizUtil.getUpdateInfo(new Prize(), req.getId(), req.getLoginName(), new Date());
         if(req.getRate() !=null){
             if(req.getRate().compareTo(new BigDecimal("1")) == 1){
@@ -71,13 +74,13 @@ public class PrizeServiceImpl implements PrizeService {
             }
             updatePrize.setRate(req.getRate());
         }
-        if(req.getPrizeName() != null){
-            Prize prize = prizeMapper.getInfoByName(req.getPrizeName());
-            if(prize.getId() != req.getId()){
-                throw new BizException(CodeCons.ERROR, "奖品名称不能和其他奖品一致");
-            }
-            updatePrize.setPrizeName(req.getPrizeName());
-        }
+//        if(req.getPrizeName() != null){
+//            Prize prize = prizeMapper.getInfoByName(req.getPrizeName());
+//            if(prize != null && prize.getId() != req.getId()){
+//                throw new BizException(CodeCons.ERROR, "奖品名称不能和其他奖品一致");
+//            }
+//            updatePrize.setPrizeName(req.getPrizeName());
+//        }
         if(req.getAmount() != null){
             updatePrize.setAmount(req.getAmount());
         }

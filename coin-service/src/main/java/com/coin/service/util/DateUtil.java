@@ -15,6 +15,7 @@ public class DateUtil {
     /**获取指定日期0点*/
     public static Date getNoTimeDate(Date date){
         Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.HOUR_OF_DAY, 0);

@@ -49,7 +49,7 @@ public class CommonAspect {
             if(StringUtils.isBlank(loginName) && !ArrayUtils.contains(noNeedLoginPath, method)){
                 return new MyResp(CodeCons.LOGIN_OUT, "登录已过期，请重新登录");
             }
-            String[] fastQueryPath = {"/custPrize/pageList"};
+            String[] fastQueryPath = {"/custPrize/pageList", "/customer/getCustInfo"};
             long waitMill = 3000l;
             if(ArrayUtils.contains(fastQueryPath, method)){
                 waitMill = 300l;

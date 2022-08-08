@@ -47,7 +47,7 @@ public class CustomerController {
             if(valid != null){
                 return valid;
             }
-            if(req.getLoginName().length() < 4){
+            if(req.getLoginName().length() < 4 || req.getLoginName().length() > 12){
                 return new MyResp(CodeCons.ERROR, "登录名格式错误");
             }
             Customer customer = customerService.getInfoByLoginName(req.getLoginName());
@@ -97,6 +97,7 @@ public class CustomerController {
         logger.info("customer-doLottery-req={}", req);
         try{
             PrizeRsp prizeRsp = custPrizeService.doLottery(req.getLoginName());
+            logger.info("customer-doLottery-result={}, loginName={}", prizeRsp, req.getLoginName());
             if(prizeRsp == null){
                 return new MyResp(CodeCons.SUCCESS, "本次抽奖未中奖，请您再接再厉", null);
             }
