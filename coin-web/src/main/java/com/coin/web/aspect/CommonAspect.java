@@ -50,9 +50,9 @@ public class CommonAspect {
                 return new MyResp(CodeCons.LOGIN_OUT, "登录已过期，请重新登录");
             }
             String[] fastQueryPath = {"/custPrize/pageList", "/customer/getCustInfo"};
-            long waitMill = 3000l;
+            long waitMill = 1688l;
             if(ArrayUtils.contains(fastQueryPath, method)){
-                waitMill = 300l;
+                waitMill = 168l;
             }
             if(ArrayUtils.contains(noNeedLoginPath, method)){
                 loginName = req.getLoginName();

@@ -33,7 +33,7 @@
         select *
         from t_cust_prize t
         where t.login_name = #{loginName}
-        and t.create_date &lt; #{maxDate}
+        and t.create_date &lt;= #{maxDate}
         <if test="minDate != null">
             and t.create_date &gt;= #{minDate}
         </if>
@@ -59,7 +59,7 @@
             and t.create_date &gt;= #{minDate}
         </if>
         <if test="maxDate != null">
-            and t.create_date &lt; #{maxDate}
+            and t.create_date &lt;= #{maxDate}
         </if>
         <if test="isWin != null and isWin=='1'.toString()">
             and t.prize_id is not null

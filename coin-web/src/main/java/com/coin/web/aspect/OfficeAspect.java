@@ -56,9 +56,9 @@ public class OfficeAspect {
                 loginName = req.getLoginName();
             }
             String[] fastQueryPath = {"/prize/pageList", "/customer/pageList", "/custPrize/pageDatas"};
-            long waitMill = 2000l;
+            long waitMill = 1688l;
             if(ArrayUtils.contains(fastQueryPath, method)){
-                waitMill = 300l;
+                waitMill = 168l;
             }
             if(!redisUtil.setNx(loginName+method, "1", waitMill)){
                 return new MyResp(CodeCons.ERROR, "请求太快，请稍后");
