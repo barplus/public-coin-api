@@ -77,6 +77,27 @@ public class CustomerController {
         return new MyResp(CodeCons.ERROR, "请求失败");
     }
 
+    @PostMapping("/logout")
+    @CommonSecure
+    public MyResp logout(@RequestBody CustomerReq req){
+        logger.info("customer-logout-req={}", req);
+        try{
+            Customer customer = customerService.getInfoByLoginName(req.getLoginName());
+            String tokenKey = customer.getLoginName()+":token";
+            if(redisUtil.get(tokenKey) != null){
+                String oldToken = redisUtil.get(redisUtil.get(tokenKey));
+                if(oldToken != null){
+                    redisUtil.remove(redisUtil.get(tokenKey));
+                }
+                redisUtil.remove(tokenKey);
+            }
+            return new MyResp(CodeCons.SUCCESS, "退出成功");
+        }catch(Exception e){
+            logger.error("customer-logout-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
     @PostMapping("/getCustInfo")
     @CommonSecure
     public MyResp getCustInfo(@RequestBody CommonReq req){

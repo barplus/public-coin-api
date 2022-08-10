@@ -50,13 +50,42 @@ public class SysUserController {
             if(user.getStatus().intValue() == 0){
                 return new MyResp(CodeCons.ERROR, "用户已被禁用");
             }
+            String tokenKey = user.getLoginName()+":token";
+            if(redisUtil.get(tokenKey) != null){
+                String oldToken = redisUtil.get(redisUtil.get(tokenKey));
+                if(oldToken != null){
+                    redisUtil.remove(redisUtil.get(tokenKey));
+                }
+                redisUtil.remove(tokenKey);
+            }
             user.setLoginPass(null);
             String token = MD5Util.MD5(user.getLoginName() + System.currentTimeMillis() + BizUtil.getStringRandom(5, 1));
             redisUtil.set(token, user.getLoginName(), 1800);
             redisUtil.set(user.getLoginName()+":office:token", token, 1800);
             return new MyResp(CodeCons.SUCCESS, token, user);
         }catch(Exception e){
-            logger.error("getCoins-error", e);
+            logger.error("user-login-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
+    @PostMapping("/logout")
+    @OfficeSecure
+    public MyResp logout(@RequestBody SysUserReq req){
+        logger.info("user-logout-req={}", req);
+        try{
+            SysUser user = userService.getUserByLoginName(req.getLoginName());
+            String tokenKey = user.getLoginName()+":token";
+            if(redisUtil.get(tokenKey) != null){
+                String oldToken = redisUtil.get(redisUtil.get(tokenKey));
+                if(oldToken != null){
+                    redisUtil.remove(redisUtil.get(tokenKey));
+                }
+                redisUtil.remove(tokenKey);
+            }
+            return new MyResp(CodeCons.SUCCESS, "退出成功");
+        }catch(Exception e){
+            logger.error("user-logout-error", e);
         }
         return new MyResp(CodeCons.ERROR, "请求失败");
     }

@@ -105,7 +105,6 @@ public class PrizeServiceImpl implements PrizeService {
     public List<PrizeRsp> pageDatas(PrizeReq req) throws Exception {
         req.setStatus(1);
         req.setRateNoZero(1);
-        req.setNumNoZero(1);
         List<Prize> prizes = prizeMapper.getPrizeList(req);
         List<PrizeRsp> list = prizes.stream().map(prize->this.convertRsp(prize)).collect(Collectors.toList());
         return list;
