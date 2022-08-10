@@ -17,10 +17,10 @@ public class CustPrizeRsp implements Serializable {
     @Excel(name = "奖品编号", width = 25)
     private Integer prizeId;
     /**奖品名称*/
-    @Excel(name = "奖品名称", width = 25, needMerge = true)
+    @Excel(name = "奖品名称", width = 25, needMerge = false)
     private String prizeName;
     /**会员登录名*/
-    @Excel(name = "会员登录名", width = 25, needMerge = true)
+    @Excel(name = "会员登录名", width = 25, needMerge = false)
     private String loginName;
     /**滚动条获取时间*/
     private Date requestDate;

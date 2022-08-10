@@ -103,6 +103,9 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         Prize prize = this.getPrize(loginName, false);
         this.addCustPrize(loginName, prize, "addCustPrize");
         PrizeRsp rsp = new PrizeRsp();
+        if(prize == null){
+            return null;
+        }
         BeanUtils.copyProperties(prize, rsp);
         return rsp;
     }

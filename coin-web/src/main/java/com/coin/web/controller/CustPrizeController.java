@@ -1,5 +1,7 @@
 package com.coin.web.controller;
 
+import cn.afterturn.easypoi.excel.ExcelImportUtil;
+import cn.afterturn.easypoi.excel.entity.ImportParams;
 import com.coin.entity.CustPrize;
 import com.coin.req.CustPrizeReq;
 import com.coin.rsp.CustPrizeRsp;
@@ -14,10 +16,8 @@ import com.coin.web.utils.FileUtil;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -74,7 +74,7 @@ public class CustPrizeController {
 
     @RequestMapping("/exportDatas")
     @OfficeSecure
-    public void exportDatas(@RequestBody CustPrizeReq req, HttpServletResponse response){
+    public MyResp exportDatas(@RequestBody CustPrizeReq req, HttpServletResponse response){
         logger.info("custPrize-exportDatas-req={}", req);
         try{
             req.setPageNum(1);
@@ -84,8 +84,25 @@ public class CustPrizeController {
             FileUtil.exportExcel(custPrizeRsps, CustPrizeRsp.class, "中奖记录.xlsx", response);
         }catch(BizException e){
             logger.error("custPrize-exportDatas-BizException", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
         }catch(Exception e){
             logger.error("custPrize-exportDatas-Exception", e);
+        }
+        return new MyResp(CodeCons.ERROR, "导出失败");
+    }
+
+    @RequestMapping(value = "/importMemberList", method = RequestMethod.POST)
+    @OfficeSecure
+    public MyResp importMemberList(CustPrizeReq req, @RequestPart("file") MultipartFile file) {
+        ImportParams params = new ImportParams();
+        params.setTitleRows(0);
+        params.setHeadRows(1);
+        try {
+            List<CustPrizeRsp> list = ExcelImportUtil.importExcel(file.getInputStream(), CustPrizeRsp.class, params);
+            return new MyResp(CodeCons.SUCCESS, "成功");
+        } catch (Exception e) {
+            logger.error("custPrize-importMemberList-error", e);
+            return new MyResp(CodeCons.ERROR, "失败");
         }
     }
 
