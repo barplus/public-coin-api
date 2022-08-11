@@ -17,5 +17,6 @@ public class CommonReq implements Serializable {
     private Integer pageNum;
     private Integer pageSize;
     private Integer id;
+    private String token;
 
 }

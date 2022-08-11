@@ -74,7 +74,7 @@ public class CustPrizeController {
 
     @RequestMapping("/exportDatas")
     @OfficeSecure
-    public MyResp exportDatas(@RequestBody CustPrizeReq req, HttpServletResponse response){
+    public MyResp exportDatas(CustPrizeReq req, HttpServletResponse response){
         logger.info("custPrize-exportDatas-req={}", req);
         try{
             req.setPageNum(1);

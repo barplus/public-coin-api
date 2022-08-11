@@ -44,7 +44,11 @@ public class OfficeAspect {
             HttpServletRequest request = attributes.getRequest();
             String method = request.getServletPath();
             String[] noNeedLoginPath = {"/user/login"};
+            String[] downLoadPath = {"/custPrize/exportDatas"};
             String token = StrUtil.getStr(request.getHeader("token"));
+            if(ArrayUtils.contains(downLoadPath, method)){
+                token = req.getToken();
+            }
             String loginName = redisUtil.get(token);
             if(StringUtils.isBlank(loginName) && !ArrayUtils.contains(noNeedLoginPath, method)){
                 return new MyResp(CodeCons.LOGIN_OUT, "登录已过期，请重新登录");
