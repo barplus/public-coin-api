@@ -108,6 +108,19 @@ public class PrizeController {
         return new MyResp(CodeCons.ERROR, "请求失败");
     }
 
+    @PostMapping("/totalRate")
+    @OfficeSecure
+    public MyResp totalRate(@RequestBody PrizeReq req){
+        logger.info("prize-totalRate-req={}", req);
+        try{
+            PrizeRsp rsp = prizeService.totalRate();
+            return new MyResp(CodeCons.SUCCESS, "", rsp);
+        }catch(Exception e){
+            logger.error("prize-totalRate-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
     @PostMapping("/prizeList")
     public MyResp prizeList(@RequestBody PrizeReq req){
         logger.info("prize-prizeList-req={}", req);

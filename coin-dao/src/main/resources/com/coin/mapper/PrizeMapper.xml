@@ -18,8 +18,22 @@
         select * from t_prize t where t.id = #{id}
     </select>
 
+    <select id="totalRate" resultType="com.coin.rsp.PrizeRsp">
+        select sum(t.rate) totalRate,
+               sum(case when t.status=1 then t.rate else 0 end) enabledTotalRate,
+               sum(case when t.status=0 then t.rate else 0 end) disabledTotalRate
+        from t_prize t
+    </select>
+
     <select id="getInfoByName" resultMap="prizeMap">
         select * from t_prize t where t.prize_name = #{prizeName}
+    </select>
+
+    <select id="getInfoByAmount" resultMap="prizeMap">
+        select * from t_prize t where t.amount = #{amount}
+        <if test="id != null">
+            and t.id != #{id}
+        </if>
     </select>
 
     <insert id="addPrize">

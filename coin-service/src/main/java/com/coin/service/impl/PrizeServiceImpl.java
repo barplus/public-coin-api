@@ -35,13 +35,23 @@ public class PrizeServiceImpl implements PrizeService {
     }
 
     @Override
+    public PrizeRsp totalRate() throws Exception {
+        PrizeRsp rsp = prizeMapper.totalRate();
+        return rsp;
+    }
+
+    @Override
     public void addPrize(PrizeReq req) throws Exception {
         Prize oldPrize = prizeMapper.getInfoByName(req.getPrizeName());
         if(oldPrize != null){
             throw new BizException(CodeCons.ERROR, "重复的奖品名");
         }
+        Prize prizeByAmount = prizeMapper.getInfoByAmount(null, req.getAmount());
+        if(prizeByAmount != null){
+            throw new BizException(CodeCons.ERROR, "重复的奖品价值");
+        }
         if(req.getRate().compareTo(new BigDecimal("1")) == 1){
-            throw new BizException(CodeCons.ERROR, "中奖率不能大于100%");
+            throw new BizException(CodeCons.ERROR, "单个奖品中奖率不能大于100%");
         }
         Prize prize = BizUtil.getInsertInfo(new Prize(), req.getLoginName(), new Date());
         prize.setPrizeName(req.getPrizeName());
@@ -82,6 +92,10 @@ public class PrizeServiceImpl implements PrizeService {
 //            updatePrize.setPrizeName(req.getPrizeName());
 //        }
         if(req.getAmount() != null){
+            Prize prizeByAmount = prizeMapper.getInfoByAmount(oldPrize.getId(), req.getAmount());
+            if(prizeByAmount != null){
+                throw new BizException(CodeCons.ERROR, "奖品价值和【"+prizeByAmount.getPrizeName()+"】重复");
+            }
             updatePrize.setAmount(req.getAmount());
         }
         if(req.getMaxNum() != null){

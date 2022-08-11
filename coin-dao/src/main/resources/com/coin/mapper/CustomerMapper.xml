@@ -59,7 +59,7 @@
 
     <update id="updateTotalNum">
         update t_customer t
-        set t.roulette_total_time = #{rouletteTotalTime}
+        set t.roulette_total_time = t.roulette_total_time + #{rouletteTotalTime}
         where t.id = #{id}
         and t.roulette_used_time &lt;= #{rouletteTotalTime}
     </update>

@@ -39,9 +39,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void update(CustomerReq req) throws Exception {
-        Customer oldCustomer = customerMapper.getInfoById(req.getId());
-        if(oldCustomer.getRouletteUsedTime().intValue() > req.getRouletteTotalTime().intValue()){
-            throw new BizException("9999", "总次数不能小于已使用的次数");
+        if(req.getRouletteTotalTime().intValue() < 1){
+            throw new BizException("9999", "增加的次数不能小于1");
         }
         Customer updateCustomer = BizUtil.getUpdateInfo(new Customer(), req.getId(), req.getLoginName(), new Date());
         updateCustomer.setRouletteTotalTime(req.getRouletteTotalTime());

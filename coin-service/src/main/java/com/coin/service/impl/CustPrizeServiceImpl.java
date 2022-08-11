@@ -124,9 +124,15 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         if(CollectionUtils.isEmpty(custPrizes)){
             custPrizes = custPrizeMapper.getTwoCustPrize();
             if(CollectionUtils.isEmpty(custPrizes)){
-                //造假数据
-                custPrizes.add(getFakeCustPrize());
-                custPrizes.add(getFakeCustPrize());
+                //造数据
+                CustPrize cp1 = getFakeCustPrize();
+                if(cp1 != null){
+                    custPrizes.add(cp1);
+                }
+                CustPrize cp2 = getFakeCustPrize();
+                if(cp2 != null){
+                    custPrizes.add(cp2);
+                }
                 isFake = true;
             }
         }
@@ -141,7 +147,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
                 custPrizeMapper.updateById(updateInfo);
             }
         }
-        if(isFake){
+        if(isFake && !CollectionUtils.isEmpty(custPrizes)){
             String fakeStr = list.get(0)+";"+list.get(1);
             redisUtil.set("CUST_PRIZE_RECORD_STR", fakeStr, 30);
         }
