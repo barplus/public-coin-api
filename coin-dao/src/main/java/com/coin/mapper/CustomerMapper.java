@@ -18,6 +18,6 @@ public interface CustomerMapper {
 
     int updateTotalNum(Customer customer);
 
-    int addUsedNum(@Param("loginName") String loginName, @Param("rouletteUsedTime") Integer rouletteUsedTime);
+    int addUsedNum(@Param("loginName") String loginName, @Param("rouletteUsedTime") Integer addTime);
 
 }
