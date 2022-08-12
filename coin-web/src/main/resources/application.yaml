@@ -18,3 +18,10 @@ pagehelper:
   support-methods-arguments: true
   params: count=countsql
   auto-dialect: mysql
+ok:
+  http:
+    connect-timeout: 3
+    read-timeout: 30
+    write-timeout: 30
+    keep-alive-duration: 60
+    max-idle-connections: 5
