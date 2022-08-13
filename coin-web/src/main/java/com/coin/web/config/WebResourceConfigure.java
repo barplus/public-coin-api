@@ -28,10 +28,6 @@ public class WebResourceConfigure extends WebMvcConfigurationSupport {
         super.addResourceHandlers(registry);
     }
 
-//    /**
-//     * 跨域
-//     * @param registry
-//     */
 //    @Override
 //    public void addCorsMappings(CorsRegistry registry){
 //        registry.addMapping("/**")
