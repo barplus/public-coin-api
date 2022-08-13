@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coin.mapper.DictMapper">
+    <resultMap id="dictMap" type="com.coin.entity.Dict">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <id column="dict_type" property="dictType" jdbcType="VARCHAR"/>
+        <result column="dict_code" property="dictCode" jdbcType="VARCHAR"/>
+        <result column="dict_name" property="dictName" jdbcType="VARCHAR"/>
+        <result column="dict_val" property="dictVal" jdbcType="VARCHAR"/>
+        <result column="dict_val_big" property="dictValBig" jdbcType="VARCHAR"/>
+        <result column="parent_dict_code" property="parentDictCode" jdbcType="VARCHAR"/>
+        <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="addDict">
+        insert into t_dict(
+            dict_type,
+            dict_code,
+            dict_name,
+            <if test="dictVal != null">
+                dict_val,
+            </if>
+            <if test="dictValBig != null">
+                dict_val_big,
+            </if>
+            <if test="parentDictCode != null">
+                parent_dict_code,
+            </if>
+            create_user,
+            create_date,
+            update_user,
+            update_date
+        ) values(
+            #{dictType},
+            #{dictCode},
+            #{dictName},
+            <if test="dictVal != null">
+                #{dictVal},
+            </if>
+            <if test="dictValBig != null">
+                #{dictValBig},
+            </if>
+            <if test="parentDictCode != null">
+                #{parentDictCode},
+            </if>
+            #{createUser},
+            #{createDate},
+            #{updateUser},
+            #{updateDate}
+        )
+    </insert>
+
+    <update id="updateDict" parameterType="com.coin.entity.Dict">
+        update t_dict
+        set
+        <if test="dictVal != null">
+            dict_val = #{dictVal},
+        </if>
+        <if test="dictValBig != null">
+            dict_val_big = #{dictValBig},
+        </if>
+        update_date=#{updateDate},
+        update_user=#{updateUser}
+        where id = #{id}
+    </update>
+
+    <select id="getListByType" resultMap="dictMap">
+        select * from t_dict where dict_type = #{dictType}
+    </select>
+
+    <select id="getByTypeAndCode" resultMap="dictMap">
+        select * from t_dict where dict_type = #{dictType} and dict_code = #{dictCode}
+    </select>
+
+</mapper>

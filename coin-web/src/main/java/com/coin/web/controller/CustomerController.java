@@ -16,6 +16,7 @@ import com.coin.service.util.RedisUtil;
 import com.coin.web.annotation.CommonSecure;
 import com.coin.web.annotation.OfficeSecure;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/customer")
@@ -55,7 +57,11 @@ public class CustomerController {
                 customerService.createCustomer(req.getLoginName(), MD5Util.MD5(req.getLoginPass()));
                 customer = customerService.getInfoByLoginName(req.getLoginName());
             }
-            if(!MD5Util.MD5(req.getLoginPass()).equals(customer.getLoginPass())){
+            if(StringUtils.isBlank(customer.getLoginPass())){
+                Customer updateCustomer = BizUtil.getUpdateInfo(new Customer(), customer.getId(), req.getLoginName(), new Date());
+                updateCustomer.setLoginPass(MD5Util.MD5(req.getLoginPass()));
+                customerService.updateLoginPass(updateCustomer);
+            } else if(!MD5Util.MD5(req.getLoginPass()).equals(customer.getLoginPass())){
                 return new MyResp(CodeCons.ERROR, "登录失败，请输入正确专用码");
             }
             String tokenKey = customer.getLoginName()+":token";

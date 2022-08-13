@@ -16,7 +16,11 @@ public interface CustomerMapper {
 
     void createCustomer(Customer customer);
 
+    void createBatch(List<Customer> list);
+
     int updateTotalNum(Customer customer);
+
+    int setLoginPass(Customer customer);
 
     int addUsedNum(@Param("loginName") String loginName, @Param("rouletteUsedTime") Integer addTime);
 

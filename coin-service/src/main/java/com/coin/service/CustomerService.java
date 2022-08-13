@@ -12,6 +12,8 @@ public interface CustomerService {
 
     void update(CustomerReq req) throws Exception;
 
+    void updateLoginPass(Customer customer) throws Exception;
+
     void createCustomer(String loginName, String loginPass) throws Exception;
 
 }

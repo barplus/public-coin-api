@@ -50,6 +50,42 @@
 	    )
     </insert>
 
+    <insert id="createBatch">
+        INSERT INTO t_customer(
+            login_name,
+            login_pass,
+            create_user,
+            create_date,
+            update_user,
+            update_date
+        )
+        VALUES
+        <foreach collection ="list" item="customer" separator =",">
+        (
+            #{loginName},
+            #{loginPass},
+            #{createUser},
+            #{createDate},
+            #{updateUser},
+            #{updateDate}
+        )
+        </foreach>
+    </insert>
+
+    <update id="setLoginPass" parameterType="com.coin.entity.Customer">
+        update t_customer
+        set
+            <if test="loginPass == null">
+                login_pass = null,
+            </if>
+            <if test="loginPass != null">
+                login_pass = #{loginPass},
+            </if>
+            update_date=#{updateDate},
+            update_user=#{updateUser}
+        where id = #{id}
+    </update>
+
     <update id="addUsedNum">
         update t_customer t set t.roulette_used_time = t.roulette_used_time+1
         where t.login_name = #{loginName}
