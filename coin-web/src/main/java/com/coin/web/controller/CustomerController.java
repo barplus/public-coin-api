@@ -175,4 +175,26 @@ public class CustomerController {
         return new MyResp(CodeCons.ERROR, "请求失败");
     }
 
+    @PostMapping("/clearLoginPass")
+    @OfficeSecure
+    public MyResp clearLoginPass(@RequestBody CustomerReq req){
+        logger.info("customer-clearLoginPass-req={}", req);
+        try{
+            MyResp valid = ParamUtil.NotBlankValid(req.getQueryLoginName(), "queryLoginName");
+            if(valid != null){
+                return valid;
+            }
+            Customer oldCustomer = customerService.getInfoByLoginName(req.getQueryLoginName());
+            Customer customer = BizUtil.getUpdateInfo(new Customer(), oldCustomer.getId(), req.getLoginName(), new Date());
+            customerService.updateLoginPass(customer);
+            return new MyResp(CodeCons.SUCCESS, "操作成功");
+        }catch(BizException e){
+            logger.error("customer-clearLoginPass-BizException", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("customer-clearLoginPass-Exception", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
 }
