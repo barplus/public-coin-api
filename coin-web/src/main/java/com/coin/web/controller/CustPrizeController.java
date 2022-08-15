@@ -94,6 +94,7 @@ public class CustPrizeController {
     @RequestMapping(value = "/importMemberList", method = RequestMethod.POST)
     @OfficeSecure
     public MyResp importMemberList(CustPrizeReq req, @RequestPart("file") MultipartFile file) {
+        logger.info("custPrize-importMemberList-req={}", req);
         ImportParams params = new ImportParams();
         params.setTitleRows(0);
         params.setHeadRows(1);
@@ -109,6 +110,7 @@ public class CustPrizeController {
     @PostMapping("/custPrizeRecord")
     public MyResp custPrizeRecord(){
         try{
+            logger.info("custPrize-custPrizeRecord-req={}", "{}");
             List<String> list = custPrizeService.custPrizeRecord();
             return new MyResp(CodeCons.SUCCESS, "", list);
         }catch(BizException e){

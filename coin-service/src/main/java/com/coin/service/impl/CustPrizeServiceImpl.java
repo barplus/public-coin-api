@@ -149,7 +149,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         }
         if(isFake && !CollectionUtils.isEmpty(custPrizes)){
             String fakeStr = list.get(0)+";"+list.get(1);
-            redisUtil.set("CUST_PRIZE_RECORD_STR", fakeStr, 30);
+            redisUtil.set("CUST_PRIZE_RECORD_STR", fakeStr, 29);
         }
         return list;
     }
