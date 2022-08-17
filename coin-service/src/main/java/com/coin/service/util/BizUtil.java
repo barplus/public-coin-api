@@ -2,13 +2,13 @@ package com.coin.service.util;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.coin.entity.Prize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Date;
+import java.util.Random;
 
 public class BizUtil {
 

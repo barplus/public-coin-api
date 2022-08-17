@@ -1,6 +1,5 @@
 package com.coin.web;
 
-import com.alibaba.fastjson.JSONObject;
 import com.coin.service.util.OkHttpUtil;
 import com.coin.web.controller.SysUserController;
 import org.junit.jupiter.api.Test;
@@ -8,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
-import java.util.Map;
 
 @SpringBootTest
 class WebApplicationTests {

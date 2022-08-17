@@ -10,6 +10,7 @@ import com.coin.service.util.RedisUtil;
 import com.coin.service.util.StrUtil;
 import com.coin.web.annotation.CommonSecure;
 import com.coin.web.utils.IpUtils;
+import com.coin.web.utils.ParamUtil;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -84,15 +85,18 @@ public class CommonAspect {
 
     private CommonReq getReq(ProceedingJoinPoint pj){
         CommonReq req = null;
+        Object object = null;
         for(Object obj:pj.getArgs()){
             if(obj instanceof CommonReq){
                 req = (CommonReq)obj;
+                object = obj;
                 break;
             }
         }
         if(req == null){
             throw new BizException(CodeCons.ERROR, "请求参数格式错误");
         }
+        ParamUtil.xssCheck(object);
         return req;
     }
 

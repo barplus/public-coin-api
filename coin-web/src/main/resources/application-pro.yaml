@@ -3,7 +3,7 @@ server:
 spring:
   datasource:
     username: root1
-    password: y8sDksW3ScwcHAKL
+    password: y8sDksW3ScwcHAKL1
     url: jdbc:mysql://127.0.0.1:3306/customer?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8&allowMultiQueries=true
     driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
@@ -25,3 +25,5 @@ spring:
 mybatis:
   mapper-locations: classpath*:/com/coin/mapper/*.xml
   type-aliases-package: com.coin.entity
+upload:
+  url:  /www/java/pic
