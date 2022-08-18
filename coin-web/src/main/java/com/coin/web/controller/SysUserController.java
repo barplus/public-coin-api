@@ -1,6 +1,6 @@
 package com.coin.web.controller;
 
-import com.coin.entity.SysUser;
+import com.coin.entity.TSysUser;
 import com.coin.req.SysUserReq;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.SysUserService;
@@ -39,7 +39,7 @@ public class SysUserController {
             if(valid != null){
                 return valid;
             }
-            SysUser user = userService.getUserByLoginName(req.getLoginName());
+            TSysUser user = userService.getUserByLoginName(req.getLoginName());
             if(user == null){
                 return new MyResp(CodeCons.ERROR, "用户不存在");
             }
@@ -74,7 +74,7 @@ public class SysUserController {
     public MyResp logout(@RequestBody SysUserReq req){
         logger.info("user-logout-req={}", req);
         try{
-            SysUser user = userService.getUserByLoginName(req.getLoginName());
+            TSysUser user = userService.getUserByLoginName(req.getLoginName());
             String tokenKey = user.getLoginName()+":token";
             if(redisUtil.get(tokenKey) != null){
                 String oldToken = redisUtil.get(redisUtil.get(tokenKey));

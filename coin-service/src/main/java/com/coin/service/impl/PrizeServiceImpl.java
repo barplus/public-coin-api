@@ -1,7 +1,7 @@
 package com.coin.service.impl;
 
-import com.coin.entity.Prize;
-import com.coin.mapper.PrizeMapper;
+import com.coin.entity.TPrize;
+import com.coin.mapper.ext.PrizeMapper;
 import com.coin.req.PrizeReq;
 import com.coin.rsp.PrizeRsp;
 import com.coin.service.PrizeService;
@@ -28,7 +28,7 @@ public class PrizeServiceImpl implements PrizeService {
 
     @Override
     public PrizeRsp getInfoById(Integer id) throws Exception {
-        Prize prize = prizeMapper.getInfoById(id);
+        TPrize prize = prizeMapper.getInfoById(id);
         PrizeRsp rsp = new PrizeRsp();
         BeanUtils.copyProperties(prize, rsp);
         return rsp;
@@ -42,11 +42,11 @@ public class PrizeServiceImpl implements PrizeService {
 
     @Override
     public void addPrize(PrizeReq req) throws Exception {
-        Prize oldPrize = prizeMapper.getInfoByName(req.getPrizeName());
+        TPrize oldPrize = prizeMapper.getInfoByName(req.getPrizeName());
         if(oldPrize != null){
             throw new BizException(CodeCons.ERROR, "重复的奖品名");
         }
-        Prize prizeByAmount = prizeMapper.getInfoByAmount(null, req.getAmount());
+        TPrize prizeByAmount = prizeMapper.getInfoByAmount(null, req.getAmount());
         if(prizeByAmount != null){
             throw new BizException(CodeCons.ERROR, "重复的奖品价值");
         }
@@ -60,7 +60,7 @@ public class PrizeServiceImpl implements PrizeService {
                 throw new BizException(CodeCons.ERROR, "单个奖品VIP中奖率不能大于100%");
             }
         }
-        Prize prize = BizUtil.getInsertInfo(new Prize(), req.getLoginName(), new Date());
+        TPrize prize = BizUtil.getInsertInfo(new TPrize(), req.getLoginName(), new Date());
         prize.setPrizeName(req.getPrizeName());
         prize.setPrizePic(req.getPrizePic());
         prize.setAmount(req.getAmount());
@@ -75,18 +75,18 @@ public class PrizeServiceImpl implements PrizeService {
         if(!BizCons.COMMON_DATA_STATUS.containsKey(req.getStatus())){
             throw new BizException(CodeCons.ERROR, "状态值错误");
         }
-        Prize updatePrize = BizUtil.getUpdateInfo(new Prize(), req.getId(), req.getLoginName(), new Date());
+        TPrize updatePrize = BizUtil.getUpdateInfo(new TPrize(), req.getId(), req.getLoginName(), new Date());
         updatePrize.setStatus(req.getStatus());
         prizeMapper.updateById(updatePrize);
     }
 
     @Override
     public void updateInfo(PrizeReq req) throws Exception {
-        Prize oldPrize = prizeMapper.getInfoById(req.getId());
+        TPrize oldPrize = prizeMapper.getInfoById(req.getId());
         if(oldPrize == null){
             throw new BizException(CodeCons.ERROR, "奖品信息不存在");
         }
-        Prize updatePrize = BizUtil.getUpdateInfo(new Prize(), req.getId(), req.getLoginName(), new Date());
+        TPrize updatePrize = BizUtil.getUpdateInfo(new TPrize(), req.getId(), req.getLoginName(), new Date());
         if(req.getRate() !=null){
             if(req.getRate().compareTo(new BigDecimal("1")) == 1){
                 throw new BizException(CodeCons.ERROR, "中奖率不能大于100%");
@@ -104,14 +104,14 @@ public class PrizeServiceImpl implements PrizeService {
             updatePrize.setVipRate(req.getVipRate());
         }
         if(req.getPrizeName() != null){
-            Prize prize = prizeMapper.getInfoByName(req.getPrizeName());
+            TPrize prize = prizeMapper.getInfoByName(req.getPrizeName());
             if(prize != null && prize.getId() != req.getId()){
                 throw new BizException(CodeCons.ERROR, "奖品名称不能和其他奖品一致");
             }
             updatePrize.setPrizeName(req.getPrizeName());
         }
         if(req.getAmount() != null){
-            Prize prizeByAmount = prizeMapper.getInfoByAmount(oldPrize.getId(), req.getAmount());
+            TPrize prizeByAmount = prizeMapper.getInfoByAmount(oldPrize.getId(), req.getAmount());
             if(prizeByAmount != null){
                 throw new BizException(CodeCons.ERROR, "奖品价值和【"+prizeByAmount.getPrizeName()+"】重复");
             }
@@ -127,10 +127,10 @@ public class PrizeServiceImpl implements PrizeService {
     }
 
     @Override
-    public PageInfo<Prize> pageList(PrizeReq req) throws Exception {
+    public PageInfo<TPrize> pageList(PrizeReq req) throws Exception {
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
-        List<Prize> prizes = prizeMapper.getPrizeList(req);
-        PageInfo<Prize> page = new PageInfo<>(prizes);
+        List<TPrize> prizes = prizeMapper.getPrizeList(req);
+        PageInfo<TPrize> page = new PageInfo<>(prizes);
         return page;
     }
 
@@ -138,12 +138,12 @@ public class PrizeServiceImpl implements PrizeService {
     public List<PrizeRsp> pageDatas(PrizeReq req) throws Exception {
         req.setStatus(1);
         req.setRateNoZero(1);
-        List<Prize> prizes = prizeMapper.getPrizeList(req);
+        List<TPrize> prizes = prizeMapper.getPrizeList(req);
         List<PrizeRsp> list = prizes.stream().map(prize->this.convertRsp(prize)).collect(Collectors.toList());
         return list;
     }
 
-    private PrizeRsp convertRsp(Prize prize){
+    private PrizeRsp convertRsp(TPrize prize){
         PrizeRsp rsp = new PrizeRsp();
         BeanUtils.copyProperties(prize, rsp);
         return rsp;

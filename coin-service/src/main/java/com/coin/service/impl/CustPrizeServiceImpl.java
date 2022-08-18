@@ -1,16 +1,17 @@
 package com.coin.service.impl;
 
-import com.coin.entity.CustPrize;
-import com.coin.entity.Customer;
-import com.coin.entity.Prize;
-import com.coin.mapper.CustPrizeMapper;
-import com.coin.mapper.CustomerMapper;
-import com.coin.mapper.PrizeMapper;
+import com.coin.entity.TCustPrize;
+import com.coin.entity.TCustomer;
+import com.coin.entity.TPrize;
+import com.coin.mapper.ext.CustPrizeMapper;
+import com.coin.mapper.ext.CustomerMapper;
+import com.coin.mapper.ext.PrizeMapper;
 import com.coin.req.CustPrizeReq;
 import com.coin.req.PrizeReq;
 import com.coin.rsp.CustPrizeRsp;
 import com.coin.rsp.PrizeRsp;
 import com.coin.service.CustPrizeService;
+import com.coin.service.CustomerService;
 import com.coin.service.constant.BizCons;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.exception.BizException;
@@ -41,17 +42,19 @@ public class CustPrizeServiceImpl implements CustPrizeService {
     @Resource
     private CustomerMapper customerMapper;
     @Resource
+    private CustomerService customerService;
+    @Resource
     private PrizeMapper prizeMapper;
     @Resource
     private RedisUtil redisUtil;
 
     @Override
-    public Prize getInfoById(Integer id) throws Exception {
+    public TPrize getInfoById(Integer id) throws Exception {
         return null;
     }
 
     @Override
-    public PageInfo<CustPrize> pageList(CustPrizeReq req) throws Exception {
+    public PageInfo<TCustPrize> pageList(CustPrizeReq req) throws Exception {
         Date today = DateUtil.getNoTimeDate(new Date());
         req.setMaxDate(DateUtil.addDays(today, 1));
         if(req.getDateType() !=null){
@@ -74,8 +77,8 @@ public class CustPrizeServiceImpl implements CustPrizeService {
             }
         }
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
-        List<CustPrize> custPrizes = custPrizeMapper.getCustPrizeList(req);
-        PageInfo<CustPrize> page = new PageInfo<>(custPrizes);
+        List<TCustPrize> custPrizes = custPrizeMapper.getCustPrizeList(req);
+        PageInfo<TCustPrize> page = new PageInfo<>(custPrizes);
         return page;
     }
 
@@ -90,7 +93,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public PrizeRsp doLottery(String loginName) throws Exception {
-        Customer customer = customerMapper.getInfoByLoginName(loginName);
+        TCustomer customer = customerService.getInfoByLoginName(loginName);
         if(customer.getRouletteTotalTime() - customer.getRouletteUsedTime() <= 0){
             throw new BizException(CodeCons.NO_ROULETTE_TIME, "您已无抽奖次数 请您继续游戏获取更多抽奖次数");
         }
@@ -100,7 +103,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
             logger.error("doLottery-addUsedNum-error");
             throw new BizException(CodeCons.ERROR, "抽奖失败，请稍后再试");
         }
-        Prize prize = this.getPrize(loginName, customer.getVip(), false);
+        TPrize prize = this.getPrize(loginName, customer.getVip(), false);
         this.addCustPrize(loginName, prize, "addCustPrize");
         PrizeRsp rsp = new PrizeRsp();
         if(prize == null){
@@ -114,7 +117,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
     @Override
     public List<PrizeRsp> doLotteryTen(String loginName) throws Exception {
         List<PrizeRsp> list = new ArrayList<>();
-        Customer customer = customerMapper.getInfoByLoginName(loginName);
+        TCustomer customer = customerService.getInfoByLoginName(loginName);
         if(customer.getRouletteTotalTime() - customer.getRouletteUsedTime() < 10){
             throw new BizException(CodeCons.NO_ROULETTE_TEN_TIME, "抽奖次数不足 请您继续游戏获取更多抽奖次数");
         }
@@ -135,16 +138,16 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         }
         boolean isFake = false;
         List<String> list = new ArrayList<>();
-        List<CustPrize> custPrizes = custPrizeMapper.getTwoCustPrize30s();
+        List<TCustPrize> custPrizes = custPrizeMapper.getTwoCustPrize30s();
         if(CollectionUtils.isEmpty(custPrizes)){
             custPrizes = custPrizeMapper.getTwoCustPrize();
             if(CollectionUtils.isEmpty(custPrizes)){
                 //造数据
-                CustPrize cp1 = getFakeCustPrize();
+                TCustPrize cp1 = getFakeCustPrize();
                 if(cp1 != null){
                     custPrizes.add(cp1);
                 }
-                CustPrize cp2 = getFakeCustPrize();
+                TCustPrize cp2 = getFakeCustPrize();
                 if(cp2 != null){
                     custPrizes.add(cp2);
                 }
@@ -152,12 +155,12 @@ public class CustPrizeServiceImpl implements CustPrizeService {
             }
         }
         Date now = new Date();
-        for(CustPrize custPrize:custPrizes){
+        for(TCustPrize custPrize:custPrizes){
             String maskLoginName = BizUtil.maskString(custPrize.getLoginName());
             String prizeName = custPrize.getPrizeName();
             list.add("恭喜“"+ maskLoginName +"”抽中奖品“"+prizeName+"”");
             if(!isFake && custPrize.getRequestDate() == null){
-                CustPrize updateInfo = BizUtil.getUpdateInfo(new CustPrize(), custPrize.getId(), "sys-api", now);
+                TCustPrize updateInfo = BizUtil.getUpdateInfo(new TCustPrize(), custPrize.getId(), "sys-api", now);
                 updateInfo.setRequestDate(now);
                 custPrizeMapper.updateById(updateInfo);
             }
@@ -170,30 +173,30 @@ public class CustPrizeServiceImpl implements CustPrizeService {
     }
 
     @Override
-    public int addCustPrize(String loginName, Prize prize) throws Exception {
-        CustPrize custPrize = BizUtil.getInsertInfo(new CustPrize(), loginName, new Date());
+    public int addCustPrize(String loginName, TPrize prize) throws Exception {
+        TCustPrize custPrize = BizUtil.getInsertInfo(new TCustPrize(), loginName, new Date());
         if(prize != null){
             custPrize.setPrizeId(prize.getId());
             custPrize.setPrizeName(prize.getPrizeName());
         }
         custPrize.setLoginName(loginName);
-        custPrize.setBillNo(DateUtil.getTodayStr());
+        custPrize.setBillNo(DateUtil.getTodayStr()+BizUtil.getStringRandom(4, 0));
         return custPrizeMapper.addCustPrize(custPrize);
     }
 
-    private CustPrize getFakeCustPrize(){
+    private TCustPrize getFakeCustPrize(){
         PrizeReq req = new PrizeReq();
         req.setStatus(1);
         req.setRateNoZero(1);
         req.setNumNoZero(1);
-        List<Prize> prizeList = prizeMapper.getPrizeList(req);
+        List<TPrize> prizeList = prizeMapper.getPrizeList(req);
         if(CollectionUtils.isEmpty(prizeList)){
             return null;
         }
-        CustPrize custPrize = new CustPrize();
+        TCustPrize custPrize = new TCustPrize();
         String fakeLoginName = BizUtil.getStringRandom(4, 1).toLowerCase() + "0000" + BizUtil.getStringRandom(4, 0).toLowerCase();
         custPrize.setLoginName(fakeLoginName);
-        Prize prize = this.getPrize(fakeLoginName, null, true);
+        TPrize prize = this.getPrize(fakeLoginName, null, true);
         if(prize == null){
             throw new BizException(CodeCons.NO_PRIZE, "没有可用的奖品");
         }
@@ -201,19 +204,19 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         return custPrize;
     }
 
-    private Prize getPrize(String loginName, Integer vip, boolean must){
+    private TPrize getPrize(String loginName, Integer vip, boolean must){
         PrizeReq req = new PrizeReq();
         req.setStatus(1);
         req.setRateNoZero(1);
         req.setNumNoZero(1);
-        List<Prize> prizeList = prizeMapper.getPrizeList(req);
+        List<TPrize> prizeList = prizeMapper.getPrizeList(req);
         if(CollectionUtils.isEmpty(prizeList)){
             logger.info("custPrize-getPrize-1, loginName={}", loginName);
             return null;
         }
         List<Integer> list = new ArrayList<>();
         int maxNum = 0;
-        for(Prize prize:prizeList){
+        for(TPrize prize:prizeList){
             BigDecimal rate = vip == null?prize.getRate():this.getVipRate(prize, vip);
             int num = rate.multiply(new BigDecimal("10000")).intValue();
             list.add(num);
@@ -230,7 +233,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         for(int i=0; i<list.size(); i++){
             currentNum += list.get(i);
             if(currentNum >= randomNum){
-                Prize prize = prizeList.get(i);
+                TPrize prize = prizeList.get(i);
                 logger.info("custPrize-getPrize-3, loginName={}", loginName);
                 return prize;
             }
@@ -239,14 +242,14 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         return null;
     }
 
-    private void addCustPrize(String loginName, Prize prize, String method) throws Exception{
+    private void addCustPrize(String loginName, TPrize prize, String method) throws Exception{
         int cout = this.addCustPrize(loginName, prize);
         if(cout != 1){
             logger.error("doLottery-"+method+"-error");
             throw new BizException(CodeCons.ERROR, "抽奖失败，请稍后再试");
         }
         if(prize != null){
-            Prize updatePrize = BizUtil.getUpdateInfo(new Prize(), prize.getId(), loginName, new Date());
+            TPrize updatePrize = BizUtil.getUpdateInfo(new TPrize(), prize.getId(), loginName, new Date());
             updatePrize.setUsedNum(prize.getUsedNum());
             updatePrize.setMaxNum(prize.getMaxNum());
             int count = prizeMapper.addUsedNum(updatePrize);
@@ -257,7 +260,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         }
     }
 
-    private BigDecimal getVipRate(Prize prize, int vip){
+    private BigDecimal getVipRate(TPrize prize, int vip){
         if(StringUtils.isBlank(prize.getVipRate())){
             return prize.getRate();
         }

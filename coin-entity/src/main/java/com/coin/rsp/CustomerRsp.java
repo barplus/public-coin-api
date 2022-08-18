@@ -1,4 +1,4 @@
-package com.coin.entity;
+package com.coin.rsp;
 
 import lombok.Data;
 
@@ -6,24 +6,32 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class CustPrize implements Serializable {
+public class CustomerRsp implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private Integer id;
-    /**记录编号*/
-    private String billNo;
-    /**奖品id*/
-    private Integer prizeId;
-    /**奖品名称*/
-    private String prizeName;
-    /**会员登录名*/
+
     private String loginName;
-    /**滚动条获取时间*/
-    private Date requestDate;
+
+    private Integer vip;
+
+    private Integer rouletteTotalTime;
+
+    private Integer rouletteUsedTime;
+
+    private String wallet;
+
+    private Integer status;
+
+    private Integer isLogin;
+
     private String createUser;
+
     private Date createDate;
+
     private String updateUser;
+
     private Date updateDate;
 
 }

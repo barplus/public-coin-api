@@ -10,7 +10,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,17 +46,17 @@ public class FileController {
     }
 
     @RequestMapping("/downloadNoLogin")
-    public MyResp downloadNoLogin(FileReq req, HttpServletResponse response) {
-        return this.download(req, response);
+    public void downloadNoLogin(FileReq req, HttpServletResponse response) {
+        this.download(req, response);
     }
 
     @RequestMapping("/download")
     @OfficeSecure
-    public MyResp download(FileReq req, HttpServletResponse response) {
+    public void download(FileReq req, HttpServletResponse response) {
         try {
             MyResp valid = ParamUtil.NotBlankValid(req.getFileName(), "文件名");
             if(valid != null){
-                return valid;
+                return;
             }
             File file = new File(picUrl +"\\" + req.getFileName());
             String filename = file.getName();
@@ -75,13 +74,10 @@ public class FileController {
             toClient.flush();
             toClient.close();
         } catch (IOException ee) {
-            logger.error("file-download-error", ee);
-            return new MyResp(CodeCons.ERROR, "下载失败");
+            logger.error("file-download-e1", ee);
         } catch (Exception e) {
             logger.error("file-download-error", e);
-            return new MyResp(CodeCons.ERROR, "下载失败");
         }
-        return new MyResp(CodeCons.SUCCESS, "下载成功");
     }
 
     @RequestMapping(value = "downloadExcel", produces = "text/html;charset=UTF-8")

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.coin.mapper.CustomerMapper">
-    <resultMap id="customerMap" type="com.coin.entity.Customer">
+<mapper namespace="com.coin.mapper.ext.CustomerMapper">
+    <resultMap id="customerMap" type="com.coin.entity.TCustomer">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
         <result column="login_pass" property="loginPass" jdbcType="VARCHAR"/>
         <result column="vip" property="vip" jdbcType="INTEGER"/>
         <result column="roulette_total_time" property="rouletteTotalTime" jdbcType="INTEGER"/>
         <result column="roulette_used_time" property="rouletteUsedTime" jdbcType="INTEGER"/>
+        <result column="wallet" property="wallet" jdbcType="VARCHAR"/>
         <result column="status" property="status" jdbcType="INTEGER"/>
         <result column="is_login" property="isLogin" jdbcType="INTEGER"/>
         <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
@@ -16,16 +17,8 @@
         <result column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <select id="getInfoByLoginName" resultMap="customerMap">
-        select * from t_customer t where t.login_name = #{loginName}
-    </select>
-
-    <select id="getInfoById" resultMap="customerMap">
-        select * from t_customer t where t.id = #{id}
-    </select>
-
     <select id="getCustomerList" resultMap="customerMap">
-        select id,login_name,vip,roulette_total_time,roulette_used_time,status,is_login,create_user,create_date,update_user,update_date
+        select id,login_name,vip,roulette_total_time,roulette_used_time,status,is_login,create_user,create_date,update_user,update_date,wallet
         from t_customer t
         where 1= 1
         <if test="queryLoginName != null and queryLoginName != ''">
@@ -76,7 +69,7 @@
         </foreach>
     </insert>
 
-    <update id="setLoginPass" parameterType="com.coin.entity.Customer">
+    <update id="setLoginPass" parameterType="com.coin.entity.TCustomer">
         update t_customer
         set
             <if test="loginPass == null">
@@ -100,6 +93,12 @@
     <update id="updateTotalNum">
         update t_customer t
         set t.roulette_total_time = t.roulette_total_time + #{rouletteTotalTime}
+        where t.id = #{id}
+    </update>
+
+    <update id="updateWallet">
+        update t_customer t
+        set t.wallet = #{wallet}
         where t.id = #{id}
     </update>
 

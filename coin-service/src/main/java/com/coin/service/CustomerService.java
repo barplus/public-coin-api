@@ -1,19 +1,24 @@
 package com.coin.service;
 
-import com.coin.entity.Customer;
+import com.coin.entity.TCustomer;
 import com.coin.req.CustomerReq;
+import com.coin.rsp.CustomerRsp;
 import com.github.pagehelper.PageInfo;
+
+import java.util.List;
 
 public interface CustomerService {
 
-    Customer getInfoByLoginName(String loginName) throws Exception;
+    TCustomer getInfoByLoginName(String loginName) throws Exception;
 
-    PageInfo<Customer> pageList(CustomerReq req) throws Exception;
+    PageInfo<TCustomer> pageList(CustomerReq req) throws Exception;
+    List<CustomerRsp> getList(CustomerReq req) throws Exception;
 
-    void update(CustomerReq req) throws Exception;
+    void updateTotalNum(CustomerReq req) throws Exception;
+    void updateWallet(CustomerReq req) throws Exception;
     void updateIsLogin(String loginName) throws Exception;
 
-    void updateLoginPass(Customer customer) throws Exception;
+    void updateLoginPass(TCustomer customer, int type, String sysUser) throws Exception;
 
     void createCustomer(String loginName, String loginPass) throws Exception;
 

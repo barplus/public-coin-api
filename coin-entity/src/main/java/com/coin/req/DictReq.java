@@ -32,5 +32,7 @@ public class DictReq extends CommonReq implements Serializable {
     private Integer status;
     /**序号*/
     private Integer sortNum;
+    /**是否只以sortNum排序*/
+    private Integer onlySortNum;
 
 }

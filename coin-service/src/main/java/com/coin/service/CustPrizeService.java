@@ -1,7 +1,7 @@
 package com.coin.service;
 
-import com.coin.entity.CustPrize;
-import com.coin.entity.Prize;
+import com.coin.entity.TCustPrize;
+import com.coin.entity.TPrize;
 import com.coin.req.CustPrizeReq;
 import com.coin.rsp.CustPrizeRsp;
 import com.coin.rsp.PrizeRsp;
@@ -11,9 +11,9 @@ import java.util.List;
 
 public interface CustPrizeService {
 
-    Prize getInfoById(Integer id) throws Exception;
+    TPrize getInfoById(Integer id) throws Exception;
 
-    PageInfo<CustPrize> pageList(CustPrizeReq req) throws Exception;
+    PageInfo<TCustPrize> pageList(CustPrizeReq req) throws Exception;
 
     PageInfo<CustPrizeRsp> pageDatas(CustPrizeReq req) throws Exception;
 
@@ -23,6 +23,6 @@ public interface CustPrizeService {
 
     List<PrizeRsp> doLotteryTen(String loginName) throws Exception;
 
-    int addCustPrize(String loginName, Prize prize) throws Exception;
+    int addCustPrize(String loginName, TPrize prize) throws Exception;
 
 }

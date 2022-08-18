@@ -2,7 +2,7 @@ package com.coin.web.controller;
 
 import cn.afterturn.easypoi.excel.ExcelImportUtil;
 import cn.afterturn.easypoi.excel.entity.ImportParams;
-import com.coin.entity.CustPrize;
+import com.coin.entity.TCustPrize;
 import com.coin.req.CustPrizeReq;
 import com.coin.rsp.CustPrizeRsp;
 import com.coin.service.BizEntity.MyResp;
@@ -41,7 +41,7 @@ public class CustPrizeController {
             if(valid != null){
                 return valid;
             }
-            PageInfo<CustPrize> page = custPrizeService.pageList(req);
+            PageInfo<TCustPrize> page = custPrizeService.pageList(req);
             return new MyResp(CodeCons.SUCCESS, "", page);
         }catch(BizException e){
             logger.error("custPrize-pageList-BizException", e);
@@ -110,7 +110,7 @@ public class CustPrizeController {
     @PostMapping("/custPrizeRecord")
     public MyResp custPrizeRecord(){
         try{
-            logger.info("custPrize-custPrizeRecord-req={}", "{}");
+            logger.info("custPrize-custPrizeRecord-req={}", "");
             List<String> list = custPrizeService.custPrizeRecord();
             return new MyResp(CodeCons.SUCCESS, "", list);
         }catch(BizException e){

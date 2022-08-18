@@ -1,0 +1,20 @@
+package com.coin.mapper.ext;
+
+import com.coin.entity.TPrize;
+import com.coin.req.PrizeReq;
+import com.coin.rsp.PrizeRsp;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+public interface PrizeMapper {
+
+    TPrize getInfoById(@Param("id") Integer id);
+    PrizeRsp totalRate();
+    TPrize getInfoByName(@Param("prizeName") String prizeName);
+    TPrize getInfoByAmount(@Param("id") Integer excludeId, @Param("amount") Integer amount);
+    List<TPrize> getPrizeList(PrizeReq req);
+    void addPrize(TPrize prize);
+    void updateById(TPrize prize);
+    int addUsedNum(TPrize prize);
+}

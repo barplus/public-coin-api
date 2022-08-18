@@ -2,7 +2,41 @@ package com.coin.service.enums;
 
 public enum LogTypeEnum {
 
-    UPDATE_PASS, //修改密码
-    EDIT_PRIZE, //奖品编辑
-    ;
+    // 公共
+    CLEAR_PASS(1, "清除密码"),
+    ADD_LOTTERY_TIME(2,"增加抽奖次数");
+
+    public int code;
+    public String message;
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    LogTypeEnum(int code, String message) {
+        this.code = code;
+        this.message = message;
+    }
+
+    public static String getMsgByCode(int code){
+        for(LogTypeEnum logType:LogTypeEnum.values()){
+            if(code == logType.getCode()){
+                return logType.getMessage();
+            }
+        }
+        return null;
+    }
+
 }

@@ -1,6 +1,6 @@
 package com.coin.web.controller;
 
-import com.coin.entity.Prize;
+import com.coin.entity.TPrize;
 import com.coin.req.PrizeReq;
 import com.coin.rsp.PrizeRsp;
 import com.coin.service.BizEntity.MyResp;
@@ -100,7 +100,7 @@ public class PrizeController {
                 return valid;
             }
             req.setNameLike("Y");
-            PageInfo<Prize> page = prizeService.pageList(req);
+            PageInfo<TPrize> page = prizeService.pageList(req);
             return new MyResp(CodeCons.SUCCESS, "", page);
         }catch(Exception e){
             logger.error("prize-pageList-error", e);

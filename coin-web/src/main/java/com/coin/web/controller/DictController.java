@@ -1,11 +1,13 @@
 package com.coin.web.controller;
 
-import com.coin.entity.Dict;
+import com.coin.entity.TDict;
 import com.coin.req.DictReq;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.DictService;
 import com.coin.service.constant.CodeCons;
+import com.coin.service.exception.BizException;
 import com.coin.service.util.ParamUtil;
+import com.coin.web.annotation.CommonSecure;
 import com.coin.web.annotation.OfficeSecure;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -36,10 +38,27 @@ public class DictController {
             if(valid != null){
                 return valid;
             }
-            List<Dict> list = dictService.getListByType(req);
+            List<TDict> list = dictService.getListByType(req);
             return new MyResp(CodeCons.SUCCESS, "", list);
         }catch(Exception e){
             logger.error("dict-getDicts-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
+    @PostMapping("/getDictList")
+    @CommonSecure
+    public MyResp getDictList(@RequestBody DictReq req){
+        logger.info("dict-getDictList-req={}", req);
+        try{
+            MyResp valid = ParamUtil.NotBlankValid(req.getDictType(), "字典类型");
+            if(valid != null){
+                return valid;
+            }
+            List<TDict> list = dictService.getListByType(req);
+            return new MyResp(CodeCons.SUCCESS, "", list);
+        }catch(Exception e){
+            logger.error("dict-getDictList-error", e);
         }
         return new MyResp(CodeCons.ERROR, "请求失败");
     }
@@ -49,7 +68,7 @@ public class DictController {
     public MyResp add(@RequestBody DictReq req){
         logger.info("dict-add-req={}", req);
         try{
-            MyResp valid = ParamUtil.NotBlankValid(req.getDictType(), "字典类型", req.getDictCode(), "字典编码", req.getDictName(), "字典名称");
+            MyResp valid = ParamUtil.NotBlankValid(req.getDictType(), "字典类型", req.getDictCode(), "字典编码", req.getDictName(), "字典名称", req.getStatus(), "状态");
             if(valid != null){
                 return valid;
             }
@@ -58,8 +77,31 @@ public class DictController {
             }
             dictService.add(req);
             return new MyResp(CodeCons.SUCCESS, "保存成功");
+        }catch(BizException e){
+            logger.error("dict-add-e", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
         }catch(Exception e){
             logger.error("dict-add-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
+    @PostMapping("/update")
+    @OfficeSecure
+    public MyResp update(@RequestBody DictReq req){
+        logger.info("dict-update-req={}", req);
+        try{
+            MyResp valid = ParamUtil.NotBlankValid(req.getId(), "id");
+            if(valid != null){
+                return valid;
+            }
+            dictService.update(req);
+            return new MyResp(CodeCons.SUCCESS, "保存成功");
+        }catch(BizException e){
+            logger.error("dict-update-e", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("dict-update-error", e);
         }
         return new MyResp(CodeCons.ERROR, "请求失败");
     }

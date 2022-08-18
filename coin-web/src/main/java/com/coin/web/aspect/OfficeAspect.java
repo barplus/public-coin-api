@@ -1,6 +1,6 @@
 package com.coin.web.aspect;
 
-import com.coin.entity.SysUser;
+import com.coin.entity.TSysUser;
 import com.coin.req.CommonReq;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.SysUserService;
@@ -69,7 +69,7 @@ public class OfficeAspect {
                 return new MyResp(CodeCons.ERROR, "请求太快，请稍后");
             }
             if(!ArrayUtils.contains(noNeedLoginPath, method)){
-                SysUser sysUser = sysUserService.getUserByLoginName(loginName);
+                TSysUser sysUser = sysUserService.getUserByLoginName(loginName);
                 if(sysUser == null){
                     return new MyResp(CodeCons.ERROR, "非法用户请求");
                 }

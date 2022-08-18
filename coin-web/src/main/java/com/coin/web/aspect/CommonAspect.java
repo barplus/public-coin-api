@@ -1,6 +1,6 @@
 package com.coin.web.aspect;
 
-import com.coin.entity.Customer;
+import com.coin.entity.TCustomer;
 import com.coin.req.CommonReq;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.CustomerService;
@@ -62,7 +62,7 @@ public class CommonAspect {
                 return new MyResp(CodeCons.ERROR, "请求太快，请稍后");
             }
             if(!ArrayUtils.contains(noNeedLoginPath, method)){
-                Customer customer = customerService.getInfoByLoginName(loginName);
+                TCustomer customer = customerService.getInfoByLoginName(loginName);
                 if(customer == null || customer.getStatus() != 1){
                     return new MyResp(CodeCons.CUSTOMER_NO_EXISTS, "用户不存在或已失效");
                 }

@@ -22,9 +22,6 @@ spring:
         max-wait: 1
         max-idle: 0
         min-idle: 0
-mybatis:
-  mapper-locations: classpath*:/com/coin/mapper/*.xml
-  type-aliases-package: com.coin.entity
 upload:
   url:  d:/www/java/pic
   #configuration:

@@ -1,6 +1,6 @@
 package com.coin.service;
 
-import com.coin.entity.Prize;
+import com.coin.entity.TPrize;
 import com.coin.req.PrizeReq;
 import com.coin.rsp.PrizeRsp;
 import com.github.pagehelper.PageInfo;
@@ -14,7 +14,7 @@ public interface PrizeService {
     void addPrize(PrizeReq req) throws Exception;
     void updateStatus(PrizeReq req) throws Exception;
     void updateInfo(PrizeReq req) throws Exception;
-    PageInfo<Prize> pageList(PrizeReq req) throws Exception;
+    PageInfo<TPrize> pageList(PrizeReq req) throws Exception;
     List<PrizeRsp> pageDatas(PrizeReq req) throws Exception;
 
 }

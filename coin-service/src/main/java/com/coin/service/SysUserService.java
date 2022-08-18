@@ -1,9 +1,9 @@
 package com.coin.service;
 
-import com.coin.entity.SysUser;
+import com.coin.entity.TSysUser;
 
 public interface SysUserService {
 
-    SysUser getUserByLoginName(String loginName) throws Exception;
+    TSysUser getUserByLoginName(String loginName) throws Exception;
 
 }

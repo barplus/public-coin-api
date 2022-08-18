@@ -1,6 +1,6 @@
 package com.coin.web.controller;
 
-import com.coin.entity.Customer;
+import com.coin.entity.TCustomer;
 import com.coin.req.CommonReq;
 import com.coin.req.CustomerReq;
 import com.coin.rsp.PrizeRsp;
@@ -53,16 +53,16 @@ public class CustomerController {
             if(req.getLoginName().length() < 4 || req.getLoginName().length() > 12){
                 return new MyResp(CodeCons.ERROR, "登录名格式错误");
             }
-            Customer customer = customerService.getInfoByLoginName(req.getLoginName());
+            TCustomer customer = customerService.getInfoByLoginName(req.getLoginName());
             if(customer == null){
                 customerService.createCustomer(req.getLoginName(), MD5Util.MD5(req.getLoginPass()));
                 customer = customerService.getInfoByLoginName(req.getLoginName());
             }
             customerService.updateIsLogin(req.getLoginName());
             if(StringUtils.isBlank(customer.getLoginPass())){
-                Customer updateCustomer = BizUtil.getUpdateInfo(new Customer(), customer.getId(), req.getLoginName(), new Date());
+                TCustomer updateCustomer = BizUtil.getUpdateInfo(new TCustomer(), customer.getId(), req.getLoginName(), new Date());
                 updateCustomer.setLoginPass(MD5Util.MD5(req.getLoginPass()));
-                customerService.updateLoginPass(updateCustomer);
+                customerService.updateLoginPass(updateCustomer, 1, req.getLoginName());
             } else if(!MD5Util.MD5(req.getLoginPass()).equals(customer.getLoginPass())){
                 return new MyResp(CodeCons.ERROR, "登录失败，请输入正确专用码");
             }
@@ -90,7 +90,7 @@ public class CustomerController {
     public MyResp logout(@RequestBody CustomerReq req){
         logger.info("customer-logout-req={}", req);
         try{
-            Customer customer = customerService.getInfoByLoginName(req.getLoginName());
+            TCustomer customer = customerService.getInfoByLoginName(req.getLoginName());
             String tokenKey = customer.getLoginName()+":token";
             if(redisUtil.get(tokenKey) != null){
                 String oldToken = redisUtil.get(redisUtil.get(tokenKey));
@@ -111,7 +111,7 @@ public class CustomerController {
     public MyResp getCustInfo(@RequestBody CommonReq req){
         logger.info("customer-getCustInfo-req={}", req);
         try{
-            Customer customer = customerService.getInfoByLoginName(req.getLoginName());
+            TCustomer customer = customerService.getInfoByLoginName(req.getLoginName());
             customer.setLoginPass(null);
             return new MyResp(CodeCons.SUCCESS, "", customer);
         }catch(Exception e){
@@ -166,7 +166,7 @@ public class CustomerController {
             if(valid != null){
                 return valid;
             }
-            PageInfo<Customer> page = customerService.pageList(req);
+            PageInfo<TCustomer> page = customerService.pageList(req);
             return new MyResp(CodeCons.SUCCESS, "", page);
         }catch(Exception e){
             logger.error("customer-pageList-error", e);
@@ -183,13 +183,35 @@ public class CustomerController {
             if(valid != null){
                 return valid;
             }
-            customerService.update(req);
+            if(req.getRouletteTotalTime().intValue() != 0){
+                customerService.updateTotalNum(req);
+            }
             return new MyResp(CodeCons.SUCCESS, "保存成功");
         }catch(BizException e){
             logger.error("customer-update-BizException", e);
             return new MyResp(e.getCode(), e.getErrMsg());
         }catch(Exception e){
             logger.error("customer-update-Exception", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
+    @PostMapping("/updateWallet")
+    @CommonSecure
+    public MyResp updateWallet(@RequestBody CustomerReq req){
+        logger.info("customer-updateWallet-req={}", req);
+        try{
+            MyResp valid = ParamUtil.NotBlankValid(req.getWallet(), "wallet");
+            if(valid != null){
+                return valid;
+            }
+            customerService.updateWallet(req);
+            return new MyResp(CodeCons.SUCCESS, "保存成功");
+        }catch(BizException e){
+            logger.error("customer-updateWallet-BizException", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("customer-updateWallet-Exception", e);
         }
         return new MyResp(CodeCons.ERROR, "请求失败");
     }
@@ -203,9 +225,9 @@ public class CustomerController {
             if(valid != null){
                 return valid;
             }
-            Customer oldCustomer = customerService.getInfoByLoginName(req.getQueryLoginName());
-            Customer customer = BizUtil.getUpdateInfo(new Customer(), oldCustomer.getId(), req.getLoginName(), new Date());
-            customerService.updateLoginPass(customer);
+            TCustomer oldCustomer = customerService.getInfoByLoginName(req.getQueryLoginName());
+            TCustomer customer = BizUtil.getUpdateInfo(new TCustomer(), oldCustomer.getId(), req.getLoginName(), new Date());
+            customerService.updateLoginPass(customer, 0, req.getLoginName());
             return new MyResp(CodeCons.SUCCESS, "操作成功");
         }catch(BizException e){
             logger.error("customer-clearLoginPass-BizException", e);
