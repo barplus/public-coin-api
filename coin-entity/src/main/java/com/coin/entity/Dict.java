@@ -25,6 +25,10 @@ public class Dict implements Serializable {
     private String parentDictCode;
     /**状态*/
     private Integer status;
+    /**序号*/
+    private Integer sortNum;
+    /**是否默认*/
+    private Integer isDefault;
     private String createUser;
     private Date createDate;
     private String updateUser;

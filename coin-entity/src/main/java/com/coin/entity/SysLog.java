@@ -11,10 +11,12 @@ public class SysLog implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
+    /**被操作信息所属人*/
+    private String loginName;
     /**1-office 2-api*/
     private Integer sysType;
-    /**日志类型:修改密码-UPDATE_PASS, 奖品编辑-EDIT_PRIZE*/
-    private String logType;
+    /**日志类型:修改密码-1, 增加抽奖次数-2*/
+    private Integer logType;
     /**修改前值*/
     private String beforeVal;
     /**修改后值*/
