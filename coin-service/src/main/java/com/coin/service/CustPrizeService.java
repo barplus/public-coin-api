@@ -21,6 +21,8 @@ public interface CustPrizeService {
 
     PrizeRsp doLottery(String loginName) throws Exception;
 
+    List<PrizeRsp> doLotteryTen(String loginName) throws Exception;
+
     int addCustPrize(String loginName, Prize prize) throws Exception;
 
 }

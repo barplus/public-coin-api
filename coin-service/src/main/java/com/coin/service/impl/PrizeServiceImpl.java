@@ -53,11 +53,20 @@ public class PrizeServiceImpl implements PrizeService {
         if(req.getRate().compareTo(new BigDecimal("1")) == 1){
             throw new BizException(CodeCons.ERROR, "单个奖品中奖率不能大于100%");
         }
+        String[] vipRates = req.getVipRate().split(";");
+        for(String vipRate:vipRates){
+            String[] rate = vipRate.split("_");
+            if(!"null".equals(rate[2]) && new BigDecimal(rate[2]).compareTo(new BigDecimal(1)) > 0){
+                throw new BizException(CodeCons.ERROR, "单个奖品VIP中奖率不能大于100%");
+            }
+        }
         Prize prize = BizUtil.getInsertInfo(new Prize(), req.getLoginName(), new Date());
         prize.setPrizeName(req.getPrizeName());
+        prize.setPrizePic(req.getPrizePic());
         prize.setAmount(req.getAmount());
         prize.setMaxNum(req.getMaxNum());
         prize.setRate(req.getRate());
+        prize.setVipRate(req.getVipRate());
         prizeMapper.addPrize(prize);
     }
 
@@ -84,13 +93,23 @@ public class PrizeServiceImpl implements PrizeService {
             }
             updatePrize.setRate(req.getRate());
         }
-//        if(req.getPrizeName() != null){
-//            Prize prize = prizeMapper.getInfoByName(req.getPrizeName());
-//            if(prize != null && prize.getId() != req.getId()){
-//                throw new BizException(CodeCons.ERROR, "奖品名称不能和其他奖品一致");
-//            }
-//            updatePrize.setPrizeName(req.getPrizeName());
-//        }
+        if(req.getVipRate() !=null){
+            String[] vipRates = req.getVipRate().split(";");
+            for(String vipRate:vipRates){
+                String[] rate = vipRate.split("_");
+                if(!"null".equals(rate[2]) && new BigDecimal(rate[2]).compareTo(new BigDecimal(1)) > 0){
+                    throw new BizException(CodeCons.ERROR, "单个奖品VIP中奖率不能大于100%");
+                }
+            }
+            updatePrize.setVipRate(req.getVipRate());
+        }
+        if(req.getPrizeName() != null){
+            Prize prize = prizeMapper.getInfoByName(req.getPrizeName());
+            if(prize != null && prize.getId() != req.getId()){
+                throw new BizException(CodeCons.ERROR, "奖品名称不能和其他奖品一致");
+            }
+            updatePrize.setPrizeName(req.getPrizeName());
+        }
         if(req.getAmount() != null){
             Prize prizeByAmount = prizeMapper.getInfoByAmount(oldPrize.getId(), req.getAmount());
             if(prizeByAmount != null){

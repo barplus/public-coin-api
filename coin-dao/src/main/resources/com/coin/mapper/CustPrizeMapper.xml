@@ -3,6 +3,7 @@
 <mapper namespace="com.coin.mapper.CustPrizeMapper">
     <resultMap id="custPrizeMap" type="com.coin.entity.CustPrize">
         <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="bill_no" property="billNo" jdbcType="VARCHAR"/>
         <result column="prize_id" property="prizeId" jdbcType="INTEGER"/>
         <result column="prize_name" property="prizeName" jdbcType="VARCHAR"/>
         <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
@@ -15,6 +16,7 @@
 
     <resultMap id="custPrizeRspMap" type="com.coin.rsp.CustPrizeRsp">
         <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="bill_no" property="billNo" jdbcType="VARCHAR"/>
         <result column="prize_id" property="prizeId" jdbcType="INTEGER"/>
         <result column="prize_name" property="prizeName" jdbcType="VARCHAR"/>
         <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
@@ -109,6 +111,7 @@
                 prize_name,
             </if>
             login_name,
+            bill_no,
             create_user,
             create_date,
             update_user,
@@ -122,6 +125,7 @@
                 #{prizeName},
             </if>
             #{loginName},
+            #{billNo},
 	        #{createUser},
 	        #{createDate},
 	        #{updateUser},

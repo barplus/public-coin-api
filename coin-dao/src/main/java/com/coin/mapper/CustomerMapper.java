@@ -20,6 +20,8 @@ public interface CustomerMapper {
 
     int updateTotalNum(Customer customer);
 
+    int updateIsLogin(String loginName);
+
     int setLoginPass(Customer customer);
 
     int addUsedNum(@Param("loginName") String loginName, @Param("rouletteUsedTime") Integer addTime);

@@ -13,6 +13,9 @@ public class CustPrizeRsp implements Serializable {
 
     @Excel(name = "ID", width = 10)
     private Integer id;
+    /**记录编号*/
+    @Excel(name = "记录编号", width = 25)
+    private String billNo;
     /**奖品id*/
     @Excel(name = "奖品编号", width = 25)
     private Integer prizeId;

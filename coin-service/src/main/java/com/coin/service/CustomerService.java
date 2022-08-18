@@ -11,6 +11,7 @@ public interface CustomerService {
     PageInfo<Customer> pageList(CustomerReq req) throws Exception;
 
     void update(CustomerReq req) throws Exception;
+    void updateIsLogin(String loginName) throws Exception;
 
     void updateLoginPass(Customer customer) throws Exception;
 

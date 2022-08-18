@@ -51,6 +51,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public void updateIsLogin(String loginName) throws Exception {
+        customerMapper.updateIsLogin(loginName);
+    }
+
+    @Override
     public void updateLoginPass(Customer customer) throws Exception {
         customerMapper.setLoginPass(customer);
     }
@@ -60,6 +65,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = BizUtil.getInsertInfo(new Customer(), "sys-api", new Date());
         customer.setLoginName(loginName);
         customer.setLoginPass(loginPass);
+        customer.setIsLogin(1);
         customerMapper.createCustomer(customer);
     }
 

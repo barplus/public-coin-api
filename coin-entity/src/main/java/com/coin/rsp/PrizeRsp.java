@@ -11,6 +11,8 @@ public class PrizeRsp implements Serializable {
     private Integer id;
     /**奖品名称*/
     private String prizeName;
+    /**奖品图片*/
+    private String prizePic;
     /**奖品价值*/
     private Integer amount;
     /**全部奖品总的中奖率*/

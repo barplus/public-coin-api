@@ -7,6 +7,7 @@ import com.coin.service.DictService;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.util.ParamUtil;
 import com.coin.web.annotation.OfficeSecure;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,14 +32,34 @@ public class DictController {
     public MyResp pageList(@RequestBody DictReq req){
         logger.info("dict-getDicts-req={}", req);
         try{
-            MyResp valid = ParamUtil.NotBlankValid(req.getDictType());
+            MyResp valid = ParamUtil.NotBlankValid(req.getDictType(), "字典类型");
             if(valid != null){
                 return valid;
             }
-            List<Dict> list = dictService.getListByType(req.getDictType());
+            List<Dict> list = dictService.getListByType(req);
             return new MyResp(CodeCons.SUCCESS, "", list);
         }catch(Exception e){
             logger.error("dict-getDicts-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
+    @PostMapping("/add")
+    @OfficeSecure
+    public MyResp add(@RequestBody DictReq req){
+        logger.info("dict-add-req={}", req);
+        try{
+            MyResp valid = ParamUtil.NotBlankValid(req.getDictType(), "字典类型", req.getDictCode(), "字典编码", req.getDictName(), "字典名称");
+            if(valid != null){
+                return valid;
+            }
+            if(StringUtils.isBlank(req.getDictVal()) && StringUtils.isBlank(req.getDictValBig())){
+                return new MyResp(CodeCons.ERROR, "字典值 不能为空");
+            }
+            dictService.add(req);
+            return new MyResp(CodeCons.SUCCESS, "保存成功");
+        }catch(Exception e){
+            logger.error("dict-add-error", e);
         }
         return new MyResp(CodeCons.ERROR, "请求失败");
     }

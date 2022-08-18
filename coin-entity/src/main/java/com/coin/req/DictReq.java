@@ -16,5 +16,21 @@ public class DictReq extends CommonReq implements Serializable {
 
     /**字典类型*/
     private String dictType;
+    /**字典编码*/
+    private String dictCode;
+    /**字典名称*/
+    private String dictName;
+    /**字典值*/
+    private String dictVal;
+    /**字典大值*/
+    private String dictValBig;
+    /**上级字典编码：上级的类型一定是相同的*/
+    private String parentDictCode;
+    /**是否默认*/
+    private Integer isDefault;
+    /**状态：1启用 0禁用*/
+    private Integer status;
+    /**序号*/
+    private Integer sortNum;
 
 }

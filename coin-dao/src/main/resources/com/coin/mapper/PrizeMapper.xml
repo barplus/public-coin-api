@@ -4,10 +4,13 @@
     <resultMap id="prizeMap" type="com.coin.entity.Prize">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="prize_name" property="prizeName" jdbcType="VARCHAR"/>
+        <result column="prize_pic" property="prizePic" jdbcType="VARCHAR"/>
         <result column="amount" property="amount" jdbcType="INTEGER"/>
         <result column="max_num" property="maxNum" jdbcType="INTEGER"/>
         <result column="used_num" property="usedNum" jdbcType="INTEGER"/>
         <result column="rate" property="rate" jdbcType="DECIMAL"/>
+        <result column="vip_rate" property="vipRate" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
         <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
         <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
@@ -39,9 +42,11 @@
     <insert id="addPrize">
         INSERT INTO t_prize(
             prize_name,
+            prize_pic,
             amount,
             max_num,
             rate,
+            vip_rate,
             create_user,
             create_date,
             update_user,
@@ -49,9 +54,11 @@
         )
 	    VALUES(
 	        #{prizeName},
+	        #{prizePic},
 	        #{amount},
 	        #{maxNum},
 	        #{rate},
+	        #{vipRate},
 	        #{createUser},
 	        #{createDate},
 	        #{updateUser},

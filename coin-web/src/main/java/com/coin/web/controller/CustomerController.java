@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/customer")
@@ -57,6 +58,7 @@ public class CustomerController {
                 customerService.createCustomer(req.getLoginName(), MD5Util.MD5(req.getLoginPass()));
                 customer = customerService.getInfoByLoginName(req.getLoginName());
             }
+            customerService.updateIsLogin(req.getLoginName());
             if(StringUtils.isBlank(customer.getLoginPass())){
                 Customer updateCustomer = BizUtil.getUpdateInfo(new Customer(), customer.getId(), req.getLoginName(), new Date());
                 updateCustomer.setLoginPass(MD5Util.MD5(req.getLoginPass()));
@@ -134,6 +136,23 @@ public class CustomerController {
             return new MyResp(e.getCode(), e.getErrMsg());
         }catch(Exception e){
             logger.error("customer-doLottery-Exception", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
+    @PostMapping("/doLotteryTen")
+    @CommonSecure
+    public MyResp doLotteryTen(@RequestBody CommonReq req){
+        logger.info("customer-doLotteryTen-req={}", req);
+        try{
+            List<PrizeRsp> prizeRsps = custPrizeService.doLotteryTen(req.getLoginName());
+            logger.info("customer-doLotteryTen-result={}, loginName={}", prizeRsps, req.getLoginName());
+            return new MyResp(CodeCons.SUCCESS, "", prizeRsps);
+        }catch(BizException e){
+            logger.error("customer-doLotteryTen-BizException", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("customer-doLotteryTen-Exception", e);
         }
         return new MyResp(CodeCons.ERROR, "请求失败");
     }

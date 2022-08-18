@@ -67,8 +67,16 @@
         where id = #{id}
     </update>
 
-    <select id="getListByType" resultMap="dictMap">
-        select * from t_dict where dict_type = #{dictType}
+    <select id="getListByType" resultMap="dictMap" parameterType="com.coin.req.DictReq">
+        select *
+        from t_dict
+        where 1=1
+        <if test="dictType != null">
+            and dict_type = #{dictType}
+        </if>
+        <if test="status != null">
+            and status = #{status}
+        </if>
     </select>
 
     <select id="getByTypeAndCode" resultMap="dictMap">

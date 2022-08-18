@@ -5,9 +5,11 @@
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
         <result column="login_pass" property="loginPass" jdbcType="VARCHAR"/>
+        <result column="vip" property="vip" jdbcType="INTEGER"/>
         <result column="roulette_total_time" property="rouletteTotalTime" jdbcType="INTEGER"/>
         <result column="roulette_used_time" property="rouletteUsedTime" jdbcType="INTEGER"/>
         <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="is_login" property="isLogin" jdbcType="INTEGER"/>
         <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
         <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
@@ -23,7 +25,7 @@
     </select>
 
     <select id="getCustomerList" resultMap="customerMap">
-        select id,login_name,roulette_total_time,roulette_used_time,status,create_user,create_date,update_user,update_date
+        select id,login_name,vip,roulette_total_time,roulette_used_time,status,is_login,create_user,create_date,update_user,update_date
         from t_customer t
         where 1= 1
         <if test="queryLoginName != null and queryLoginName != ''">
@@ -35,6 +37,7 @@
         INSERT INTO t_customer(
             login_name,
             login_pass,
+            is_login,
             create_user,
             create_date,
             update_user,
@@ -43,6 +46,7 @@
 	    VALUES(
 	        #{loginName},
 	        #{loginPass},
+	        #{isLogin},
 	        #{createUser},
 	        #{createDate},
 	        #{updateUser},
@@ -97,6 +101,12 @@
         update t_customer t
         set t.roulette_total_time = t.roulette_total_time + #{rouletteTotalTime}
         where t.id = #{id}
+    </update>
+
+    <update id="updateIsLogin">
+        update t_customer t
+        set t.is_login = 1
+        where t.login_name = #{loginName}
     </update>
 
 </mapper>

@@ -17,6 +17,8 @@ public class PrizeReq extends CommonReq implements Serializable {
 
     /**奖品名*/
     private String prizeName;
+    /**奖品图片路径*/
+    private String prizePic;
     /**价值*/
     private Integer amount;
     /**最大数量*/
@@ -25,6 +27,8 @@ public class PrizeReq extends CommonReq implements Serializable {
     private Integer usedNum;
     /**中奖率*/
     private BigDecimal rate;
+    /**VIP等级中奖率*/
+    private String vipRate;
     private Integer status;
     /**查询中奖概率大于0的奖品*/
     private Integer rateNoZero;

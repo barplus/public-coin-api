@@ -100,7 +100,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
             logger.error("doLottery-addUsedNum-error");
             throw new BizException(CodeCons.ERROR, "抽奖失败，请稍后再试");
         }
-        Prize prize = this.getPrize(loginName, false);
+        Prize prize = this.getPrize(loginName, customer.getVip(), false);
         this.addCustPrize(loginName, prize, "addCustPrize");
         PrizeRsp rsp = new PrizeRsp();
         if(prize == null){
@@ -108,6 +108,21 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         }
         BeanUtils.copyProperties(prize, rsp);
         return rsp;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public List<PrizeRsp> doLotteryTen(String loginName) throws Exception {
+        List<PrizeRsp> list = new ArrayList<>();
+        Customer customer = customerMapper.getInfoByLoginName(loginName);
+        if(customer.getRouletteTotalTime() - customer.getRouletteUsedTime() < 10){
+            throw new BizException(CodeCons.NO_ROULETTE_TEN_TIME, "抽奖次数不足 请您继续游戏获取更多抽奖次数");
+        }
+        for(int i=0; i<10; i++){
+            PrizeRsp rsp = this.doLottery(loginName);
+            list.add(rsp);
+        }
+        return list;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -162,6 +177,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
             custPrize.setPrizeName(prize.getPrizeName());
         }
         custPrize.setLoginName(loginName);
+        custPrize.setBillNo(DateUtil.getTodayStr());
         return custPrizeMapper.addCustPrize(custPrize);
     }
 
@@ -177,7 +193,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         CustPrize custPrize = new CustPrize();
         String fakeLoginName = BizUtil.getStringRandom(4, 1).toLowerCase() + "0000" + BizUtil.getStringRandom(4, 0).toLowerCase();
         custPrize.setLoginName(fakeLoginName);
-        Prize prize = this.getPrize(fakeLoginName, true);
+        Prize prize = this.getPrize(fakeLoginName, null, true);
         if(prize == null){
             throw new BizException(CodeCons.NO_PRIZE, "没有可用的奖品");
         }
@@ -185,7 +201,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         return custPrize;
     }
 
-    private Prize getPrize(String loginName, boolean must){
+    private Prize getPrize(String loginName, Integer vip, boolean must){
         PrizeReq req = new PrizeReq();
         req.setStatus(1);
         req.setRateNoZero(1);
@@ -198,13 +214,14 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         List<Integer> list = new ArrayList<>();
         int maxNum = 0;
         for(Prize prize:prizeList){
-            int num = prize.getRate().multiply(new BigDecimal("10000")).intValue();
+            BigDecimal rate = vip == null?prize.getRate():this.getVipRate(prize, vip);
+            int num = rate.multiply(new BigDecimal("10000")).intValue();
             list.add(num);
             maxNum += num;
         }
         int randomBaseNum = maxNum>10000 || must?maxNum:10000;
         int randomNum = new Random().nextInt(randomBaseNum)+1;
-        logger.info("{} - doLottery, maxNum={}, randomNum={}, prizeList={}", loginName, maxNum, randomNum, BizUtil.objToJsonArr(prizeList));
+        logger.info("{} - doLottery, maxNum={}, listNum={}, randomNum={}, prizeList={}", loginName, maxNum, list, randomNum, BizUtil.objToJsonArr(prizeList));
         if(randomNum > maxNum){
             logger.info("custPrize-getPrize-2, loginName={}", loginName);
             return null;
@@ -238,6 +255,22 @@ public class CustPrizeServiceImpl implements CustPrizeService {
                 throw new BizException(CodeCons.ERROR, "抽奖失败，请稍后再试");
             }
         }
+    }
+
+    private BigDecimal getVipRate(Prize prize, int vip){
+        if(StringUtils.isBlank(prize.getVipRate())){
+            return prize.getRate();
+        }
+        String[] vipRateArray = prize.getVipRate().split(";");
+        for(String vipRateStr:vipRateArray){
+            String[] vipRate = vipRateStr.split("_");
+            if(vipRate[0].equals("VIP"+vip)){
+                if(!"null".equals(vipRate[2])){
+                    return new BigDecimal(vipRate[2]);
+                }
+            }
+        }
+        return prize.getRate();
     }
 
 }

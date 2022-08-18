@@ -11,6 +11,8 @@ public class CustPrize implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
+    /**记录编号*/
+    private String billNo;
     /**奖品id*/
     private Integer prizeId;
     /**奖品名称*/

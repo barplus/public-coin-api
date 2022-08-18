@@ -12,6 +12,8 @@ public class CodeCons {
     public static final String NO_ROULETTE_TIME = "9992";
     /**没有可用的奖品*/
     public static final String NO_PRIZE = "9993";
+    /**抽奖次数不足*/
+    public static final String NO_ROULETTE_TEN_TIME = "9994";
     /**用户不存在或已失效*/
     public static final String CUSTOMER_NO_EXISTS = "1111";
     /**错误*/

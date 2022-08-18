@@ -23,6 +23,8 @@ public class Dict implements Serializable {
     private String dictValBig;
     /**上级字典编码*/
     private String parentDictCode;
+    /**状态*/
+    private Integer status;
     private String createUser;
     private Date createDate;
     private String updateUser;

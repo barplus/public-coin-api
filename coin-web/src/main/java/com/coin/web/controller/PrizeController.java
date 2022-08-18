@@ -35,7 +35,7 @@ public class PrizeController {
         logger.info("prize-login-req={}", req);
         try {
             MyResp valid = ParamUtil.NotBlankValid(req.getPrizeName(), "奖品名称", req.getAmount(), "奖品价值",
-                    req.getMaxNum(), "总投放数", req.getRate(), "中奖率");
+                    req.getMaxNum(), "总投放数", req.getRate(), "中奖率", req.getVipRate(), "VIP中奖率", req.getPrizePic(), "奖品图标");
             if (valid != null) {
                 return valid;
             }
