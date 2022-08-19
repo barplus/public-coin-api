@@ -13,8 +13,6 @@ import java.util.List;
 @Service
 public class SysUserServiceImpl implements SysUserService {
 
-//    @Resource
-//    private SysUserMapper userMapper;
     @Resource
     private TSysUserMapper tSysUserMapper;
 
@@ -27,7 +25,6 @@ public class SysUserServiceImpl implements SysUserService {
             return null;
         }
         return list.get(0);
-//        return userMapper.getUserByLoginName(loginName);
     }
 
 }

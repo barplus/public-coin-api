@@ -14,19 +14,6 @@
         <result column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <resultMap id="custPrizeRspMap" type="com.coin.rsp.CustPrizeRsp">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="bill_no" property="billNo" jdbcType="VARCHAR"/>
-        <result column="prize_id" property="prizeId" jdbcType="INTEGER"/>
-        <result column="prize_name" property="prizeName" jdbcType="VARCHAR"/>
-        <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
-        <result column="request_date" property="requestDate" jdbcType="TIMESTAMP"/>
-        <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
-        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
-        <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
-        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
-    </resultMap>
-
     <select id="getTwoCustPrize30s" resultMap="custPrizeMap">
         select *
         from t_cust_prize t

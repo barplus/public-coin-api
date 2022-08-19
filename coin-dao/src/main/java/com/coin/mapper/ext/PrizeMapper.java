@@ -10,11 +10,17 @@ import java.util.List;
 public interface PrizeMapper {
 
     PrizeRsp totalRate();
+
     TPrize getInfoByName(@Param("prizeName") String prizeName);
+
     TPrize getInfoByAmount(@Param("id") Integer excludeId, @Param("amount") Integer amount);
+
     List<TPrize> getPrizeList(PrizeReq req);
+
     void addPrize(TPrize prize);
+
     void updateById(TPrize prize);
+
     int addUsedNum(TPrize prize);
 
 }

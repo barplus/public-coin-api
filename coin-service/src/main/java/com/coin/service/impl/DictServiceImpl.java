@@ -52,18 +52,6 @@ public class DictServiceImpl implements DictService {
         if(oldDict != null){
             throw new BizException(CodeCons.ERROR, "重复的数据，请修改类型或编码");
         }
-        TDict defaultDict = null;
-        if(req.getIsDefault() != null && req.getIsDefault().intValue() == 1){
-            DictReq req1 = new DictReq();
-            req1.setDictType(req.getDictType());
-            List<TDict> list = dictMapper.getListByType(req1);
-            for(TDict dict:list){
-                if(dict.getIsDefault().intValue() == 1){
-                    defaultDict = dict;
-                    break;
-                }
-            }
-        }
         TDict dict = BizUtil.getInsertInfo(new TDict(), req.getLoginName(), new Date());
         dict.setDictType(req.getDictType());
         dict.setDictCode(req.getDictCode());
@@ -75,13 +63,12 @@ public class DictServiceImpl implements DictService {
         dict.setIsDefault(req.getIsDefault());
         dict.setStatus(req.getStatus());
         tDictMapper.insertSelective(dict);
-        if(defaultDict != null){
-            TDict updateDict = BizUtil.getUpdateInfo(new TDict(), defaultDict.getId(), req.getLoginName(), new Date());
-            updateDict.setIsDefault(0);
-            tDictMapper.updateByPrimaryKeySelective(updateDict);
+        if(req.getIsDefault() != null && req.getIsDefault().intValue() == 1){
+            this.clearDefault(req.getDictType(), null, req.getLoginName());
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void update(DictReq req) throws Exception {
         TDict dict = BizUtil.getUpdateInfo(new TDict(), req.getId(), req.getLoginName(), new Date());
@@ -91,27 +78,36 @@ public class DictServiceImpl implements DictService {
             }
             dict.setStatus(req.getStatus());
         }
-        TDict defaultDict = null;
         if(req.getIsDefault() != null){
             if(req.getIsDefault().intValue() !=0 && req.getIsDefault().intValue() !=1){
                 throw new BizException(CodeCons.ERROR, "默认值错误");
             }
             dict.setIsDefault(req.getIsDefault());
-            if(req.getIsDefault().intValue() == 1){
-                DictReq req1 = new DictReq();
-                req1.setDictType(req.getDictType());
-                List<TDict> list = dictMapper.getListByType(req1);
-                for(TDict dict1:list){
-                    if(dict1.getIsDefault().intValue() == 1 && dict1.getId().intValue() != req.getId()){
-                        defaultDict = dict;
-                        break;
-                    }
-                }
-            }
         }
         int count = tDictMapper.updateByPrimaryKeySelective(dict);
-        if(count > 0 && defaultDict != null){
-            TDict updateDict = BizUtil.getUpdateInfo(new TDict(), defaultDict.getId(), req.getLoginName(), new Date());
+        if(count > 0 && req.getIsDefault() != null && req.getIsDefault().intValue() == 1){
+            TDict oldDict = tDictMapper.selectByPrimaryKey(req.getId());
+            this.clearDefault(oldDict.getDictType(), oldDict.getId(), req.getLoginName());
+        }
+    }
+
+    /**
+     * 清除指定类型的字典当前默认项
+     * @param dictType 类型
+     * @param excludeId 需要排除的id
+     * @param updateUser 修改人
+     */
+    private void clearDefault(String dictType, Integer excludeId, String updateUser){
+        TDictExample example = new TDictExample();
+        TDictExample.Criteria criteria = example.createCriteria();
+        criteria.andDictTypeEqualTo(dictType);
+        criteria.andIsDefaultEqualTo(1);
+        if(excludeId != null){
+            criteria.andIdNotEqualTo(excludeId);
+        }
+        List<TDict> list = tDictMapper.selectByExample(example);
+        for(TDict dict:list){
+            TDict updateDict = BizUtil.getUpdateInfo(new TDict(), dict.getId(), updateUser, new Date());
             updateDict.setIsDefault(0);
             tDictMapper.updateByPrimaryKeySelective(updateDict);
         }
