@@ -52,6 +52,9 @@ public class DictServiceImpl implements DictService {
         if(oldDict != null){
             throw new BizException(CodeCons.ERROR, "重复的数据，请修改类型或编码");
         }
+        if(req.getIsDefault().intValue() == 1){
+            this.clearDefault(req.getDictType(), null, req.getLoginName());
+        }
         TDict dict = BizUtil.getInsertInfo(new TDict(), req.getLoginName(), new Date());
         dict.setDictType(req.getDictType());
         dict.setDictCode(req.getDictCode());
@@ -63,9 +66,6 @@ public class DictServiceImpl implements DictService {
         dict.setIsDefault(req.getIsDefault());
         dict.setStatus(req.getStatus());
         tDictMapper.insertSelective(dict);
-        if(req.getIsDefault() != null && req.getIsDefault().intValue() == 1){
-            this.clearDefault(req.getDictType(), null, req.getLoginName());
-        }
     }
 
     @Transactional(rollbackFor = Exception.class)

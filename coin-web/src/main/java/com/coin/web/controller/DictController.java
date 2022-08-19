@@ -68,7 +68,8 @@ public class DictController {
     public MyResp add(@RequestBody DictReq req){
         logger.info("dict-add-req={}", req);
         try{
-            MyResp valid = ParamUtil.NotBlankValid(req.getDictType(), "字典类型", req.getDictCode(), "字典编码", req.getDictName(), "字典名称", req.getStatus(), "状态");
+            MyResp valid = ParamUtil.NotBlankValid(req.getDictType(), "字典类型", req.getDictCode(), "字典编码",
+                    req.getDictName(), "字典名称", req.getStatus(), "状态", req.getIsDefault(), "是否默认");
             if(valid != null){
                 return valid;
             }

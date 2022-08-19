@@ -152,7 +152,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         List<PrizeRsp> list = new ArrayList<>();
         TCustomer customer = customerService.getInfoByLoginName(loginName);
         if(customer.getRouletteTotalTime() - customer.getRouletteUsedTime() < 10){
-            throw new BizException(CodeCons.NO_ROULETTE_TEN_TIME, "抽奖次数不足 请您继续游戏获取更多抽奖次数");
+            throw new BizException(CodeCons.NO_ROULETTE_TEN_TIME, "您的剩余抽奖次数不足10次 请您单次抽奖");
         }
         for(int i=0; i<10; i++){
             PrizeRsp rsp = this.doLottery(loginName);
