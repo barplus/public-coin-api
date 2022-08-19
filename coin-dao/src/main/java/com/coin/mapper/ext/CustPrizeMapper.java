@@ -9,16 +9,8 @@ import java.util.List;
 
 public interface CustPrizeMapper {
 
-    List<TCustPrize> getCustPrizeList(CustPrizeReq req);
-
-    List<CustPrizeRsp> getDatas(CustPrizeReq req);
-
     List<TCustPrize> getTwoCustPrize30s();
 
     List<TCustPrize> getTwoCustPrize();
-
-    int addCustPrize(TCustPrize prize);
-
-    int updateById(TCustPrize prize);
 
 }

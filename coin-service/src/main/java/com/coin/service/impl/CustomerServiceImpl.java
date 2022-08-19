@@ -13,6 +13,7 @@ import com.coin.service.exception.BizException;
 import com.coin.service.util.BizUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -52,10 +53,10 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public PageInfo<TCustomer> pageList(CustomerReq req) throws Exception {
+    public PageInfo<CustomerRsp> pageList(CustomerReq req) throws Exception {
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
-        List<TCustomer> customers = customerMapper.getCustomerList(req);
-        PageInfo<TCustomer> page = new PageInfo<>(customers);
+        List<CustomerRsp> rspList = this.getList(req);
+        PageInfo<CustomerRsp> page = new PageInfo<>(rspList);
         return page;
     }
 
@@ -63,6 +64,9 @@ public class CustomerServiceImpl implements CustomerService {
     public List<CustomerRsp> getList(CustomerReq req) throws Exception {
         TCustomerExample example = new TCustomerExample();
         TCustomerExample.Criteria criteria = example.createCriteria();
+        if(StringUtils.isNotBlank(req.getQueryLoginName())){
+            criteria.andLoginNameEqualTo(req.getQueryLoginName());
+        }
         List<TCustomer> list = tCustomerMapper.selectByExample(example);
         List<CustomerRsp> rspList = list.stream().map(customer->this.convertRsp(customer)).collect(Collectors.toList());
         return rspList;
@@ -90,7 +94,7 @@ public class CustomerServiceImpl implements CustomerService {
         TCustomer cust = customerService.getInfoByLoginName(req.getLoginName());
         TCustomer updateCustomer = BizUtil.getUpdateInfo(new TCustomer(), cust.getId(), req.getLoginName(), new Date());
         updateCustomer.setWallet(req.getWallet());
-        customerMapper.updateWallet(updateCustomer);
+        tCustomerMapper.updateByPrimaryKeySelective(updateCustomer);
     }
 
     @Override
@@ -116,7 +120,7 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setLoginName(loginName);
         customer.setLoginPass(loginPass);
         customer.setIsLogin(1);
-        customerMapper.createCustomer(customer);
+        tCustomerMapper.insertSelective(customer);
     }
 
     private CustomerRsp convertRsp(TCustomer customer){

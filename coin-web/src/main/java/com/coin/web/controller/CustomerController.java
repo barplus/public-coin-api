@@ -3,6 +3,7 @@ package com.coin.web.controller;
 import com.coin.entity.TCustomer;
 import com.coin.req.CommonReq;
 import com.coin.req.CustomerReq;
+import com.coin.rsp.CustomerRsp;
 import com.coin.rsp.PrizeRsp;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.CustPrizeService;
@@ -166,7 +167,7 @@ public class CustomerController {
             if(valid != null){
                 return valid;
             }
-            PageInfo<TCustomer> page = customerService.pageList(req);
+            PageInfo<CustomerRsp> page = customerService.pageList(req);
             return new MyResp(CodeCons.SUCCESS, "", page);
         }catch(Exception e){
             logger.error("customer-pageList-error", e);

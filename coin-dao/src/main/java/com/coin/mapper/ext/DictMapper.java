@@ -8,14 +8,8 @@ import java.util.List;
 
 public interface DictMapper {
 
-    void addDict(TDict dict);
-
-    int updateDict(TDict dict);
-
     List<TDict> getListByType(DictReq dictReq);
 
     TDict getByTypeAndCode(@Param("dictType")String dictType, @Param("dictCode")String dictCode);
-
-    TDict getById(@Param("id")Integer id);
 
 }

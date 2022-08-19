@@ -42,7 +42,7 @@ public class DictServiceImpl implements DictService {
 
     @Override
     public TDict getById(Integer id) throws Exception {
-        return dictMapper.getById(id);
+        return tDictMapper.selectByPrimaryKey(id);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -74,11 +74,11 @@ public class DictServiceImpl implements DictService {
         dict.setSortNum(req.getSortNum());
         dict.setIsDefault(req.getIsDefault());
         dict.setStatus(req.getStatus());
-        dictMapper.addDict(dict);
+        tDictMapper.insertSelective(dict);
         if(defaultDict != null){
             TDict updateDict = BizUtil.getUpdateInfo(new TDict(), defaultDict.getId(), req.getLoginName(), new Date());
             updateDict.setIsDefault(0);
-            dictMapper.updateDict(updateDict);
+            tDictMapper.updateByPrimaryKeySelective(updateDict);
         }
     }
 
@@ -109,11 +109,11 @@ public class DictServiceImpl implements DictService {
                 }
             }
         }
-        int count = dictMapper.updateDict(dict);
+        int count = tDictMapper.updateByPrimaryKeySelective(dict);
         if(count > 0 && defaultDict != null){
             TDict updateDict = BizUtil.getUpdateInfo(new TDict(), defaultDict.getId(), req.getLoginName(), new Date());
             updateDict.setIsDefault(0);
-            dictMapper.updateDict(updateDict);
+            tDictMapper.updateByPrimaryKeySelective(updateDict);
         }
     }
 

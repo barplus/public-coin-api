@@ -12,8 +12,4 @@
         <result column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <select id="getUserByLoginName" resultMap="sysUserMap">
-        select * from t_sys_user t where t.login_name = #{loginName}
-    </select>
-
 </mapper>

@@ -18,64 +18,6 @@
         <result column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <insert id="addDict">
-        insert into t_dict(
-            dict_type,
-            dict_code,
-            dict_name,
-            <if test="dictVal != null">
-                dict_val,
-            </if>
-            <if test="dictValBig != null">
-                dict_val_big,
-            </if>
-            <if test="parentDictCode != null">
-                parent_dict_code,
-            </if>
-            create_user,
-            create_date,
-            update_user,
-            update_date
-        ) values(
-            #{dictType},
-            #{dictCode},
-            #{dictName},
-            <if test="dictVal != null">
-                #{dictVal},
-            </if>
-            <if test="dictValBig != null">
-                #{dictValBig},
-            </if>
-            <if test="parentDictCode != null">
-                #{parentDictCode},
-            </if>
-            #{createUser},
-            #{createDate},
-            #{updateUser},
-            #{updateDate}
-        )
-    </insert>
-
-    <update id="updateDict" parameterType="com.coin.entity.TDict">
-        update t_dict
-        set
-        <if test="dictVal != null">
-            dict_val = #{dictVal},
-        </if>
-        <if test="dictValBig != null">
-            dict_val_big = #{dictValBig},
-        </if>
-        <if test="status != null">
-            status = #{status},
-        </if>
-        <if test="isDefault != null">
-            is_default = #{isDefault},
-        </if>
-        update_date=#{updateDate},
-        update_user=#{updateUser}
-        where id = #{id}
-    </update>
-
     <select id="getListByType" resultMap="dictMap" parameterType="com.coin.req.DictReq">
         select *
         from t_dict
@@ -93,8 +35,5 @@
         select * from t_dict where dict_type = #{dictType} and dict_code = #{dictCode}
     </select>
 
-    <select id="getById" resultMap="dictMap">
-        select * from t_dict where id = #{id}
-    </select>
 
 </mapper>

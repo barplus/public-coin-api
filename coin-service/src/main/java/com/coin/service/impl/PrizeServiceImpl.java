@@ -1,6 +1,7 @@
 package com.coin.service.impl;
 
 import com.coin.entity.TPrize;
+import com.coin.mapper.TPrizeMapper;
 import com.coin.mapper.ext.PrizeMapper;
 import com.coin.req.PrizeReq;
 import com.coin.rsp.PrizeRsp;
@@ -25,10 +26,12 @@ public class PrizeServiceImpl implements PrizeService {
 
     @Resource
     private PrizeMapper prizeMapper;
+    @Resource
+    private TPrizeMapper tPrizeMapper;
 
     @Override
     public PrizeRsp getInfoById(Integer id) throws Exception {
-        TPrize prize = prizeMapper.getInfoById(id);
+        TPrize prize = tPrizeMapper.selectByPrimaryKey(id);
         PrizeRsp rsp = new PrizeRsp();
         BeanUtils.copyProperties(prize, rsp);
         return rsp;
@@ -82,7 +85,7 @@ public class PrizeServiceImpl implements PrizeService {
 
     @Override
     public void updateInfo(PrizeReq req) throws Exception {
-        TPrize oldPrize = prizeMapper.getInfoById(req.getId());
+        TPrize oldPrize = tPrizeMapper.selectByPrimaryKey(req.getId());
         if(oldPrize == null){
             throw new BizException(CodeCons.ERROR, "奖品信息不存在");
         }

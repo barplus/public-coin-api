@@ -17,36 +17,6 @@
         <result column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <select id="getCustomerList" resultMap="customerMap">
-        select id,login_name,vip,roulette_total_time,roulette_used_time,status,is_login,create_user,create_date,update_user,update_date,wallet
-        from t_customer t
-        where 1= 1
-        <if test="queryLoginName != null and queryLoginName != ''">
-            and t.login_name = #{queryLoginName}
-        </if>
-    </select>
-
-    <insert id="createCustomer">
-        INSERT INTO t_customer(
-            login_name,
-            login_pass,
-            is_login,
-            create_user,
-            create_date,
-            update_user,
-            update_date
-        )
-	    VALUES(
-	        #{loginName},
-	        #{loginPass},
-	        #{isLogin},
-	        #{createUser},
-	        #{createDate},
-	        #{updateUser},
-	        #{updateDate}
-	    )
-    </insert>
-
     <insert id="createBatch">
         INSERT INTO t_customer(
             login_name,
@@ -93,12 +63,6 @@
     <update id="updateTotalNum">
         update t_customer t
         set t.roulette_total_time = t.roulette_total_time + #{rouletteTotalTime}
-        where t.id = #{id}
-    </update>
-
-    <update id="updateWallet">
-        update t_customer t
-        set t.wallet = #{wallet}
         where t.id = #{id}
     </update>
 

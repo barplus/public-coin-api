@@ -11,7 +11,7 @@ public interface CustomerService {
 
     TCustomer getInfoByLoginName(String loginName) throws Exception;
 
-    PageInfo<TCustomer> pageList(CustomerReq req) throws Exception;
+    PageInfo<CustomerRsp> pageList(CustomerReq req) throws Exception;
     List<CustomerRsp> getList(CustomerReq req) throws Exception;
 
     void updateTotalNum(CustomerReq req) throws Exception;

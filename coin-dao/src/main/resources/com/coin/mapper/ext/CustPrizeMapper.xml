@@ -27,47 +27,6 @@
         <result column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <select id="getCustPrizeList" resultMap="custPrizeMap" parameterType="com.coin.req.CustPrizeReq">
-        select *
-        from t_cust_prize t
-        where t.login_name = #{loginName}
-        and t.create_date &lt;= #{maxDate}
-        <if test="minDate != null">
-            and t.create_date &gt;= #{minDate}
-        </if>
-        <if test="dataType != null">
-            <if test="dataType == 1">
-                and t.prize_name is not null
-            </if>
-            <if test="dataType == 0">
-                and t.prize_name is null
-            </if>
-        </if>
-        order by id desc
-    </select>
-
-    <select id="getDatas" resultMap="custPrizeRspMap" parameterType="com.coin.req.CustPrizeReq">
-        select *
-        from t_cust_prize t
-        where 1=1
-        <if test="queryLoginName != null and queryLoginName != ''">
-            and t.login_name = #{queryLoginName}
-        </if>
-        <if test="minDate != null">
-            and t.create_date &gt;= #{minDate}
-        </if>
-        <if test="maxDate != null">
-            and t.create_date &lt;= #{maxDate}
-        </if>
-        <if test="isWin != null and isWin=='1'.toString()">
-            and t.prize_id is not null
-        </if>
-        <if test="isWin != null and isWin=='0'.toString()">
-            and t.prize_id is null
-        </if>
-        order by id desc
-    </select>
-
     <select id="getTwoCustPrize30s" resultMap="custPrizeMap">
         select *
         from t_cust_prize t
@@ -85,48 +44,5 @@
         order by t.create_date
         limit 2
     </select>
-
-    <update id="updateById">
-        update t_cust_prize
-        <set>
-            update_user=#{updateUser},
-            update_date=#{updateDate},
-            <if test="requestDate != null">
-                request_date = #{requestDate},
-            </if>
-        </set>
-        where id = #{id}
-    </update>
-
-    <insert id="addCustPrize">
-        INSERT INTO t_cust_prize(
-            <if test="prizeId != null">
-                prize_id,
-            </if>
-            <if test="prizeName != null">
-                prize_name,
-            </if>
-            login_name,
-            bill_no,
-            create_user,
-            create_date,
-            update_user,
-            update_date
-        )
-	    VALUES(
-            <if test="prizeId != null">
-                #{prizeId},
-            </if>
-            <if test="prizeName != null">
-                #{prizeName},
-            </if>
-            #{loginName},
-            #{billNo},
-	        #{createUser},
-	        #{createDate},
-	        #{updateUser},
-	        #{updateDate}
-	    )
-    </insert>
 
 </mapper>

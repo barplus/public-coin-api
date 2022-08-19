@@ -17,10 +17,6 @@
         <result column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <select id="getInfoById" resultMap="prizeMap">
-        select * from t_prize t where t.id = #{id}
-    </select>
-
     <select id="totalRate" resultType="com.coin.rsp.PrizeRsp">
         select sum(t.rate) totalRate,
                sum(case when t.status=1 then t.rate else 0 end) enabledTotalRate,

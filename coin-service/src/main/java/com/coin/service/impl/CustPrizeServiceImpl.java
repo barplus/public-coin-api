@@ -1,8 +1,11 @@
 package com.coin.service.impl;
 
 import com.coin.entity.TCustPrize;
+import com.coin.entity.TCustPrizeExample;
 import com.coin.entity.TCustomer;
 import com.coin.entity.TPrize;
+import com.coin.mapper.TCustPrizeMapper;
+import com.coin.mapper.TPrizeMapper;
 import com.coin.mapper.ext.CustPrizeMapper;
 import com.coin.mapper.ext.CustomerMapper;
 import com.coin.mapper.ext.PrizeMapper;
@@ -31,6 +34,7 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CustPrizeServiceImpl implements CustPrizeService {
@@ -40,53 +44,82 @@ public class CustPrizeServiceImpl implements CustPrizeService {
     @Resource
     private CustPrizeMapper custPrizeMapper;
     @Resource
+    private TCustPrizeMapper tCustPrizeMapper;
+    @Resource
     private CustomerMapper customerMapper;
     @Resource
     private CustomerService customerService;
     @Resource
     private PrizeMapper prizeMapper;
     @Resource
+    private TPrizeMapper tPrizeMapper;
+    @Resource
     private RedisUtil redisUtil;
 
     @Override
     public TPrize getInfoById(Integer id) throws Exception {
-        return null;
+        return tPrizeMapper.selectByPrimaryKey(id);
     }
 
     @Override
     public PageInfo<TCustPrize> pageList(CustPrizeReq req) throws Exception {
-        Date today = DateUtil.getNoTimeDate(new Date());
-        req.setMaxDate(DateUtil.addDays(today, 1));
+        TCustPrizeExample example = new TCustPrizeExample();
+        TCustPrizeExample.Criteria criteria = example.createCriteria();
+        criteria.andLoginNameEqualTo(req.getLoginName());
+        if(req.getDateType() != null){
+            if(req.getDateType().intValue() == 1){
+                criteria.andPrizeIdIsNotNull();
+            }
+            if(req.getDateType().intValue() == 0){
+                criteria.andPrizeIdIsNull();
+            }
+        }
         if(req.getDateType() !=null){
             int queryDay = req.getDateType().intValue();
             if(!BizCons.CUST_PRIZE_QUERY_DAY.containsKey(queryDay)){
                 throw new BizException("9999", "查询日期不支持");
             }
+            Date today = DateUtil.getNoTimeDate(new Date());
             if(queryDay == 0){
-                req.setMinDate(today);
-            }
-            if(queryDay == 1){
-                req.setMaxDate(today);
-                req.setMinDate(DateUtil.addDays(today, -1));
-            }
-            if(queryDay == 7){
-                req.setMinDate(DateUtil.addDays(today, -7));
-            }
-            if(queryDay == 30){
-                req.setMinDate(DateUtil.addDays(today, -30));
+                criteria.andCreateDateGreaterThanOrEqualTo(today);
+            } else if(queryDay == 1){
+                criteria.andCreateDateLessThanOrEqualTo(today);
+                criteria.andCreateDateGreaterThanOrEqualTo(DateUtil.addDays(today, -1));
+            } else {
+                criteria.andCreateDateGreaterThanOrEqualTo(DateUtil.addDays(today, -1 * queryDay));
             }
         }
+        example.setOrderByClause(" id desc");
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
-        List<TCustPrize> custPrizes = custPrizeMapper.getCustPrizeList(req);
+        List<TCustPrize> custPrizes = tCustPrizeMapper.selectByExample(example);
         PageInfo<TCustPrize> page = new PageInfo<>(custPrizes);
         return page;
     }
 
     @Override
     public PageInfo<CustPrizeRsp> pageDatas(CustPrizeReq req) throws Exception {
+        TCustPrizeExample example = new TCustPrizeExample();
+        TCustPrizeExample.Criteria criteria = example.createCriteria();
+        if(StringUtils.isNotBlank(req.getQueryLoginName())){
+            criteria.andLoginNameEqualTo(req.getQueryLoginName());
+        }
+        if(req.getMinDate() != null){
+            criteria.andCreateDateGreaterThanOrEqualTo(req.getMinDate());
+        }
+        if(req.getMaxDate() != null){
+            criteria.andCreateDateLessThanOrEqualTo(req.getMaxDate());
+        }
+        if("1".equals(req.getIsWin())){
+            criteria.andPrizeNameIsNotNull();
+        }
+        if("0".equals(req.getIsWin())){
+            criteria.andPrizeNameIsNull();
+        }
+        example.setOrderByClause(" id desc");
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
-        List<CustPrizeRsp> custPrizes = custPrizeMapper.getDatas(req);
-        PageInfo<CustPrizeRsp> page = new PageInfo<>(custPrizes);
+        List<TCustPrize> custPrizes = tCustPrizeMapper.selectByExample(example);
+        List<CustPrizeRsp> rsps = custPrizes.stream().map(custPrize->this.convertRsp(custPrize)).collect(Collectors.toList());
+        PageInfo<CustPrizeRsp> page = new PageInfo<>(rsps);
         return page;
     }
 
@@ -162,7 +195,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
             if(!isFake && custPrize.getRequestDate() == null){
                 TCustPrize updateInfo = BizUtil.getUpdateInfo(new TCustPrize(), custPrize.getId(), "sys-api", now);
                 updateInfo.setRequestDate(now);
-                custPrizeMapper.updateById(updateInfo);
+                tCustPrizeMapper.updateByPrimaryKeySelective(updateInfo);
             }
         }
         if(isFake && !CollectionUtils.isEmpty(custPrizes)){
@@ -181,7 +214,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         }
         custPrize.setLoginName(loginName);
         custPrize.setBillNo(DateUtil.getTodayStr()+BizUtil.getStringRandom(4, 0));
-        return custPrizeMapper.addCustPrize(custPrize);
+        return tCustPrizeMapper.insertSelective(custPrize);
     }
 
     private TCustPrize getFakeCustPrize(){
@@ -274,6 +307,12 @@ public class CustPrizeServiceImpl implements CustPrizeService {
             }
         }
         return prize.getRate();
+    }
+
+    private CustPrizeRsp convertRsp(TCustPrize custPrize){
+        CustPrizeRsp rsp = new CustPrizeRsp();
+        BeanUtils.copyProperties(custPrize, rsp);
+        return rsp;
     }
 
 }
