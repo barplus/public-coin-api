@@ -12,6 +12,7 @@ import com.coin.service.util.BizUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -20,8 +21,6 @@ import java.util.List;
 @Service
 public class DictServiceImpl implements DictService {
 
-    @Resource
-    private DictMapper dictMapper;
     @Resource
     private TDictMapper tDictMapper;
 
@@ -45,10 +44,21 @@ public class DictServiceImpl implements DictService {
         return tDictMapper.selectByPrimaryKey(id);
     }
 
+    @Override
+    public TDict getByTypeAndCode(String dictType, String dictCode) throws Exception {
+        TDictExample example = new TDictExample();
+        example.createCriteria().andDictTypeEqualTo(dictType).andDictCodeEqualTo(dictCode);
+        List<TDict> list = tDictMapper.selectByExample(example);
+        if(CollectionUtils.isEmpty(list)){
+            return null;
+        }
+        return list.get(0);
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void add(DictReq req) throws Exception {
-        TDict oldDict = dictMapper.getByTypeAndCode(req.getDictType(), req.getDictCode());
+        TDict oldDict = this.getByTypeAndCode(req.getDictType(), req.getDictCode());
         if(oldDict != null){
             throw new BizException(CodeCons.ERROR, "重复的数据，请修改类型或编码");
         }
@@ -83,6 +93,9 @@ public class DictServiceImpl implements DictService {
                 throw new BizException(CodeCons.ERROR, "默认值错误");
             }
             dict.setIsDefault(req.getIsDefault());
+        }
+        if(req.getSortNum() != null){
+            dict.setSortNum(req.getSortNum());
         }
         int count = tDictMapper.updateByPrimaryKeySelective(dict);
         if(count > 0 && req.getIsDefault() != null && req.getIsDefault().intValue() == 1){

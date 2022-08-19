@@ -36,6 +36,9 @@ public class OfficeAspect {
     private SysUserService sysUserService;
     @Resource
     private RedisUtil redisUtil;
+    String[] noNeedLoginPath = {"/user/login"};
+    String[] downLoadPath = {"/custPrize/exportDatas", "/customer/exportDatas"};
+    String[] fastQueryPath = {"/prize/pageList", "/customer/pageList", "/custPrize/pageDatas"};
 
     @Around(value="within(com.coin.web.controller.*Controller) && @annotation(officeSecure)")
     public Object officeSecure(ProceedingJoinPoint pj, OfficeSecure officeSecure){
@@ -44,8 +47,7 @@ public class OfficeAspect {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
             String method = request.getServletPath();
-            String[] noNeedLoginPath = {"/user/login"};
-            String[] downLoadPath = {"/custPrize/exportDatas"};
+
             String token = StrUtil.getStr(request.getHeader("token"));
             if(ArrayUtils.contains(downLoadPath, method)){
                 token = req.getToken();
@@ -60,7 +62,6 @@ public class OfficeAspect {
                 }
                 loginName = req.getLoginName();
             }
-            String[] fastQueryPath = {"/prize/pageList", "/customer/pageList", "/custPrize/pageDatas"};
             long waitMill = 1688l;
             if(ArrayUtils.contains(fastQueryPath, method)){
                 waitMill = 168l;

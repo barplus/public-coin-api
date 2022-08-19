@@ -7,8 +7,11 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class BizUtil {
 
@@ -174,6 +177,19 @@ public class BizUtil {
         String aStr = oldStr.substring(0, 2);
         String bStr = oldStr.substring(oldStr.length()-3);
         return aStr + "****" + bStr;
+    }
+
+    /**
+     * 指定字符串按指定字符分割后转化为integer列表
+     * @param str 字符串,如 1,2,3,4
+     * @param split 分割符,如 ,
+     * @return
+     */
+    public static List<Integer> strToListInt(String str, String split){
+        String[] strs = str.split(split);
+        int[] array = Arrays.stream(strs).mapToInt(Integer::parseInt).toArray();
+        List<Integer> list = Arrays.stream(array).boxed().collect(Collectors.toList());
+        return list;
     }
 
     public static void main(String[] args) {

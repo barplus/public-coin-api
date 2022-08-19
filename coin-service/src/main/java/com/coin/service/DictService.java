@@ -11,6 +11,8 @@ public interface DictService {
 
     TDict getById(Integer id) throws Exception;
 
+    TDict getByTypeAndCode(String dictType, String dictCode) throws Exception;
+
     void add(DictReq req) throws Exception;
 
     void update(DictReq req) throws Exception;

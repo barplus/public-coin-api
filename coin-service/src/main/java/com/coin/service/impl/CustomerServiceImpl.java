@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,6 +65,15 @@ public class CustomerServiceImpl implements CustomerService {
         TCustomerExample.Criteria criteria = example.createCriteria();
         if(StringUtils.isNotBlank(req.getQueryLoginName())){
             criteria.andLoginNameEqualTo(req.getQueryLoginName());
+        }
+        if(req.getVip() != null){
+            criteria.andVipEqualTo(req.getVip());
+        }
+        if(StringUtils.isNotBlank(req.getVips())){
+            criteria.andVipIn(BizUtil.strToListInt(req.getVips(), ","));
+        }
+        if(req.getIsLogin() != null){
+            criteria.andIsLoginEqualTo(req.getIsLogin());
         }
         List<TCustomer> list = tCustomerMapper.selectByExample(example);
         List<CustomerRsp> rspList = list.stream().map(customer->this.convertRsp(customer)).collect(Collectors.toList());
@@ -126,6 +134,7 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerRsp convertRsp(TCustomer customer){
         CustomerRsp rsp = new CustomerRsp();
         BeanUtils.copyProperties(customer, rsp);
+        rsp.setRouletteSurplusTime(rsp.getRouletteTotalTime() - rsp.getRouletteUsedTime());
         return rsp;
     }
 

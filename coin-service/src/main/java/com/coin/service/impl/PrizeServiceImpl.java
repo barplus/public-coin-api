@@ -1,6 +1,7 @@
 package com.coin.service.impl;
 
 import com.coin.entity.TPrize;
+import com.coin.entity.TPrizeExample;
 import com.coin.mapper.TPrizeMapper;
 import com.coin.mapper.ext.PrizeMapper;
 import com.coin.req.PrizeReq;
@@ -14,6 +15,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -38,6 +40,17 @@ public class PrizeServiceImpl implements PrizeService {
     }
 
     @Override
+    public TPrize getInfoByName(String prizeName) throws Exception {
+        TPrizeExample example = new TPrizeExample();
+        example.createCriteria().andPrizeNameEqualTo(prizeName);
+        List<TPrize> list = tPrizeMapper.selectByExample(example);
+        if(CollectionUtils.isEmpty(list)){
+            return null;
+        }
+        return list.get(0);
+    }
+
+    @Override
     public PrizeRsp totalRate() throws Exception {
         PrizeRsp rsp = prizeMapper.totalRate();
         return rsp;
@@ -45,7 +58,7 @@ public class PrizeServiceImpl implements PrizeService {
 
     @Override
     public void addPrize(PrizeReq req) throws Exception {
-        TPrize oldPrize = prizeMapper.getInfoByName(req.getPrizeName());
+        TPrize oldPrize = this.getInfoByName(req.getPrizeName());
         if(oldPrize != null){
             throw new BizException(CodeCons.ERROR, "重复的奖品名");
         }
@@ -70,7 +83,7 @@ public class PrizeServiceImpl implements PrizeService {
         prize.setMaxNum(req.getMaxNum());
         prize.setRate(req.getRate());
         prize.setVipRate(req.getVipRate());
-        prizeMapper.addPrize(prize);
+        tPrizeMapper.insertSelective(prize);
     }
 
     @Override
@@ -107,7 +120,7 @@ public class PrizeServiceImpl implements PrizeService {
             updatePrize.setVipRate(req.getVipRate());
         }
         if(req.getPrizeName() != null){
-            TPrize prize = prizeMapper.getInfoByName(req.getPrizeName());
+            TPrize prize = this.getInfoByName(req.getPrizeName());
             if(prize != null && prize.getId() != req.getId()){
                 throw new BizException(CodeCons.ERROR, "奖品名称不能和其他奖品一致");
             }

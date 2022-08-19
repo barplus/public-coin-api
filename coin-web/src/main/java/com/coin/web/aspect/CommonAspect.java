@@ -36,6 +36,8 @@ public class CommonAspect {
     private RedisUtil redisUtil;
     @Resource
     private CustomerService customerService;
+    String[] noNeedLoginPath = {"/customer/login"};
+    String[] fastQueryPath = {"/custPrize/pageList", "/customer/getCustInfo"};
 
     @Around(value="within(com.coin.web.controller.*Controller) && @annotation(commonSecure)")
     public Object commonSecure(ProceedingJoinPoint pj, CommonSecure commonSecure){
@@ -46,11 +48,9 @@ public class CommonAspect {
             String method = request.getServletPath();
             String token = StrUtil.getStr(request.getHeader("token"));
             String loginName = redisUtil.get(token);
-            String[] noNeedLoginPath = {"/customer/login"};
             if(StringUtils.isBlank(loginName) && !ArrayUtils.contains(noNeedLoginPath, method)){
                 return new MyResp(CodeCons.LOGIN_OUT, "登录已过期，请重新登录");
             }
-            String[] fastQueryPath = {"/custPrize/pageList", "/customer/getCustInfo"};
             long waitMill = 1688l;
             if(ArrayUtils.contains(fastQueryPath, method)){
                 waitMill = 168l;

@@ -22,5 +22,11 @@ public class CustomerReq extends CommonReq implements Serializable {
     private Integer rouletteTotalTime;
     /**会员的钱包*/
     private String wallet;
+    /**vip*/
+    private Integer vip;
+    /**vips*/
+    private String vips;
+    /**是否登录：1-是 0-否*/
+    private Integer isLogin;
 
 }

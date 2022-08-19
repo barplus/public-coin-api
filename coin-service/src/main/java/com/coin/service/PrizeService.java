@@ -10,6 +10,7 @@ import java.util.List;
 public interface PrizeService {
 
     PrizeRsp getInfoById(Integer id) throws Exception;
+    TPrize getInfoByName(String loginName) throws Exception;
     PrizeRsp totalRate() throws Exception;
     void addPrize(PrizeReq req) throws Exception;
     void updateStatus(PrizeReq req) throws Exception;

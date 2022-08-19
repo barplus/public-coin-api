@@ -24,10 +24,6 @@
         from t_prize t
     </select>
 
-    <select id="getInfoByName" resultMap="prizeMap">
-        select * from t_prize t where t.prize_name = #{prizeName}
-    </select>
-
     <select id="getInfoByAmount" resultMap="prizeMap">
         select * from t_prize t where t.amount = #{amount}
         <if test="id != null">
