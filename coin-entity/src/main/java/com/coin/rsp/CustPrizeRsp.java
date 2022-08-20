@@ -29,7 +29,7 @@ public class CustPrizeRsp implements Serializable {
     private String wallet;
     private String prizePic;
     private String createUser;
-    @Excel(name = "中奖时间", width = 35, format = "yyyy-MM-dd HH:mm:ss", orderNum = "4")
+    @Excel(name = "抽奖时间", width = 35, format = "yyyy-MM-dd HH:mm:ss", orderNum = "4")
     private Date createDate;
     private String updateUser;
     private Date updateDate;

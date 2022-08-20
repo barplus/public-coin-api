@@ -217,11 +217,11 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         if(prize != null){
             custPrize.setPrizeId(prize.getId());
             custPrize.setPrizeName(prize.getPrizeName());
+            CustomerRsp rsp = customerService.getByLoginName(loginName);
+            custPrize.setWallet(rsp==null?null:rsp.getWallet());
         }
         custPrize.setLoginName(loginName);
         custPrize.setBillNo(DateUtil.getTodayStr()+BizUtil.getStringRandom(4, 0));
-        CustomerRsp rsp = customerService.getByLoginName(loginName);
-        custPrize.setWallet(rsp==null?null:rsp.getWallet());
         return tCustPrizeMapper.insertSelective(custPrize);
     }
 
