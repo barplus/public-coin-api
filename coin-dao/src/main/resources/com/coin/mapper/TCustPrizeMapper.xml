@@ -8,6 +8,7 @@
     <result column="prize_name" jdbcType="VARCHAR" property="prizeName" />
     <result column="login_name" jdbcType="VARCHAR" property="loginName" />
     <result column="request_date" jdbcType="TIMESTAMP" property="requestDate" />
+    <result column="wallet" jdbcType="VARCHAR" property="wallet" />
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
@@ -72,8 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, bill_no, prize_id, prize_name, login_name, request_date, create_user, create_date, 
-    update_user, update_date
+    id, bill_no, prize_id, prize_name, login_name, request_date, wallet, create_user, 
+    create_date, update_user, update_date
   </sql>
   <select id="selectByExample" parameterType="com.coin.entity.TCustPrizeExample" resultMap="BaseResultMap">
     select
@@ -110,13 +111,13 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_cust_prize (bill_no, prize_id, prize_name, 
-      login_name, request_date, create_user, 
-      create_date, update_user, update_date
-      )
+      login_name, request_date, wallet, 
+      create_user, create_date, update_user, 
+      update_date)
     values (#{billNo,jdbcType=VARCHAR}, #{prizeId,jdbcType=INTEGER}, #{prizeName,jdbcType=VARCHAR}, 
-      #{loginName,jdbcType=VARCHAR}, #{requestDate,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}
-      )
+      #{loginName,jdbcType=VARCHAR}, #{requestDate,jdbcType=TIMESTAMP}, #{wallet,jdbcType=VARCHAR}, 
+      #{createUser,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateDate,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.coin.entity.TCustPrize">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -138,6 +139,9 @@
       </if>
       <if test="requestDate != null">
         request_date,
+      </if>
+      <if test="wallet != null">
+        wallet,
       </if>
       <if test="createUser != null">
         create_user,
@@ -167,6 +171,9 @@
       </if>
       <if test="requestDate != null">
         #{requestDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wallet != null">
+        #{wallet,jdbcType=VARCHAR},
       </if>
       <if test="createUser != null">
         #{createUser,jdbcType=VARCHAR},
@@ -209,6 +216,9 @@
       <if test="row.requestDate != null">
         request_date = #{row.requestDate,jdbcType=TIMESTAMP},
       </if>
+      <if test="row.wallet != null">
+        wallet = #{row.wallet,jdbcType=VARCHAR},
+      </if>
       <if test="row.createUser != null">
         create_user = #{row.createUser,jdbcType=VARCHAR},
       </if>
@@ -234,6 +244,7 @@
       prize_name = #{row.prizeName,jdbcType=VARCHAR},
       login_name = #{row.loginName,jdbcType=VARCHAR},
       request_date = #{row.requestDate,jdbcType=TIMESTAMP},
+      wallet = #{row.wallet,jdbcType=VARCHAR},
       create_user = #{row.createUser,jdbcType=VARCHAR},
       create_date = #{row.createDate,jdbcType=TIMESTAMP},
       update_user = #{row.updateUser,jdbcType=VARCHAR},
@@ -260,6 +271,9 @@
       <if test="requestDate != null">
         request_date = #{requestDate,jdbcType=TIMESTAMP},
       </if>
+      <if test="wallet != null">
+        wallet = #{wallet,jdbcType=VARCHAR},
+      </if>
       <if test="createUser != null">
         create_user = #{createUser,jdbcType=VARCHAR},
       </if>
@@ -282,6 +296,7 @@
       prize_name = #{prizeName,jdbcType=VARCHAR},
       login_name = #{loginName,jdbcType=VARCHAR},
       request_date = #{requestDate,jdbcType=TIMESTAMP},
+      wallet = #{wallet,jdbcType=VARCHAR},
       create_user = #{createUser,jdbcType=VARCHAR},
       create_date = #{createDate,jdbcType=TIMESTAMP},
       update_user = #{updateUser,jdbcType=VARCHAR},

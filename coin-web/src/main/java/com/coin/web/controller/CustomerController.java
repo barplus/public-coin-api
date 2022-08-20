@@ -1,5 +1,7 @@
 package com.coin.web.controller;
 
+import cn.afterturn.easypoi.excel.ExcelImportUtil;
+import cn.afterturn.easypoi.excel.entity.ImportParams;
 import com.coin.entity.TCustomer;
 import com.coin.req.CommonReq;
 import com.coin.req.CustomerReq;
@@ -10,10 +12,7 @@ import com.coin.service.CustPrizeService;
 import com.coin.service.CustomerService;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.exception.BizException;
-import com.coin.service.util.BizUtil;
-import com.coin.service.util.MD5Util;
-import com.coin.service.util.ParamUtil;
-import com.coin.service.util.RedisUtil;
+import com.coin.service.util.*;
 import com.coin.web.annotation.CommonSecure;
 import com.coin.web.annotation.OfficeSecure;
 import com.coin.web.utils.FileUtil;
@@ -21,10 +20,8 @@ import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -186,7 +183,7 @@ public class CustomerController {
             req.setPageSize(20000);
             PageInfo<CustomerRsp> page = customerService.pageList(req);
             List<CustomerRsp> rsps = page.getList();
-            FileUtil.exportExcel(rsps, CustomerRsp.class, "会员记录.xlsx", response);
+            FileUtil.exportExcel(rsps, CustomerRsp.class, DateUtil.getTodayStr("yyyyMMdd")+"会员记录+.xlsx", response);
         }catch(BizException e){
             logger.error("customer-exportDatas-BizException", e);
             return new MyResp(e.getCode(), e.getErrMsg());
@@ -194,6 +191,26 @@ public class CustomerController {
             logger.error("customer-exportDatas-Exception", e);
         }
         return new MyResp(CodeCons.ERROR, "导出失败");
+    }
+
+    @RequestMapping(value = "/importCustomerList")
+    @OfficeSecure
+    public MyResp importCustomerList(CustomerReq req, @RequestPart("file") MultipartFile file) {
+        logger.info("custPrize-importCustomerList-req={}", req);
+        ImportParams params = new ImportParams();
+        params.setTitleRows(0);
+        params.setHeadRows(1);
+        try {
+            List<CustomerRsp> list = ExcelImportUtil.importExcel(file.getInputStream(), CustomerRsp.class, params);
+            customerService.importCustomerList(list);
+            return new MyResp(CodeCons.SUCCESS, "成功");
+        } catch (BizException e) {
+            logger.error("custPrize-importCustomerList-e", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        } catch (Exception e) {
+            logger.error("custPrize-importCustomerList-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "失败");
     }
 
     @PostMapping("/update")

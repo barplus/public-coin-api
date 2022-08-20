@@ -91,22 +91,6 @@ public class CustPrizeController {
         return new MyResp(CodeCons.ERROR, "导出失败");
     }
 
-    @RequestMapping(value = "/importMemberList", method = RequestMethod.POST)
-    @OfficeSecure
-    public MyResp importMemberList(CustPrizeReq req, @RequestPart("file") MultipartFile file) {
-        logger.info("custPrize-importMemberList-req={}", req);
-        ImportParams params = new ImportParams();
-        params.setTitleRows(0);
-        params.setHeadRows(1);
-        try {
-            List<CustPrizeRsp> list = ExcelImportUtil.importExcel(file.getInputStream(), CustPrizeRsp.class, params);
-            return new MyResp(CodeCons.SUCCESS, "成功");
-        } catch (Exception e) {
-            logger.error("custPrize-importMemberList-error", e);
-            return new MyResp(CodeCons.ERROR, "失败");
-        }
-    }
-
     @PostMapping("/custPrizeRecord")
     public MyResp custPrizeRecord(){
         try{

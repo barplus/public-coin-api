@@ -39,7 +39,7 @@
         <table tableName="t_cust_prize">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="t_customer">
+        <!--<table tableName="t_customer">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="t_dict">
@@ -52,21 +52,6 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="t_sys_user">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <!--<table tableName="ums_admin">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="ums_role">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="ums_admin_role_relation">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="ums_resource">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="ums_resource_category">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
     </context>

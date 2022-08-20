@@ -18,6 +18,8 @@ public class TCustPrize implements Serializable {
     private String loginName;
     /**滚动条获取时间*/
     private Date requestDate;
+    /**收款钱包*/
+    private String wallet;
 
     private String createUser;
 
@@ -41,6 +43,7 @@ public class TCustPrize implements Serializable {
         sb.append(", prizeName=").append(prizeName);
         sb.append(", loginName=").append(loginName);
         sb.append(", requestDate=").append(requestDate);
+        sb.append(", wallet=").append(wallet);
         sb.append(", createUser=").append(createUser);
         sb.append(", createDate=").append(createDate);
         sb.append(", updateUser=").append(updateUser);

@@ -1,5 +1,6 @@
 package com.coin.service.util;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
@@ -32,10 +33,18 @@ public class DateUtil {
 
     /**获取当天年月日时分秒的字符串*/
     public static String getTodayStr(){
+        return DateUtil.getTodayStr(null);
+    }
+
+    /**获取当天年月日时分秒的字符串*/
+    public static String getTodayStr(String fmtStr){
+        if(StringUtils.isBlank(fmtStr)){
+            fmtStr="yyyyMMddHHmmss";
+        }
         //获取当前时间
         LocalDateTime now = LocalDateTime.now();
         //创建日期时间对象格式化器，日期格式类似： 2020-02-23 22:18:38
-        DateTimeFormatter formatter=DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        DateTimeFormatter formatter=DateTimeFormatter.ofPattern(fmtStr);
         //将时间转化为对应格式的字符串
         String fomateDate=now.format(formatter).toString();
         return fomateDate;

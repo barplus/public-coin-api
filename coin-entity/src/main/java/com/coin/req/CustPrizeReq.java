@@ -33,5 +33,7 @@ public class CustPrizeReq extends CommonReq implements Serializable {
     private String queryLoginName;
     /**是否中奖：1-中奖 0-未中奖*/
     private String isWin;
+    /**记录编号*/
+    private String billNo;
 
 }

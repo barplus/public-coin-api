@@ -100,6 +100,9 @@ public class CustPrizeServiceImpl implements CustPrizeService {
     public PageInfo<CustPrizeRsp> pageDatas(CustPrizeReq req) throws Exception {
         TCustPrizeExample example = new TCustPrizeExample();
         TCustPrizeExample.Criteria criteria = example.createCriteria();
+        if(StringUtils.isNotBlank(req.getBillNo())){
+            criteria.andBillNoEqualTo(req.getBillNo());
+        }
         if(StringUtils.isNotBlank(req.getQueryLoginName())){
             criteria.andLoginNameEqualTo(req.getQueryLoginName());
         }

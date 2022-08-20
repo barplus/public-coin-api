@@ -495,6 +495,76 @@ public class TCustPrizeExample {
             return (Criteria) this;
         }
 
+        public Criteria andWalletIsNull() {
+            addCriterion("wallet is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWalletIsNotNull() {
+            addCriterion("wallet is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWalletEqualTo(String value) {
+            addCriterion("wallet =", value, "wallet");
+            return (Criteria) this;
+        }
+
+        public Criteria andWalletNotEqualTo(String value) {
+            addCriterion("wallet <>", value, "wallet");
+            return (Criteria) this;
+        }
+
+        public Criteria andWalletGreaterThan(String value) {
+            addCriterion("wallet >", value, "wallet");
+            return (Criteria) this;
+        }
+
+        public Criteria andWalletGreaterThanOrEqualTo(String value) {
+            addCriterion("wallet >=", value, "wallet");
+            return (Criteria) this;
+        }
+
+        public Criteria andWalletLessThan(String value) {
+            addCriterion("wallet <", value, "wallet");
+            return (Criteria) this;
+        }
+
+        public Criteria andWalletLessThanOrEqualTo(String value) {
+            addCriterion("wallet <=", value, "wallet");
+            return (Criteria) this;
+        }
+
+        public Criteria andWalletLike(String value) {
+            addCriterion("wallet like", value, "wallet");
+            return (Criteria) this;
+        }
+
+        public Criteria andWalletNotLike(String value) {
+            addCriterion("wallet not like", value, "wallet");
+            return (Criteria) this;
+        }
+
+        public Criteria andWalletIn(List<String> values) {
+            addCriterion("wallet in", values, "wallet");
+            return (Criteria) this;
+        }
+
+        public Criteria andWalletNotIn(List<String> values) {
+            addCriterion("wallet not in", values, "wallet");
+            return (Criteria) this;
+        }
+
+        public Criteria andWalletBetween(String value1, String value2) {
+            addCriterion("wallet between", value1, value2, "wallet");
+            return (Criteria) this;
+        }
+
+        public Criteria andWalletNotBetween(String value1, String value2) {
+            addCriterion("wallet not between", value1, value2, "wallet");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateUserIsNull() {
             addCriterion("create_user is null");
             return (Criteria) this;

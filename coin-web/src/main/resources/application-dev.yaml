@@ -23,7 +23,7 @@ spring:
         max-idle: 0
         min-idle: 0
 upload:
-  url:  d:/www/java/pic
+  url:  d:/www/java/pic/
   #configuration:
     #local-cache-scope: statement
   #configuration:

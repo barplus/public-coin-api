@@ -8,6 +8,7 @@ import com.coin.req.CustomerReq;
 import com.coin.rsp.CustomerRsp;
 import com.coin.service.CustomerService;
 import com.coin.service.SysLogService;
+import com.coin.service.constant.CodeCons;
 import com.coin.service.enums.LogTypeEnum;
 import com.coin.service.exception.BizException;
 import com.coin.service.util.BizUtil;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -108,6 +110,22 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void updateIsLogin(String loginName) throws Exception {
         customerMapper.updateIsLogin(loginName);
+    }
+
+    @Override
+    public void importCustomerList(List<CustomerRsp> rsps) throws Exception {
+        logger.info("CustomerServiceImpl-importCustomerList-size={}", rsps);
+        List<TCustomer> insertList = new ArrayList<>();
+        for(int i=0; i<rsps.size(); i++){
+            CustomerRsp rsp = rsps.get(i);
+            if(StringUtils.isBlank(rsp.getLoginName()) || rsp.getVip() == null || rsp.getRouletteTotalTime() == null){
+                throw new BizException(CodeCons.ERROR, "第"+(i+2)+"行数据不完整或格式错误，请检查");
+            }
+            TCustomer customer = this.getInfoByLoginName(rsp.getLoginName());
+//            if(customer){
+//
+//            }
+        }
     }
 
     @Transactional(rollbackFor = Exception.class)

@@ -58,7 +58,7 @@ public class FileController {
             if(valid != null){
                 return;
             }
-            File file = new File(picUrl +"\\" + req.getFileName());
+            File file = new File(picUrl + req.getFileName());
             String filename = file.getName();
             filename = new String(filename.replaceAll(" ", "").getBytes("UTF-8"), "ISO8859-1");
             InputStream fis = new BufferedInputStream(new FileInputStream(file));
@@ -82,7 +82,7 @@ public class FileController {
 
     @RequestMapping(value = "downloadExcel", produces = "text/html;charset=UTF-8")
     @OfficeSecure
-    public void downLoadStuInfoExcel(FileReq req, HttpServletResponse response, HttpServletRequest request) {
+    public void downloadExcel(FileReq req, HttpServletResponse response, HttpServletRequest request) {
         String filePath = getClass().getResource("/static/excel_template/"+req.getFileName()).getPath();
         File excelFile = new File(filePath);
         FileInputStream fis = null;
@@ -96,7 +96,7 @@ public class FileController {
         }
         response.setContentType("application/vnd.ms-excel;charset=utf-8");
         response.setCharacterEncoding("utf-8");
-        response.setHeader("Content-disposition", "attachment;filename=muban.xlsx");
+        response.setHeader("Content-disposition", "attachment;filename="+req.getFileName());
         OutputStream os = null;
         try {
             os = response.getOutputStream();
