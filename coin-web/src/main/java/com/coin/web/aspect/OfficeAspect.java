@@ -37,7 +37,7 @@ public class OfficeAspect {
     @Resource
     private RedisUtil redisUtil;
     String[] noNeedLoginPath = {"/user/login"};
-    String[] downLoadPath = {"/custPrize/exportDatas", "/customer/exportDatas", "/file/downloadExcel"};
+    String[] downLoadPath = {"/custPrize/exportDatas", "/customer/exportDatas", "/file/downloadExcel", "/sysLog/exportDatas"};
     String[] fastQueryPath = {"/prize/pageList", "/customer/pageList", "/custPrize/pageDatas"};
 
     @Around(value="within(com.coin.web.controller.*Controller) && @annotation(officeSecure)")

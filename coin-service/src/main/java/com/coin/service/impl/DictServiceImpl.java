@@ -45,6 +45,17 @@ public class DictServiceImpl implements DictService {
     }
 
     @Override
+    public TDict getDefaultByType(String dictType) throws Exception {
+        TDictExample example = new TDictExample();
+        example.createCriteria().andDictTypeEqualTo(dictType).andIsDefaultEqualTo(1);
+        List<TDict> list = tDictMapper.selectByExample(example);
+        if(CollectionUtils.isEmpty(list)){
+            return null;
+        }
+        return list.get(0);
+    }
+
+    @Override
     public TDict getByTypeAndCode(String dictType, String dictCode) throws Exception {
         TDictExample example = new TDictExample();
         example.createCriteria().andDictTypeEqualTo(dictType).andDictCodeEqualTo(dictCode);

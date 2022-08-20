@@ -12,21 +12,21 @@ public class CustomerRsp implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
-    @Excel(name = "登录账号", width = 20)
+    @Excel(name = "登录账号", width = 20, orderNum = "1")
     private String loginName;
-    @Excel(name = "vip等级", width = 20, orderNum = "4")
+    @Excel(name = "vip等级", width = 20, orderNum = "5")
     private Integer vip;
-    @Excel(name = "总抽奖次数", width = 25, orderNum = "3")
+    @Excel(name = "总抽奖次数", width = 25, orderNum = "4")
     private Integer rouletteTotalTime;
 
     private Integer rouletteUsedTime;
-    @Excel(name = "剩余抽奖次数", width = 25, orderNum = "2")
+    @Excel(name = "剩余抽奖次数", width = 25, orderNum = "3")
     private Integer rouletteSurplusTime;
 
     private String wallet;
 
     private Integer status;
-    @Excel(name = "是否登录", width = 20, orderNum = "1", replace = {"是_1", "否_0"})
+    @Excel(name = "是否登录", width = 20, orderNum = "2", replace = {"是_1", "否_0"})
     private Integer isLogin;
 
     private String createUser;

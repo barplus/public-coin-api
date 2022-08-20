@@ -1,12 +1,13 @@
 package com.coin.web.controller;
 
 import com.coin.req.FileReq;
+import com.coin.rsp.template.CustomerTemplate;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.util.DateUtil;
 import com.coin.service.util.ParamUtil;
 import com.coin.web.annotation.OfficeSecure;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import com.coin.web.utils.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/file")
@@ -80,31 +82,15 @@ public class FileController {
         }
     }
 
-    @RequestMapping(value = "downloadExcel", produces = "text/html;charset=UTF-8")
+    @RequestMapping(value = "downloadExcel")
     @OfficeSecure
-    public void downloadExcel(FileReq req, HttpServletResponse response, HttpServletRequest request) {
-        String filePath = getClass().getResource("/static/excel_template/"+req.getFileName()).getPath();
-        File excelFile = new File(filePath);
-        FileInputStream fis = null;
-        XSSFWorkbook wb = null;
-        try {
-            fis = new FileInputStream(excelFile);
-            wb = new XSSFWorkbook(fis);
-            fis.close();
-        } catch (Exception e) {
-            logger.error("file-downloadExcel-error-1", e);
-        }
-        response.setContentType("application/vnd.ms-excel;charset=utf-8");
-        response.setCharacterEncoding("utf-8");
-        response.setHeader("Content-disposition", "attachment;filename="+req.getFileName());
-        OutputStream os = null;
-        try {
-            os = response.getOutputStream();
-            wb.write(os);
-            os.flush();
-            os.close();
-        } catch (IOException e) {
-            logger.error("file-downloadExcel-error-2", e);
+    public void downloadExcel(FileReq req, HttpServletResponse response) {
+        try{
+            if("customer.xlsx".equals(req.getFileName())){
+                FileUtil.exportExcel(new ArrayList<>(), CustomerTemplate.class, req.getFileName(), response);
+            }
+        }catch(Exception e){
+            logger.error("file-downloadExcel-error", e);
         }
     }
 

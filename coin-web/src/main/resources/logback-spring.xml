@@ -21,7 +21,7 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
    %n是换行符
         -->
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] [%X{TRACE_ID}]**************** %-5level %logger{50} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] [%X{TRACE_ID}]**************** %-5level %logger{1000} - %msg%n</pattern>
         </layout>
     </appender>
 
@@ -54,7 +54,7 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
         </rollingPolicy>
         <!-- 日志输出格式： -->
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [ %thread ] [%X{TRACE_ID}] ------------------ [ %-5level ] [ %logger{50} : %line ] -
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [ %thread ] [%X{TRACE_ID}] ------------------ [ %-5level ] [ %logger{1000} : %line ] -
                 %msg%n
             </pattern>
         </layout>

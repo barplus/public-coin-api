@@ -41,7 +41,7 @@ public class CustPrizeController {
             if(valid != null){
                 return valid;
             }
-            PageInfo<TCustPrize> page = custPrizeService.pageList(req);
+            PageInfo<CustPrizeRsp> page = custPrizeService.pageList(req);
             return new MyResp(CodeCons.SUCCESS, "", page);
         }catch(BizException e){
             logger.error("custPrize-pageList-BizException", e);

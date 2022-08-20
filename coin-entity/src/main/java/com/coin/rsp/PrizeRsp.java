@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 @Data
 public class PrizeRsp implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private Integer id;
     /**奖品名称*/
     private String prizeName;

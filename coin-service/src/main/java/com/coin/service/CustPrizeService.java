@@ -13,7 +13,7 @@ public interface CustPrizeService {
 
     TPrize getInfoById(Integer id) throws Exception;
 
-    PageInfo<TCustPrize> pageList(CustPrizeReq req) throws Exception;
+    PageInfo<CustPrizeRsp> pageList(CustPrizeReq req) throws Exception;
 
     PageInfo<CustPrizeRsp> pageDatas(CustPrizeReq req) throws Exception;
 

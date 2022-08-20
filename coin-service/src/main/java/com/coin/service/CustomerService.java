@@ -10,6 +10,7 @@ import java.util.List;
 public interface CustomerService {
 
     TCustomer getInfoByLoginName(String loginName) throws Exception;
+    CustomerRsp getByLoginName(String loginName) throws Exception;
 
     PageInfo<CustomerRsp> pageList(CustomerReq req) throws Exception;
     List<CustomerRsp> getList(CustomerReq req) throws Exception;

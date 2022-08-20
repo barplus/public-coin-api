@@ -2,11 +2,13 @@ package com.coin.service.impl;
 
 import com.coin.entity.TCustomer;
 import com.coin.entity.TCustomerExample;
+import com.coin.entity.TDict;
 import com.coin.mapper.TCustomerMapper;
 import com.coin.mapper.ext.CustomerMapper;
 import com.coin.req.CustomerReq;
 import com.coin.rsp.CustomerRsp;
 import com.coin.service.CustomerService;
+import com.coin.service.DictService;
 import com.coin.service.SysLogService;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.enums.LogTypeEnum;
@@ -41,6 +43,8 @@ public class CustomerServiceImpl implements CustomerService {
     private SysLogService sysLogService;
     @Resource
     private CustomerService customerService;
+    @Resource
+    private DictService dictService;
 
     @Override
     public TCustomer getInfoByLoginName(String loginName) throws Exception {
@@ -51,6 +55,13 @@ public class CustomerServiceImpl implements CustomerService {
             return null;
         }
         return list.get(0);
+    }
+
+    @Override
+    public CustomerRsp getByLoginName(String loginName) throws Exception {
+        TCustomer customer = this.getInfoByLoginName(loginName);
+        CustomerRsp rsp = this.convertRsp(customer);
+        return rsp;
     }
 
     @Override
@@ -153,6 +164,16 @@ public class CustomerServiceImpl implements CustomerService {
         CustomerRsp rsp = new CustomerRsp();
         BeanUtils.copyProperties(customer, rsp);
         rsp.setRouletteSurplusTime(rsp.getRouletteTotalTime() - rsp.getRouletteUsedTime());
+        if(StringUtils.isBlank(customer.getWallet())){
+            try{
+                TDict dict = dictService.getDefaultByType("WALLET");
+                if(dict != null){
+                    customer.setWallet(dict.getDictCode());
+                }
+            }catch(Exception e){
+                logger.error("customer-convertRsp-error", e);
+            }
+        }
         return rsp;
     }
 

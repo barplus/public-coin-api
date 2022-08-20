@@ -1,9 +1,6 @@
 package com.coin.service.impl;
 
-import com.coin.entity.TCustPrize;
-import com.coin.entity.TCustPrizeExample;
-import com.coin.entity.TCustomer;
-import com.coin.entity.TPrize;
+import com.coin.entity.*;
 import com.coin.mapper.TCustPrizeMapper;
 import com.coin.mapper.TPrizeMapper;
 import com.coin.mapper.ext.CustPrizeMapper;
@@ -12,14 +9,17 @@ import com.coin.mapper.ext.PrizeMapper;
 import com.coin.req.CustPrizeReq;
 import com.coin.req.PrizeReq;
 import com.coin.rsp.CustPrizeRsp;
+import com.coin.rsp.CustomerRsp;
 import com.coin.rsp.PrizeRsp;
 import com.coin.service.CustPrizeService;
 import com.coin.service.CustomerService;
+import com.coin.service.DictService;
 import com.coin.service.constant.BizCons;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.exception.BizException;
 import com.coin.service.util.BizUtil;
 import com.coin.service.util.DateUtil;
+import com.coin.service.util.PageUtil;
 import com.coin.service.util.RedisUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -48,11 +48,13 @@ public class CustPrizeServiceImpl implements CustPrizeService {
     @Resource
     private CustomerMapper customerMapper;
     @Resource
-    private CustomerService customerService;
-    @Resource
     private PrizeMapper prizeMapper;
     @Resource
     private TPrizeMapper tPrizeMapper;
+    @Resource
+    private CustomerService customerService;
+    @Resource
+    private DictService dictService;
     @Resource
     private RedisUtil redisUtil;
 
@@ -62,7 +64,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
     }
 
     @Override
-    public PageInfo<TCustPrize> pageList(CustPrizeReq req) throws Exception {
+    public PageInfo<CustPrizeRsp> pageList(CustPrizeReq req) throws Exception {
         TCustPrizeExample example = new TCustPrizeExample();
         TCustPrizeExample.Criteria criteria = example.createCriteria();
         criteria.andLoginNameEqualTo(req.getLoginName());
@@ -93,7 +95,8 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
         List<TCustPrize> custPrizes = tCustPrizeMapper.selectByExample(example);
         PageInfo<TCustPrize> page = new PageInfo<>(custPrizes);
-        return page;
+        List<CustPrizeRsp> rspList = custPrizes.stream().map(custPrize->this.convertRsp(custPrize)).collect(Collectors.toList());
+        return PageUtil.pageInfo2PageRsp(page, rspList);
     }
 
     @Override
@@ -121,9 +124,9 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         example.setOrderByClause(" id desc");
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
         List<TCustPrize> custPrizes = tCustPrizeMapper.selectByExample(example);
+        PageInfo<TCustPrize> page = new PageInfo<>(custPrizes);
         List<CustPrizeRsp> rsps = custPrizes.stream().map(custPrize->this.convertRsp(custPrize)).collect(Collectors.toList());
-        PageInfo<CustPrizeRsp> page = new PageInfo<>(rsps);
-        return page;
+        return PageUtil.pageInfo2PageRsp(page, rsps);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -217,6 +220,8 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         }
         custPrize.setLoginName(loginName);
         custPrize.setBillNo(DateUtil.getTodayStr()+BizUtil.getStringRandom(4, 0));
+        CustomerRsp rsp = customerService.getByLoginName(loginName);
+        custPrize.setWallet(rsp==null?null:rsp.getWallet());
         return tCustPrizeMapper.insertSelective(custPrize);
     }
 
@@ -312,9 +317,24 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         return prize.getRate();
     }
 
-    private CustPrizeRsp convertRsp(TCustPrize custPrize){
+    private CustPrizeRsp convertRsp(TCustPrize custPrize) {
         CustPrizeRsp rsp = new CustPrizeRsp();
         BeanUtils.copyProperties(custPrize, rsp);
+        try{
+            TCustomer customer = customerService.getInfoByLoginName(rsp.getLoginName());
+            if(StringUtils.isNotBlank(customer.getWallet())){
+                rsp.setWallet(customer.getWallet());
+            }else{
+                TDict dict = dictService.getDefaultByType("WALLET");
+                rsp.setWallet(dict==null?"":dict.getDictCode());
+            }
+            if(rsp.getPrizeId() != null){
+                TPrize prize = tPrizeMapper.selectByPrimaryKey(rsp.getPrizeId());
+                rsp.setPrizePic(prize.getPrizePic());
+            }
+        }catch(Exception e){
+            logger.error("CustPrizeRsp-convertRsp-e", e);
+        }
         return rsp;
     }
 
