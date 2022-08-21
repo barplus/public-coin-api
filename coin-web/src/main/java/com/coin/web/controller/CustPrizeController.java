@@ -1,8 +1,5 @@
 package com.coin.web.controller;
 
-import cn.afterturn.easypoi.excel.ExcelImportUtil;
-import cn.afterturn.easypoi.excel.entity.ImportParams;
-import com.coin.entity.TCustPrize;
 import com.coin.req.CustPrizeReq;
 import com.coin.rsp.CustPrizeRsp;
 import com.coin.service.BizEntity.MyResp;
@@ -16,8 +13,10 @@ import com.coin.web.utils.FileUtil;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;

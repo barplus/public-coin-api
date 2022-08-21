@@ -17,6 +17,8 @@ public interface CustPrizeService {
 
     PageInfo<CustPrizeRsp> pageDatas(CustPrizeReq req) throws Exception;
 
+    List<TCustPrize> getLastSomeRecord(int num, String loginName) throws Exception;
+
     List<String> custPrizeRecord() throws Exception;
 
     PrizeRsp doLottery(String loginName) throws Exception;

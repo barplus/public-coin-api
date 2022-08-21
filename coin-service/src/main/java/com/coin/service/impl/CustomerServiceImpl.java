@@ -1,12 +1,15 @@
 package com.coin.service.impl;
 
+import com.coin.entity.TCustPrize;
 import com.coin.entity.TCustomer;
 import com.coin.entity.TCustomerExample;
 import com.coin.entity.TDict;
+import com.coin.mapper.TCustPrizeMapper;
 import com.coin.mapper.TCustomerMapper;
 import com.coin.mapper.ext.CustomerMapper;
 import com.coin.req.CustomerReq;
 import com.coin.rsp.CustomerRsp;
+import com.coin.service.CustPrizeService;
 import com.coin.service.CustomerService;
 import com.coin.service.DictService;
 import com.coin.service.SysLogService;
@@ -40,11 +43,15 @@ public class CustomerServiceImpl implements CustomerService {
     @Resource
     private TCustomerMapper tCustomerMapper;
     @Resource
+    private TCustPrizeMapper tCustPrizeMapper;
+    @Resource
     private SysLogService sysLogService;
     @Resource
     private CustomerService customerService;
     @Resource
     private DictService dictService;
+    @Resource
+    private CustPrizeService custPrizeService;
 
     @Override
     public TCustomer getInfoByLoginName(String loginName) throws Exception {
@@ -110,12 +117,25 @@ public class CustomerServiceImpl implements CustomerService {
                 customer.getRouletteTotalTime().intValue()+req.getRouletteTotalTime()+"", "", 1, req.getLoginName());
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateWallet(CustomerReq req) throws Exception {
         TCustomer cust = customerService.getInfoByLoginName(req.getLoginName());
         TCustomer updateCustomer = BizUtil.getUpdateInfo(new TCustomer(), cust.getId(), req.getLoginName(), new Date());
         updateCustomer.setWallet(req.getWallet());
         tCustomerMapper.updateByPrimaryKeySelective(updateCustomer);
+        if(req.getLotteryType() != null){
+            if(req.getLotteryType() > 10){
+                throw new BizException(CodeCons.ERROR, "抽奖方式错误");
+            }
+            List<TCustPrize> list = custPrizeService.getLastSomeRecord(req.getLotteryType(), req.getLoginName());
+            TCustPrize updateInfo = BizUtil.getUpdateInfo(new TCustPrize(), 0, req.getLoginName(), new Date());
+            for(TCustPrize cp:list){
+                updateInfo.setId(cp.getId());
+                updateInfo.setWallet(req.getWallet());
+                tCustPrizeMapper.updateByPrimaryKeySelective(updateInfo);
+            }
+        }
     }
 
     @Override
@@ -124,18 +144,43 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void importCustomerList(List<CustomerRsp> rsps) throws Exception {
+    public void importCustomerList(List<CustomerRsp> rsps, String updateUser) throws Exception {
         logger.info("CustomerServiceImpl-importCustomerList-size={}", rsps);
         List<TCustomer> insertList = new ArrayList<>();
+        Date now = new Date();
         for(int i=0; i<rsps.size(); i++){
             CustomerRsp rsp = rsps.get(i);
             if(StringUtils.isBlank(rsp.getLoginName()) || rsp.getVip() == null || rsp.getRouletteTotalTime() == null){
                 throw new BizException(CodeCons.ERROR, "第"+(i+2)+"行数据不完整或格式错误，请检查");
             }
             TCustomer customer = this.getInfoByLoginName(rsp.getLoginName());
-//            if(customer){
-//
-//            }
+            if(customer == null){
+                customer = BizUtil.getInsertInfo(new TCustomer(), updateUser, now);
+                customer.setLoginName(rsp.getLoginName());
+                customer.setVip(rsp.getVip());
+                customer.setRouletteTotalTime(rsp.getRouletteTotalTime());
+                insertList.add(customer);
+            }else{
+                TCustomer updateCust = BizUtil.getUpdateInfo(new TCustomer(), customer.getId(), updateUser, now);
+                boolean isChange = false;
+                if(rsp.getVip() > customer.getVip()){
+                    isChange = true;
+                    updateCust.setVip(rsp.getVip());
+                }
+                if(rsp.getRouletteTotalTime() > customer.getRouletteTotalTime()){
+                    isChange = true;
+                    updateCust.setRouletteTotalTime(rsp.getRouletteTotalTime());
+                }
+                if(isChange){
+                    this.updateImportInfo(updateCust, customer.getRouletteTotalTime(), customer.getLoginName());
+                }
+            }
+        }
+        if(insertList.size() > 0){
+            List<List<TCustomer>> lists = BizUtil.splitList(insertList, 500);
+            for(List<TCustomer> list:lists){
+                customerMapper.createBatch(list);
+            }
         }
     }
 
@@ -158,6 +203,14 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setLoginPass(loginPass);
         customer.setIsLogin(1);
         tCustomerMapper.insertSelective(customer);
+    }
+
+    private void updateImportInfo(TCustomer updateCust, int rouletteTotalTime, String loginName) throws Exception{
+        if(updateCust.getRouletteTotalTime() != null && updateCust.getRouletteTotalTime() != rouletteTotalTime){
+            sysLogService.addSysLog(loginName, LogTypeEnum.ADD_LOTTERY_TIME, rouletteTotalTime+"",
+                    updateCust.getRouletteTotalTime()+"", "批量导入修改次数", 2, updateCust.getUpdateUser());
+        }
+        tCustomerMapper.updateByPrimaryKeySelective(updateCust);
     }
 
     private CustomerRsp convertRsp(TCustomer customer){

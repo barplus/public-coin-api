@@ -18,7 +18,7 @@ public interface CustomerService {
     void updateTotalNum(CustomerReq req) throws Exception;
     void updateWallet(CustomerReq req) throws Exception;
     void updateIsLogin(String loginName) throws Exception;
-    void importCustomerList(List<CustomerRsp> rsps) throws Exception;
+    void importCustomerList(List<CustomerRsp> rsps, String updateUser) throws Exception;
 
     void updateLoginPass(TCustomer customer, int type, String sysUser) throws Exception;
 

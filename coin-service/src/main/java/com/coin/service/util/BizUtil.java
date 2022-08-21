@@ -7,10 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class BizUtil {
@@ -89,6 +86,20 @@ public class BizUtil {
             return null;
         }
         return t;
+    }
+
+    public static <T> List<List<T>> splitList(List<T> oldList, int num){
+        List<List<T>> result = new ArrayList<>();
+        List<T> list = new ArrayList<>();
+        for(int i=0; i<oldList.size(); i++){
+            if(i > 0 && i % 500 == 0){
+                result.add(list);
+                list = new ArrayList<>();
+            }
+            list.add(oldList.get(i));
+        }
+        result.add(list);
+        return result;
     }
 
     public static <T> T getInsertInfo(T t, String createUser, Date date){

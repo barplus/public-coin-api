@@ -20,12 +20,8 @@
     <insert id="createBatch">
         INSERT INTO t_customer(
             login_name,
-            <if test="vip != null">
-                vip,
-            </if>
-            <if test="rouletteTotalTime != null">
-                roulette_total_time,
-            </if>
+            vip,
+            roulette_total_time,
             create_user,
             create_date,
             update_user,
@@ -34,17 +30,13 @@
         VALUES
         <foreach collection ="list" item="customer" separator =",">
         (
-            #{loginName},
-            <if test="vip != null">
-                #{vip},
-            </if>
-            <if test="rouletteTotalTime != null">
-                #{rouletteTotalTime},
-            </if>
-            #{createUser},
-            #{createDate},
-            #{updateUser},
-            #{updateDate}
+            #{customer.loginName},
+            #{customer.vip},
+            #{customer.rouletteTotalTime},
+            #{customer.createUser},
+            #{customer.createDate},
+            #{customer.updateUser},
+            #{customer.updateDate}
         )
         </foreach>
     </insert>

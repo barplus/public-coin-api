@@ -202,15 +202,15 @@ public class CustomerController {
         params.setHeadRows(1);
         try {
             List<CustomerRsp> list = ExcelImportUtil.importExcel(file.getInputStream(), CustomerRsp.class, params);
-            customerService.importCustomerList(list);
-            return new MyResp(CodeCons.SUCCESS, "成功");
+            customerService.importCustomerList(list, req.getLoginName());
+            return new MyResp(CodeCons.SUCCESS, "导入成功");
         } catch (BizException e) {
             logger.error("custPrize-importCustomerList-e", e);
             return new MyResp(e.getCode(), e.getErrMsg());
         } catch (Exception e) {
             logger.error("custPrize-importCustomerList-error", e);
         }
-        return new MyResp(CodeCons.ERROR, "失败");
+        return new MyResp(CodeCons.ERROR, "导入失败");
     }
 
     @PostMapping("/update")

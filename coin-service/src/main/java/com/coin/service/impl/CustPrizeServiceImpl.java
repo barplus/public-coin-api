@@ -68,11 +68,11 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         TCustPrizeExample example = new TCustPrizeExample();
         TCustPrizeExample.Criteria criteria = example.createCriteria();
         criteria.andLoginNameEqualTo(req.getLoginName());
-        if(req.getDateType() != null){
-            if(req.getDateType().intValue() == 1){
+        if(req.getDataType() != null){
+            if(req.getDataType().intValue() == 1){
                 criteria.andPrizeIdIsNotNull();
             }
-            if(req.getDateType().intValue() == 0){
+            if(req.getDataType().intValue() == 0){
                 criteria.andPrizeIdIsNull();
             }
         }
@@ -85,7 +85,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
             if(queryDay == 0){
                 criteria.andCreateDateGreaterThanOrEqualTo(today);
             } else if(queryDay == 1){
-                criteria.andCreateDateLessThanOrEqualTo(today);
+                criteria.andCreateDateLessThan(today);
                 criteria.andCreateDateGreaterThanOrEqualTo(DateUtil.addDays(today, -1));
             } else {
                 criteria.andCreateDateGreaterThanOrEqualTo(DateUtil.addDays(today, -1 * queryDay));
@@ -127,6 +127,15 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         PageInfo<TCustPrize> page = new PageInfo<>(custPrizes);
         List<CustPrizeRsp> rsps = custPrizes.stream().map(custPrize->this.convertRsp(custPrize)).collect(Collectors.toList());
         return PageUtil.pageInfo2PageRsp(page, rsps);
+    }
+
+    @Override
+    public List<TCustPrize> getLastSomeRecord(int num, String loginName) throws Exception {
+        TCustPrizeExample example = new TCustPrizeExample();
+        example.createCriteria().andLoginNameEqualTo(loginName);
+        example.setOrderByClause(" id desc limit " + num);
+        List<TCustPrize> list = tCustPrizeMapper.selectByExample(example);
+        return list;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -321,12 +330,14 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         CustPrizeRsp rsp = new CustPrizeRsp();
         BeanUtils.copyProperties(custPrize, rsp);
         try{
-            TCustomer customer = customerService.getInfoByLoginName(rsp.getLoginName());
-            if(StringUtils.isNotBlank(customer.getWallet())){
-                rsp.setWallet(customer.getWallet());
-            }else{
-                TDict dict = dictService.getDefaultByType("WALLET");
-                rsp.setWallet(dict==null?"":dict.getDictCode());
+            if(StringUtils.isBlank(rsp.getWallet())){
+                TCustomer customer = customerService.getInfoByLoginName(rsp.getLoginName());
+                if(StringUtils.isNotBlank(customer.getWallet())){
+                    rsp.setWallet(customer.getWallet());
+                }else{
+                    TDict dict = dictService.getDefaultByType("WALLET");
+                    rsp.setWallet(dict==null?"":dict.getDictCode());
+                }
             }
             if(rsp.getPrizeId() != null){
                 TPrize prize = tPrizeMapper.selectByPrimaryKey(rsp.getPrizeId());
