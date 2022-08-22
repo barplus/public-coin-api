@@ -221,7 +221,7 @@ public class CustomerServiceImpl implements CustomerService {
             try{
                 TDict dict = dictService.getDefaultByType("WALLET");
                 if(dict != null){
-                    customer.setWallet(dict.getDictCode());
+                    rsp.setWallet(dict.getDictCode());
                 }
             }catch(Exception e){
                 logger.error("customer-convertRsp-error", e);

@@ -10,6 +10,7 @@ import com.coin.rsp.PrizeRsp;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.CustPrizeService;
 import com.coin.service.CustomerService;
+import com.coin.service.constant.BizCons;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.exception.BizException;
 import com.coin.service.util.*;
@@ -66,18 +67,16 @@ public class CustomerController {
             } else if(!MD5Util.MD5(req.getLoginPass()).equals(customer.getLoginPass())){
                 return new MyResp(CodeCons.ERROR, "登录失败，请输入正确专用码");
             }
-            String tokenKey = customer.getLoginName()+":token";
-            if(redisUtil.get(tokenKey) != null){
-                String oldToken = redisUtil.get(redisUtil.get(tokenKey));
-                if(oldToken != null){
-                    redisUtil.remove(redisUtil.get(tokenKey));
-                }
+            String tokenKey = BizCons.SYS_API + customer.getLoginName() + ":token";
+            String oldToken = redisUtil.get(tokenKey);
+            if(StringUtils.isNotBlank(oldToken)){
+                redisUtil.remove(oldToken);
                 redisUtil.remove(tokenKey);
             }
             customer.setLoginPass(null);
             String token = MD5Util.MD5(customer.getLoginName() + System.currentTimeMillis() + BizUtil.getStringRandom(5, 1));
             redisUtil.set(token, customer.getLoginName(), 1800);
-            redisUtil.set(customer.getLoginName()+":token", token, 1800);
+            redisUtil.set(tokenKey, token, 1800);
             return new MyResp(CodeCons.SUCCESS, token, customer);
         }catch(Exception e){
             logger.error("customer-login-error", e);

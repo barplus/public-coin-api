@@ -4,6 +4,7 @@ import com.coin.entity.TCustomer;
 import com.coin.req.CommonReq;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.CustomerService;
+import com.coin.service.constant.BizCons;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.exception.BizException;
 import com.coin.service.util.RedisUtil;
@@ -67,9 +68,10 @@ public class CommonAspect {
                     return new MyResp(CodeCons.CUSTOMER_NO_EXISTS, "用户不存在或已失效");
                 }
             }
+            String tokenKey = BizCons.SYS_API + loginName + ":token";
             logger.info("loginName={}, request-ip={}", loginName, IpUtils.getIpAddr(request));
             redisUtil.setExpire(token, 1800l);
-            redisUtil.setExpire(loginName+":token", 1800l);
+            redisUtil.setExpire(tokenKey, 1800l);
             req.setLoginName(loginName);
             return pj.proceed();
         } catch (BizException e){

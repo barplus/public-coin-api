@@ -4,6 +4,7 @@ import com.coin.entity.TSysUser;
 import com.coin.req.CommonReq;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.SysUserService;
+import com.coin.service.constant.BizCons;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.exception.BizException;
 import com.coin.service.util.RedisUtil;
@@ -75,9 +76,10 @@ public class OfficeAspect {
                     return new MyResp(CodeCons.ERROR, "非法用户请求");
                 }
             }
+            String tokenKey = BizCons.SYS_OFFICE + loginName + ":token";
             logger.info("loginName={}, request-ip={}", loginName, IpUtils.getIpAddr(request));
             redisUtil.setExpire(token, 1800l);
-            redisUtil.setExpire(loginName+":office:token", 1800l);
+            redisUtil.setExpire(tokenKey, 1800l);
             req.setLoginName(loginName);
             return pj.proceed();
         } catch (BizException e){

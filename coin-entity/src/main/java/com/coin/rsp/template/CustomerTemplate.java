@@ -10,11 +10,11 @@ public class CustomerTemplate implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Excel(name = "登录账号", width = 20, orderNum = "1")
+    @Excel(name = "会员账号", width = 20, orderNum = "1")
     private String loginName;
-    @Excel(name = "vip等级", width = 20, orderNum = "2")
-    private Integer vip;
-    @Excel(name = "总抽奖次数", width = 25, orderNum = "3")
+    @Excel(name = "总抽奖次数", width = 25, orderNum = "2")
     private Integer rouletteTotalTime;
+    @Excel(name = "VIP等级", width = 20, orderNum = "3")
+    private Integer vip;
 
 }

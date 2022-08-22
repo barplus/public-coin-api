@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BizCons {
+    public static final String SYS_OFFICE = "sys_office";
+    public static final String SYS_API = "sys_api";
     /**数据状态*/
     public static final Map<Integer, String> COMMON_DATA_STATUS = new HashMap<>();
     /**客户中奖记录查询的时间值*/

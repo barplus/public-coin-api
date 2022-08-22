@@ -4,12 +4,14 @@ import com.coin.entity.TSysUser;
 import com.coin.req.SysUserReq;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.SysUserService;
+import com.coin.service.constant.BizCons;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.util.BizUtil;
 import com.coin.service.util.MD5Util;
 import com.coin.service.util.ParamUtil;
 import com.coin.service.util.RedisUtil;
 import com.coin.web.annotation.OfficeSecure;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,18 +52,16 @@ public class SysUserController {
             if(user.getStatus().intValue() == 0){
                 return new MyResp(CodeCons.ERROR, "用户已被禁用");
             }
-            String tokenKey = user.getLoginName()+":token";
-            if(redisUtil.get(tokenKey) != null){
-                String oldToken = redisUtil.get(redisUtil.get(tokenKey));
-                if(oldToken != null){
-                    redisUtil.remove(redisUtil.get(tokenKey));
-                }
+            String tokenKey = BizCons.SYS_OFFICE + user.getLoginName() + ":token";
+            String oldToken = redisUtil.get(tokenKey);
+            if(StringUtils.isNotBlank(oldToken)){
+                redisUtil.remove(oldToken);
                 redisUtil.remove(tokenKey);
             }
             user.setLoginPass(null);
             String token = MD5Util.MD5(user.getLoginName() + System.currentTimeMillis() + BizUtil.getStringRandom(5, 1));
             redisUtil.set(token, user.getLoginName(), 1800);
-            redisUtil.set(user.getLoginName()+":office:token", token, 1800);
+            redisUtil.set(tokenKey, token, 1800);
             return new MyResp(CodeCons.SUCCESS, token, user);
         }catch(Exception e){
             logger.error("user-login-error", e);
