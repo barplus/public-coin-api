@@ -39,6 +39,9 @@ public class PrizeController {
             if (valid != null) {
                 return valid;
             }
+            if(req.getPrizeName().length() > 8){
+                return new MyResp(CodeCons.ERROR, "奖品名称长度不能超过8位字符");
+            }
             prizeService.addPrize(req);
             return new MyResp(CodeCons.SUCCESS, "保存成功");
         }catch (BizException e){

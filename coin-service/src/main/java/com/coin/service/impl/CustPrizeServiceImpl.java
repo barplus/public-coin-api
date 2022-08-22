@@ -318,7 +318,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         for(String vipRateStr:vipRateArray){
             String[] vipRate = vipRateStr.split("_");
             if(vipRate[0].equals("VIP"+vip)){
-                if(!"null".equals(vipRate[2])){
+                if("1".equals(vipRate[1]) && !"null".equals(vipRate[2])){
                     return new BigDecimal(vipRate[2]);
                 }
             }
