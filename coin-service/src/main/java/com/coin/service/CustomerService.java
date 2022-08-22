@@ -13,7 +13,7 @@ public interface CustomerService {
     CustomerRsp getByLoginName(String loginName) throws Exception;
 
     PageInfo<CustomerRsp> pageList(CustomerReq req) throws Exception;
-    List<CustomerRsp> getList(CustomerReq req) throws Exception;
+    List<TCustomer> getList(CustomerReq req) throws Exception;
 
     void updateTotalNum(CustomerReq req) throws Exception;
     void updateWallet(CustomerReq req) throws Exception;

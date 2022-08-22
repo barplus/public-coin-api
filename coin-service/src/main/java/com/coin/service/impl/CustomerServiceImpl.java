@@ -17,6 +17,7 @@ import com.coin.service.constant.CodeCons;
 import com.coin.service.enums.LogTypeEnum;
 import com.coin.service.exception.BizException;
 import com.coin.service.util.BizUtil;
+import com.coin.service.util.PageUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -74,13 +75,14 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public PageInfo<CustomerRsp> pageList(CustomerReq req) throws Exception {
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
-        List<CustomerRsp> rspList = this.getList(req);
-        PageInfo<CustomerRsp> page = new PageInfo<>(rspList);
-        return page;
+        List<TCustomer> customers = this.getList(req);
+        PageInfo<TCustomer> page = new PageInfo<>(customers);
+        List<CustomerRsp> rspList = customers.stream().map(customer->this.convertRsp(customer)).collect(Collectors.toList());
+        return PageUtil.pageInfo2PageRsp(page, rspList);
     }
 
     @Override
-    public List<CustomerRsp> getList(CustomerReq req) throws Exception {
+    public List<TCustomer> getList(CustomerReq req) throws Exception {
         TCustomerExample example = new TCustomerExample();
         TCustomerExample.Criteria criteria = example.createCriteria();
         if(StringUtils.isNotBlank(req.getQueryLoginName())){
@@ -96,8 +98,7 @@ public class CustomerServiceImpl implements CustomerService {
             criteria.andIsLoginEqualTo(req.getIsLogin());
         }
         List<TCustomer> list = tCustomerMapper.selectByExample(example);
-        List<CustomerRsp> rspList = list.stream().map(customer->this.convertRsp(customer)).collect(Collectors.toList());
-        return rspList;
+        return list;
     }
 
     @Transactional(rollbackFor = Exception.class)
