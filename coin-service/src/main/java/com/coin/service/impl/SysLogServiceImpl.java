@@ -27,12 +27,13 @@ public class SysLogServiceImpl implements SysLogService {
     private TSysLogMapper tSysLogMapper;
 
     @Override
-    public void addSysLog(String loginName, LogTypeEnum logType, String beforeVal, String afterVal, String logRemark, Integer SysType, String sysUser) throws Exception {
+    public void addSysLog(String loginName, LogTypeEnum logType, String beforeVal, String changeVal, String afterVal, String logRemark, Integer SysType, String sysUser) throws Exception {
         TSysLog log = BizUtil.getInsertInfo(new TSysLog(), sysUser, new Date());
         log.setLoginName(loginName);
         log.setSysType(SysType);
         log.setLogType(logType.code);
         log.setBeforeVal(beforeVal);
+        log.setChangeVal(changeVal);
         log.setAfterVal(afterVal);
         log.setLogRemark(logRemark);
         tSysLogMapper.insertSelective(log);

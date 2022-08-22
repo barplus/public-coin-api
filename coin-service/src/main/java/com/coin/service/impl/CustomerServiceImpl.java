@@ -103,8 +103,12 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateTotalNum(CustomerReq req) throws Exception {
-        if(req.getRouletteTotalTime().intValue() < 1){
-            throw new BizException("9999", "增加的次数不能小于1");
+        if(req.getRouletteTotalTime().intValue() == 0){
+            throw new BizException("9999", "加减的次数不能是0");
+        }
+        TCustomer customer = tCustomerMapper.selectByPrimaryKey(req.getId());
+        if(req.getRouletteTotalTime().intValue() + customer.getRouletteTotalTime() < customer.getRouletteUsedTime()){
+            throw new BizException("9999", "用户剩余次数不足以扣减，请确认");
         }
         TCustomer updateCustomer = BizUtil.getUpdateInfo(new TCustomer(), req.getId(), req.getLoginName(), new Date());
         updateCustomer.setRouletteTotalTime(req.getRouletteTotalTime());
@@ -112,8 +116,7 @@ public class CustomerServiceImpl implements CustomerService {
         if(count != 1){
             throw new BizException("9999", "修改失败，用户信息已变化，请刷新后再修改");
         }
-        TCustomer customer = tCustomerMapper.selectByPrimaryKey(req.getId());
-        sysLogService.addSysLog(customer.getLoginName(), LogTypeEnum.ADD_LOTTERY_TIME, customer.getRouletteTotalTime()+"",
+        sysLogService.addSysLog(customer.getLoginName(), LogTypeEnum.ADD_LOTTERY_TIME, customer.getRouletteTotalTime()+"", req.getRouletteTotalTime()+"",
                 customer.getRouletteTotalTime().intValue()+req.getRouletteTotalTime()+"", "", 1, req.getLoginName());
     }
 
@@ -153,6 +156,9 @@ public class CustomerServiceImpl implements CustomerService {
             if(StringUtils.isBlank(rsp.getLoginName()) || rsp.getVip() == null || rsp.getRouletteTotalTime() == null){
                 throw new BizException(CodeCons.ERROR, "第"+(i+2)+"行数据不完整或格式错误，请检查");
             }
+            if(rsp.getLoginName().length() < 4 || rsp.getLoginName().length() > 12){
+                throw new BizException(CodeCons.ERROR, "第"+(i+2)+"行数据会员账号格式错误，请检查");
+            }
             TCustomer customer = this.getInfoByLoginName(rsp.getLoginName());
             if(customer == null){
                 customer = BizUtil.getInsertInfo(new TCustomer(), updateUser, now);
@@ -191,7 +197,7 @@ public class CustomerServiceImpl implements CustomerService {
         //0是清除密码 1是修改密码
         if(type == 0){
             TCustomer cust = tCustomerMapper.selectByPrimaryKey(customer.getId());
-            sysLogService.addSysLog(cust.getLoginName(), LogTypeEnum.CLEAR_PASS, "",
+            sysLogService.addSysLog(cust.getLoginName(), LogTypeEnum.CLEAR_PASS, "", "",
                     "", "", 1, sysUser);
         }
     }
@@ -207,8 +213,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     private void updateImportInfo(TCustomer updateCust, int rouletteTotalTime, String loginName) throws Exception{
         if(updateCust.getRouletteTotalTime() != null && updateCust.getRouletteTotalTime() != rouletteTotalTime){
-            sysLogService.addSysLog(loginName, LogTypeEnum.ADD_LOTTERY_TIME, rouletteTotalTime+"",
-                    updateCust.getRouletteTotalTime()+"", "批量导入修改次数", 2, updateCust.getUpdateUser());
+            sysLogService.addSysLog(loginName, LogTypeEnum.ADD_LOTTERY_TIME, rouletteTotalTime+"", updateCust.getRouletteTotalTime()-rouletteTotalTime + "",
+                    updateCust.getRouletteTotalTime()+"",  "批量导入修改次数", 2, updateCust.getUpdateUser());
         }
         tCustomerMapper.updateByPrimaryKeySelective(updateCust);
     }

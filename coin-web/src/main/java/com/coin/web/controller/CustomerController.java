@@ -200,6 +200,10 @@ public class CustomerController {
         params.setTitleRows(0);
         params.setHeadRows(1);
         try {
+            String fileName = file.getOriginalFilename();
+            if(!"customer.xlsx".equals(fileName)){
+                throw new BizException(CodeCons.ERROR, "请使用模板文件导入");
+            }
             List<CustomerRsp> list = ExcelImportUtil.importExcel(file.getInputStream(), CustomerRsp.class, params);
             customerService.importCustomerList(list, req.getLoginName());
             return new MyResp(CodeCons.SUCCESS, "导入成功");

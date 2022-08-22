@@ -7,6 +7,7 @@
     <result column="sys_type" jdbcType="INTEGER" property="sysType" />
     <result column="log_type" jdbcType="INTEGER" property="logType" />
     <result column="before_val" jdbcType="VARCHAR" property="beforeVal" />
+    <result column="change_val" jdbcType="VARCHAR" property="changeVal" />
     <result column="after_val" jdbcType="VARCHAR" property="afterVal" />
     <result column="log_remark" jdbcType="VARCHAR" property="logRemark" />
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />
@@ -73,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, login_name, sys_type, log_type, before_val, after_val, log_remark, create_user, 
-    create_date, update_user, update_date
+    id, login_name, sys_type, log_type, before_val, change_val, after_val, log_remark, 
+    create_user, create_date, update_user, update_date
   </sql>
   <select id="selectByExample" parameterType="com.coin.entity.TSysLogExample" resultMap="BaseResultMap">
     select
@@ -111,13 +112,13 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_sys_log (login_name, sys_type, log_type, 
-      before_val, after_val, log_remark, 
-      create_user, create_date, update_user, 
-      update_date)
+      before_val, change_val, after_val, 
+      log_remark, create_user, create_date, 
+      update_user, update_date)
     values (#{loginName,jdbcType=VARCHAR}, #{sysType,jdbcType=INTEGER}, #{logType,jdbcType=INTEGER}, 
-      #{beforeVal,jdbcType=VARCHAR}, #{afterVal,jdbcType=VARCHAR}, #{logRemark,jdbcType=VARCHAR}, 
-      #{createUser,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
-      #{updateDate,jdbcType=TIMESTAMP})
+      #{beforeVal,jdbcType=VARCHAR}, #{changeVal,jdbcType=VARCHAR}, #{afterVal,jdbcType=VARCHAR}, 
+      #{logRemark,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.coin.entity.TSysLog">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -136,6 +137,9 @@
       </if>
       <if test="beforeVal != null">
         before_val,
+      </if>
+      <if test="changeVal != null">
+        change_val,
       </if>
       <if test="afterVal != null">
         after_val,
@@ -168,6 +172,9 @@
       </if>
       <if test="beforeVal != null">
         #{beforeVal,jdbcType=VARCHAR},
+      </if>
+      <if test="changeVal != null">
+        #{changeVal,jdbcType=VARCHAR},
       </if>
       <if test="afterVal != null">
         #{afterVal,jdbcType=VARCHAR},
@@ -213,6 +220,9 @@
       <if test="row.beforeVal != null">
         before_val = #{row.beforeVal,jdbcType=VARCHAR},
       </if>
+      <if test="row.changeVal != null">
+        change_val = #{row.changeVal,jdbcType=VARCHAR},
+      </if>
       <if test="row.afterVal != null">
         after_val = #{row.afterVal,jdbcType=VARCHAR},
       </if>
@@ -243,6 +253,7 @@
       sys_type = #{row.sysType,jdbcType=INTEGER},
       log_type = #{row.logType,jdbcType=INTEGER},
       before_val = #{row.beforeVal,jdbcType=VARCHAR},
+      change_val = #{row.changeVal,jdbcType=VARCHAR},
       after_val = #{row.afterVal,jdbcType=VARCHAR},
       log_remark = #{row.logRemark,jdbcType=VARCHAR},
       create_user = #{row.createUser,jdbcType=VARCHAR},
@@ -267,6 +278,9 @@
       </if>
       <if test="beforeVal != null">
         before_val = #{beforeVal,jdbcType=VARCHAR},
+      </if>
+      <if test="changeVal != null">
+        change_val = #{changeVal,jdbcType=VARCHAR},
       </if>
       <if test="afterVal != null">
         after_val = #{afterVal,jdbcType=VARCHAR},
@@ -295,6 +309,7 @@
       sys_type = #{sysType,jdbcType=INTEGER},
       log_type = #{logType,jdbcType=INTEGER},
       before_val = #{beforeVal,jdbcType=VARCHAR},
+      change_val = #{changeVal,jdbcType=VARCHAR},
       after_val = #{afterVal,jdbcType=VARCHAR},
       log_remark = #{logRemark,jdbcType=VARCHAR},
       create_user = #{createUser,jdbcType=VARCHAR},

@@ -16,6 +16,8 @@ public class TSysLog implements Serializable {
     private Integer logType;
     /**修改前值*/
     private String beforeVal;
+    /**修改值*/
+    private String changeVal;
     /**修改后值*/
     private String afterVal;
     /**备注*/
@@ -42,6 +44,7 @@ public class TSysLog implements Serializable {
         sb.append(", sysType=").append(sysType);
         sb.append(", logType=").append(logType);
         sb.append(", beforeVal=").append(beforeVal);
+        sb.append(", changeVal=").append(changeVal);
         sb.append(", afterVal=").append(afterVal);
         sb.append(", logRemark=").append(logRemark);
         sb.append(", createUser=").append(createUser);

@@ -425,6 +425,76 @@ public class TSysLogExample {
             return (Criteria) this;
         }
 
+        public Criteria andChangeValIsNull() {
+            addCriterion("change_val is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeValIsNotNull() {
+            addCriterion("change_val is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeValEqualTo(String value) {
+            addCriterion("change_val =", value, "changeVal");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeValNotEqualTo(String value) {
+            addCriterion("change_val <>", value, "changeVal");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeValGreaterThan(String value) {
+            addCriterion("change_val >", value, "changeVal");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeValGreaterThanOrEqualTo(String value) {
+            addCriterion("change_val >=", value, "changeVal");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeValLessThan(String value) {
+            addCriterion("change_val <", value, "changeVal");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeValLessThanOrEqualTo(String value) {
+            addCriterion("change_val <=", value, "changeVal");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeValLike(String value) {
+            addCriterion("change_val like", value, "changeVal");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeValNotLike(String value) {
+            addCriterion("change_val not like", value, "changeVal");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeValIn(List<String> values) {
+            addCriterion("change_val in", values, "changeVal");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeValNotIn(List<String> values) {
+            addCriterion("change_val not in", values, "changeVal");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeValBetween(String value1, String value2) {
+            addCriterion("change_val between", value1, value2, "changeVal");
+            return (Criteria) this;
+        }
+
+        public Criteria andChangeValNotBetween(String value1, String value2) {
+            addCriterion("change_val not between", value1, value2, "changeVal");
+            return (Criteria) this;
+        }
+
         public Criteria andAfterValIsNull() {
             addCriterion("after_val is null");
             return (Criteria) this;

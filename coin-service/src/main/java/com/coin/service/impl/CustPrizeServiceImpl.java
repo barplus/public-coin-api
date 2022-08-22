@@ -227,7 +227,10 @@ public class CustPrizeServiceImpl implements CustPrizeService {
             custPrize.setPrizeId(prize.getId());
             custPrize.setPrizeName(prize.getPrizeName());
             CustomerRsp rsp = customerService.getByLoginName(loginName);
-            custPrize.setWallet(rsp==null?null:rsp.getWallet());
+            if(rsp==null || StringUtils.isEmpty(rsp.getWallet())){
+                throw new BizException(CodeCons.ERROR, "未设置收款钱包，无法抽奖");
+            }
+            custPrize.setWallet(rsp.getWallet());
         }
         custPrize.setLoginName(loginName);
         custPrize.setBillNo(DateUtil.getTodayStr()+BizUtil.getStringRandom(4, 0));
@@ -330,15 +333,6 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         CustPrizeRsp rsp = new CustPrizeRsp();
         BeanUtils.copyProperties(custPrize, rsp);
         try{
-            if(StringUtils.isBlank(rsp.getWallet())){
-                TCustomer customer = customerService.getInfoByLoginName(rsp.getLoginName());
-                if(StringUtils.isNotBlank(customer.getWallet())){
-                    rsp.setWallet(customer.getWallet());
-                }else{
-                    TDict dict = dictService.getDefaultByType("WALLET");
-                    rsp.setWallet(dict==null?"":dict.getDictCode());
-                }
-            }
             if(rsp.getPrizeId() != null){
                 TPrize prize = tPrizeMapper.selectByPrimaryKey(rsp.getPrizeId());
                 rsp.setPrizePic(prize.getPrizePic());

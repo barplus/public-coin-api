@@ -36,22 +36,22 @@
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.coin.mapper"
                              targetProject="coin-dao\src\main\java"/>
         <!--生成全部表tableName设为%-->
-        <table tableName="t_cust_prize">
+        <!--<table tableName="t_cust_prize">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+        </table>-->
         <!--<table tableName="t_customer">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="t_dict">
+        </table>-->
+        <!--<table tableName="t_dict">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="t_prize">
+        </table>-->
+        <!--<table tableName="t_prize">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+        </table>-->
         <table tableName="t_sys_log">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="t_sys_user">
+        <!--<table tableName="t_sys_user">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
     </context>
