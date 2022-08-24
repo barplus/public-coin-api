@@ -31,6 +31,9 @@ public class DictServiceImpl implements DictService {
         if(StringUtils.isNotBlank(dictReq.getDictType())){
             criteria.andDictTypeEqualTo(dictReq.getDictType());
         }
+        if(dictReq.getStatus() != null){
+            criteria.andStatusEqualTo(dictReq.getStatus());
+        }
         if(dictReq.getOnlySortNum() != null && dictReq.getOnlySortNum().intValue() == 1){
             example.setOrderByClause(" sort_num");
         } else {

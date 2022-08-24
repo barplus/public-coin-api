@@ -4,7 +4,7 @@ spring:
   datasource:
     username: admin
     password: ;iohj355esa1
-    url: jdbc:mysql://mysql:3306/roulette?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8&allowMultiQueries=true
+    url: jdbc:mysql://34.92.68.153:3307/roulette?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8&allowMultiQueries=true
     driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
     multipart:
@@ -14,7 +14,7 @@ spring:
     database: 0
     host: 127.0.0.1
     port: 6379
-    password: 123456
+    password: redisPlus
     timeout: 1000
     jedis:
       pool:
@@ -23,4 +23,4 @@ spring:
         max-idle: 0
         min-idle: 0
 upload:
-  url:  /home/service/java/pic/
+  url:  /www/java/pic/

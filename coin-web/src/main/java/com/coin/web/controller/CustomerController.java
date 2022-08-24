@@ -182,7 +182,7 @@ public class CustomerController {
             req.setPageSize(20000);
             PageInfo<CustomerRsp> page = customerService.pageList(req);
             List<CustomerRsp> rsps = page.getList();
-            FileUtil.exportExcel(rsps, CustomerRsp.class, DateUtil.getTodayStr("yyyyMMdd")+"会员记录.xlsx", response);
+            FileUtil.exportExcel(rsps, CustomerRsp.class, DateUtil.getTodayStr()+"会员记录.xlsx", response);
         }catch(BizException e){
             logger.error("customer-exportDatas-BizException", e);
             return new MyResp(e.getCode(), e.getErrMsg());

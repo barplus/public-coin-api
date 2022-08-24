@@ -17,8 +17,6 @@ public interface PrizeMapper {
 
     void addPrize(TPrize prize);
 
-    void updateById(TPrize prize);
-
     int addUsedNum(TPrize prize);
 
 }

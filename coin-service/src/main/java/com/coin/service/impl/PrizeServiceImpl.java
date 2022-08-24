@@ -93,7 +93,7 @@ public class PrizeServiceImpl implements PrizeService {
         }
         TPrize updatePrize = BizUtil.getUpdateInfo(new TPrize(), req.getId(), req.getLoginName(), new Date());
         updatePrize.setStatus(req.getStatus());
-        prizeMapper.updateById(updatePrize);
+        tPrizeMapper.updateByPrimaryKeySelective(updatePrize);
     }
 
     @Override
@@ -139,7 +139,7 @@ public class PrizeServiceImpl implements PrizeService {
             }
             updatePrize.setMaxNum(req.getMaxNum());
         }
-        prizeMapper.updateById(updatePrize);
+        tPrizeMapper.updateByPrimaryKeySelective(updatePrize);
     }
 
     @Override
