@@ -135,9 +135,11 @@ public class CustomerServiceImpl implements CustomerService {
             List<TCustPrize> list = custPrizeService.getLastSomeRecord(req.getLotteryType(), req.getLoginName());
             TCustPrize updateInfo = BizUtil.getUpdateInfo(new TCustPrize(), 0, req.getLoginName(), new Date());
             for(TCustPrize cp:list){
-                updateInfo.setId(cp.getId());
-                updateInfo.setWallet(req.getWallet());
-                tCustPrizeMapper.updateByPrimaryKeySelective(updateInfo);
+                if(cp.getPrizeId() != null){
+                    updateInfo.setId(cp.getId());
+                    updateInfo.setWallet(req.getWallet());
+                    tCustPrizeMapper.updateByPrimaryKeySelective(updateInfo);
+                }
             }
         }
     }
