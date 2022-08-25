@@ -13,6 +13,7 @@ import com.coin.service.exception.BizException;
 import com.coin.service.util.BizUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -125,6 +126,9 @@ public class PrizeServiceImpl implements PrizeService {
                 throw new BizException(CodeCons.ERROR, "奖品名称不能和其他奖品一致");
             }
             updatePrize.setPrizeName(req.getPrizeName());
+        }
+        if(StringUtils.isNotBlank(req.getPrizePic())){
+            updatePrize.setPrizePic(req.getPrizePic());
         }
         if(req.getAmount() != null){
             TPrize prizeByAmount = prizeMapper.getInfoByAmount(oldPrize.getId(), req.getAmount());

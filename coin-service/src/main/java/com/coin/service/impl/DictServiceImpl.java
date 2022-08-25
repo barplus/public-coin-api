@@ -10,6 +10,8 @@ import com.coin.service.constant.CodeCons;
 import com.coin.service.exception.BizException;
 import com.coin.service.util.BizUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -20,6 +22,8 @@ import java.util.List;
 
 @Service
 public class DictServiceImpl implements DictService {
+
+    private static final Logger logger = LoggerFactory.getLogger(DictServiceImpl.class);
 
     @Resource
     private TDictMapper tDictMapper;
