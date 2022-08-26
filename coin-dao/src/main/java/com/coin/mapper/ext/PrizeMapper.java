@@ -15,8 +15,6 @@ public interface PrizeMapper {
 
     List<TPrize> getPrizeList(PrizeReq req);
 
-    void addPrize(TPrize prize);
-
     int addUsedNum(TPrize prize);
 
 }
