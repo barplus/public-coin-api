@@ -31,60 +31,6 @@
         </if>
     </select>
 
-    <insert id="addPrize">
-        INSERT INTO t_prize(
-            prize_name,
-            prize_pic,
-            amount,
-            max_num,
-            rate,
-            vip_rate,
-            create_user,
-            create_date,
-            update_user,
-            update_date
-        )
-	    VALUES(
-	        #{prizeName},
-	        #{prizePic},
-	        #{amount},
-	        #{maxNum},
-	        #{rate},
-	        #{vipRate},
-	        #{createUser},
-	        #{createDate},
-	        #{updateUser},
-	        #{updateDate}
-	    )
-    </insert>
-
-    <update id="updateById">
-        update t_prize
-        <set>
-            update_user=#{updateUser},
-            update_date=#{updateDate},
-            <if test="prizeName != null">
-                prize_name = #{prizeName},
-            </if>
-            <if test="amount != null">
-                amount = #{amount},
-            </if>
-            <if test="maxNum != null">
-                max_num = #{maxNum},
-            </if>
-            <if test="usedNum != null">
-                used_num = #{usedNum},
-            </if>
-            <if test="rate != null">
-                rate = #{rate},
-            </if>
-            <if test="status != null">
-                status = #{status},
-            </if>
-        </set>
-        where id = #{id}
-    </update>
-
     <update id="addUsedNum">
         update t_prize set used_num=used_num+1 where id = #{id} and used_num = #{usedNum} and used_num &lt; max_num
     </update>
