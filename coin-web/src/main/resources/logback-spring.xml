@@ -20,9 +20,13 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
    %msg：日志消息，
    %n是换行符
         -->
-        <layout class="ch.qos.logback.classic.PatternLayout">
+        <!--<layout class="ch.qos.logback.classic.PatternLayout">
             <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] [%X{TRACE_ID}]**************** %-5level %logger{1000} - %msg%n</pattern>
-        </layout>
+        </layout>-->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] [%X{TRACE_ID}]**************** %-5level %logger{1000} - %msg%n</pattern>
+            <charset>utf-8</charset>
+        </encoder>
     </appender>
 
     <!-- 滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其他文件 -->
@@ -53,9 +57,13 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
             </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
         <!-- 日志输出格式： -->
-        <layout class="ch.qos.logback.classic.PatternLayout">
+        <!--<layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [ %thread ] [%X{TRACE_ID}] &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; [ %-5level ] [ %logger{1000} : %line ] - %msg%n</pattern>
+        </layout>-->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d{yyyy-MM-dd HH:mm:ss} [ %thread ] [%X{TRACE_ID}] ------------------ [ %-5level ] [ %logger{1000} : %line ] - %msg%n</pattern>
-        </layout>
+            <charset>utf-8</charset>
+        </encoder>
     </appender>
 
     <!--
