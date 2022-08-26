@@ -93,7 +93,6 @@ public class CustPrizeController {
     @PostMapping("/custPrizeRecord")
     public MyResp custPrizeRecord(){
         try{
-            logger.info("custPrize-custPrizeRecord-req={}", "No need param");
             List<String> list = custPrizeService.custPrizeRecord();
             return new MyResp(CodeCons.SUCCESS, "", list);
         }catch(BizException e){
