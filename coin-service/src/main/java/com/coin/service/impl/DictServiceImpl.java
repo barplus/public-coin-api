@@ -121,6 +121,7 @@ public class DictServiceImpl implements DictService {
         if(StringUtils.isNotBlank(req.getDictValBig())){
             dict.setDictValBig(req.getDictValBig());
         }
+        logger.info("dict-service-update, dict={}", dict);
         int count = tDictMapper.updateByPrimaryKeySelective(dict);
         if(count > 0 && req.getIsDefault() != null && req.getIsDefault().intValue() == 1){
             TDict oldDict = tDictMapper.selectByPrimaryKey(req.getId());
