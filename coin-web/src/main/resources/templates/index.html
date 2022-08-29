@@ -1,19 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
     <head>
-        <meta charset="UTF-8" />
-        <title>React 1</title>
+        <title>活动中心后台</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/bootstrap-4.6.1-dist/css/bootstrap.min.css">
+        <script type="text/javascript" src="/jquery-3.2.1/jQuery.js"></script>
+        <!--<script src="/popper.min.js"></script>-->
+        <script type="text/javascript" src="/bootstrap-4.6.1-dist/js/bootstrap.min.js"></script>
     </head>
-    <body>
+    <body style="background: #5a6268; background: url('/pic/bg.gif') no-repeat center center fixed; background-size: cover;">
+        <div style="margin-top:320px;"></div>
+        <div class="container" style="">
+            <div class="row">
+                <div class="col-sm-5">
+                </div>
+                <div class="col-sm-4">
+                    <form class="form-horizontal" action="">
+                        <div id="loginui" style="background-color: darkseagreen; padding: 28px;border-radius: 8px;border-color: #00a3ff;border-width: 2px  ">
+                            <div style="height: 80px;">
+                                <h3 style="text-align: center;color: darkolivegreen; font-size: 35px;">活动中心后台</h3>
+                            </div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <img src="/bootstrap-icons-1.9.1/person-square.svg" alt="Bootstrap" width="16" height="16">
+                                </span>
+                                </div>
+                                <input name="loginName" type="text" class="form-control" placeholder="用户名">
+                            </div>
 
-        <h2>React 1</h2>
-        <!-- We will put our React component inside this div. -->
-        <div id="like_button_container"></div>
-        <!-- Load React. -->
-        <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
-        <script type="text/javascript" src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-        <script type="text/javascript" src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-        <script type="text/javascript" src="/like_button.js"></script>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <img src="/bootstrap-icons-1.9.1/file-earmark-lock2.svg" alt="Bootstrap" width="16" height="16">
+                                </span>
+                                </div>
+                                <input name="loginPass" type="password" class="form-control pword m-b" placeholder="密码">
+                            </div>
+                            <div class="submit">
+                                <button style="border-radius:8px; background-color: #00A3FF" onclick="login()" class="btn btn-lg  btn-login btn-block">登录</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
     </body>
+
+    <script>
+        function login(xx){
+            alert("xx");
+            return false;
+        }
+    </script>
 </html>
