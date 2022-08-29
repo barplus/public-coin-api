@@ -18,6 +18,8 @@ public class TSysResource implements Serializable {
 
     private Integer status;
 
+    private Integer sortNum;
+
     private String createUser;
 
     private Date createDate;
@@ -84,6 +86,14 @@ public class TSysResource implements Serializable {
         this.status = status;
     }
 
+    public Integer getSortNum() {
+        return sortNum;
+    }
+
+    public void setSortNum(Integer sortNum) {
+        this.sortNum = sortNum;
+    }
+
     public String getCreateUser() {
         return createUser;
     }
@@ -129,6 +139,7 @@ public class TSysResource implements Serializable {
         sb.append(", resourcePath=").append(resourcePath);
         sb.append(", parentCode=").append(parentCode);
         sb.append(", status=").append(status);
+        sb.append(", sortNum=").append(sortNum);
         sb.append(", createUser=").append(createUser);
         sb.append(", createDate=").append(createDate);
         sb.append(", updateUser=").append(updateUser);
