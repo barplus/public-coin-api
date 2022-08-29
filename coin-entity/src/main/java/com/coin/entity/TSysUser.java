@@ -12,6 +12,8 @@ public class TSysUser implements Serializable {
     private String loginName;
     /**登录密码*/
     private String loginPass;
+    /**角色编码*/
+    private String roleCode;
     /**状态：1-正常 0-禁用*/
     private Integer status;
 
@@ -34,6 +36,7 @@ public class TSysUser implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", loginName=").append(loginName);
         sb.append(", loginPass=").append(loginPass);
+        sb.append(", roleCode=").append(roleCode);
         sb.append(", status=").append(status);
         sb.append(", createUser=").append(createUser);
         sb.append(", createDate=").append(createDate);

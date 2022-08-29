@@ -5,6 +5,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="login_name" jdbcType="VARCHAR" property="loginName" />
     <result column="login_pass" jdbcType="VARCHAR" property="loginPass" />
+    <result column="role_code" jdbcType="VARCHAR" property="roleCode" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
@@ -70,7 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, login_name, login_pass, status, create_user, create_date, update_user, update_date
+    id, login_name, login_pass, role_code, status, create_user, create_date, update_user, 
+    update_date
   </sql>
   <select id="selectByExample" parameterType="com.coin.entity.TSysUserExample" resultMap="BaseResultMap">
     select
@@ -106,12 +108,12 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_sys_user (login_name, login_pass, status, 
-      create_user, create_date, update_user, 
-      update_date)
-    values (#{loginName,jdbcType=VARCHAR}, #{loginPass,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{createUser,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
-      #{updateDate,jdbcType=TIMESTAMP})
+    insert into t_sys_user (login_name, login_pass, role_code, 
+      status, create_user, create_date, 
+      update_user, update_date)
+    values (#{loginName,jdbcType=VARCHAR}, #{loginPass,jdbcType=VARCHAR}, #{roleCode,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.coin.entity.TSysUser">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -124,6 +126,9 @@
       </if>
       <if test="loginPass != null">
         login_pass,
+      </if>
+      <if test="roleCode != null">
+        role_code,
       </if>
       <if test="status != null">
         status,
@@ -147,6 +152,9 @@
       </if>
       <if test="loginPass != null">
         #{loginPass,jdbcType=VARCHAR},
+      </if>
+      <if test="roleCode != null">
+        #{roleCode,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
@@ -183,6 +191,9 @@
       <if test="row.loginPass != null">
         login_pass = #{row.loginPass,jdbcType=VARCHAR},
       </if>
+      <if test="row.roleCode != null">
+        role_code = #{row.roleCode,jdbcType=VARCHAR},
+      </if>
       <if test="row.status != null">
         status = #{row.status,jdbcType=INTEGER},
       </if>
@@ -208,6 +219,7 @@
     set id = #{row.id,jdbcType=INTEGER},
       login_name = #{row.loginName,jdbcType=VARCHAR},
       login_pass = #{row.loginPass,jdbcType=VARCHAR},
+      role_code = #{row.roleCode,jdbcType=VARCHAR},
       status = #{row.status,jdbcType=INTEGER},
       create_user = #{row.createUser,jdbcType=VARCHAR},
       create_date = #{row.createDate,jdbcType=TIMESTAMP},
@@ -225,6 +237,9 @@
       </if>
       <if test="loginPass != null">
         login_pass = #{loginPass,jdbcType=VARCHAR},
+      </if>
+      <if test="roleCode != null">
+        role_code = #{roleCode,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
@@ -248,6 +263,7 @@
     update t_sys_user
     set login_name = #{loginName,jdbcType=VARCHAR},
       login_pass = #{loginPass,jdbcType=VARCHAR},
+      role_code = #{roleCode,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       create_user = #{createUser,jdbcType=VARCHAR},
       create_date = #{createDate,jdbcType=TIMESTAMP},
