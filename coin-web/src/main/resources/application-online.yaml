@@ -4,7 +4,7 @@ spring:
   datasource:
     username: barplus
     password: 10hgfdj4hd
-    url: jdbc:mysql://mysql:3306/JAVA_BACKGROUND?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8&allowMultiQueries=true
+    url: jdbc:mysql://127.0.0.1:3306/JAVA_BACKGROUND?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8&allowMultiQueries=true
     driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
     multipart:

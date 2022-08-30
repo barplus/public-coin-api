@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: uat
+    active: fat
   servlet:
     multipart:
       max-file-size: 5MB

@@ -6,6 +6,7 @@ import com.coin.service.BizEntity.MyResp;
 import com.coin.service.SysUserService;
 import com.coin.service.constant.BizCons;
 import com.coin.service.constant.CodeCons;
+import com.coin.service.exception.BizException;
 import com.coin.service.util.BizUtil;
 import com.coin.service.util.MD5Util;
 import com.coin.service.util.ParamUtil;
@@ -75,7 +76,7 @@ public class SysUserController {
         logger.info("user-logout-req={}", req);
         try{
             TSysUser user = userService.getUserByLoginName(req.getLoginName());
-            String tokenKey = user.getLoginName()+":token";
+            String tokenKey = BizCons.SYS_OFFICE + user.getLoginName()+":token";
             if(redisUtil.get(tokenKey) != null){
                 String oldToken = redisUtil.get(redisUtil.get(tokenKey));
                 if(oldToken != null){
@@ -88,6 +89,30 @@ public class SysUserController {
             logger.error("user-logout-error", e);
         }
         return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
+    @PostMapping("/updatePass")
+    @OfficeSecure
+    public MyResp updatePass(@RequestBody SysUserReq req){
+        logger.info("user-updatePass-req={}", req);
+        try{
+            MyResp valid = ParamUtil.NotBlankValid(req.getLoginPass(), "原密码", req.getNewPass(), "新密码");
+            if(valid != null){
+                return valid;
+            }
+            if(req.getLoginPass().equals(req.getNewPass())){
+                return new MyResp(CodeCons.ERROR, "新密码不能和原密码相同");
+            }
+            userService.updatePass(req);
+            this.logout(req);
+            return new MyResp(CodeCons.SUCCESS, "修改成功，请重新登录");
+        }catch(BizException e){
+            logger.error("user-updatePass-error", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("user-updatePass-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "修改失败");
     }
 
 }
