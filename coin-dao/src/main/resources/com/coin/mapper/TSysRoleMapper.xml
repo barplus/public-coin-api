@@ -3,6 +3,7 @@
 <mapper namespace="com.coin.mapper.TSysRoleMapper">
   <resultMap id="BaseResultMap" type="com.coin.entity.TSysRole">
     <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="role_type" jdbcType="INTEGER" property="roleType" />
     <result column="role_code" jdbcType="VARCHAR" property="roleCode" />
     <result column="role_name" jdbcType="VARCHAR" property="roleName" />
     <result column="parent_code" jdbcType="VARCHAR" property="parentCode" />
@@ -72,8 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, role_code, role_name, parent_code, status, sort_num, create_user, create_date, 
-    update_user, update_date
+    id, role_type, role_code, role_name, parent_code, status, sort_num, create_user, 
+    create_date, update_user, update_date
   </sql>
   <select id="selectByExample" parameterType="com.coin.entity.TSysRoleExample" resultMap="BaseResultMap">
     select
@@ -109,14 +110,14 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_sys_role (role_code, role_name, parent_code, 
-      status, sort_num, create_user, 
-      create_date, update_user, update_date
-      )
-    values (#{roleCode,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, #{parentCode,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER}, #{sortNum,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}
-      )
+    insert into t_sys_role (role_type, role_code, role_name, 
+      parent_code, status, sort_num, 
+      create_user, create_date, update_user, 
+      update_date)
+    values (#{roleType,jdbcType=INTEGER}, #{roleCode,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, 
+      #{parentCode,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{sortNum,jdbcType=INTEGER}, 
+      #{createUser,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateDate,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.coin.entity.TSysRole">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -124,6 +125,9 @@
     </selectKey>
     insert into t_sys_role
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roleType != null">
+        role_type,
+      </if>
       <if test="roleCode != null">
         role_code,
       </if>
@@ -153,6 +157,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roleType != null">
+        #{roleType,jdbcType=INTEGER},
+      </if>
       <if test="roleCode != null">
         #{roleCode,jdbcType=VARCHAR},
       </if>
@@ -194,6 +201,9 @@
       <if test="row.id != null">
         id = #{row.id,jdbcType=INTEGER},
       </if>
+      <if test="row.roleType != null">
+        role_type = #{row.roleType,jdbcType=INTEGER},
+      </if>
       <if test="row.roleCode != null">
         role_code = #{row.roleCode,jdbcType=VARCHAR},
       </if>
@@ -229,6 +239,7 @@
   <update id="updateByExample" parameterType="map">
     update t_sys_role
     set id = #{row.id,jdbcType=INTEGER},
+      role_type = #{row.roleType,jdbcType=INTEGER},
       role_code = #{row.roleCode,jdbcType=VARCHAR},
       role_name = #{row.roleName,jdbcType=VARCHAR},
       parent_code = #{row.parentCode,jdbcType=VARCHAR},
@@ -245,6 +256,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.coin.entity.TSysRole">
     update t_sys_role
     <set>
+      <if test="roleType != null">
+        role_type = #{roleType,jdbcType=INTEGER},
+      </if>
       <if test="roleCode != null">
         role_code = #{roleCode,jdbcType=VARCHAR},
       </if>
@@ -277,7 +291,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.coin.entity.TSysRole">
     update t_sys_role
-    set role_code = #{roleCode,jdbcType=VARCHAR},
+    set role_type = #{roleType,jdbcType=INTEGER},
+      role_code = #{roleCode,jdbcType=VARCHAR},
       role_name = #{roleName,jdbcType=VARCHAR},
       parent_code = #{parentCode,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},

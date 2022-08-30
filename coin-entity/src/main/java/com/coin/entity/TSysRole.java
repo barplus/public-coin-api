@@ -6,6 +6,8 @@ import java.util.Date;
 public class TSysRole implements Serializable {
     private Integer id;
 
+    private Integer roleType;
+
     private String roleCode;
 
     private String roleName;
@@ -32,6 +34,14 @@ public class TSysRole implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getRoleType() {
+        return roleType;
+    }
+
+    public void setRoleType(Integer roleType) {
+        this.roleType = roleType;
     }
 
     public String getRoleCode() {
@@ -113,6 +123,7 @@ public class TSysRole implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", roleType=").append(roleType);
         sb.append(", roleCode=").append(roleCode);
         sb.append(", roleName=").append(roleName);
         sb.append(", parentCode=").append(parentCode);
