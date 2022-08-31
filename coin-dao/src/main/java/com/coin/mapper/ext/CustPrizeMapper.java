@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface CustPrizeMapper {
 
-    List<TCustPrize> getTwoCustPrize30s();
+    List<TCustPrize> getTwoCustPrizeByInterval(@Param("interval") Integer interval);
 
     List<TCustPrize> getTwoCustPrize();
 

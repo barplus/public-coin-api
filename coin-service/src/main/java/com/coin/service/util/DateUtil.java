@@ -6,6 +6,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -48,6 +49,16 @@ public class DateUtil {
         //将时间转化为对应格式的字符串
         String fomateDate=now.format(formatter).toString();
         return fomateDate;
+    }
+
+    /**
+     * 将字符串转化为时间，默认是 yyyy-MM-dd HH:mm:ss
+     * @param dataStr
+     * @return
+     */
+    public static Date getDateByStr(String dataStr) throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.parse(dataStr);
     }
 
     public static void main(String[] args) {

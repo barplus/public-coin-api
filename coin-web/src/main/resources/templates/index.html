@@ -19,24 +19,34 @@
                     <form class="form-horizontal" action="">
                         <div id="loginui" style="background-color: darkseagreen; padding: 28px;border-radius: 8px;border-color: #00a3ff;border-width: 2px  ">
                             <div style="height: 80px;">
-                                <h3 style="text-align: center;color: darkolivegreen; font-size: 35px;">活动中心后台</h3>
+                                <h3 style="text-align: center;color: darkolivegreen; font-size: 35px;">[(${sysName})]</h3>
                             </div>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    <img src="/bootstrap-icons-1.9.1/person-square.svg" alt="Bootstrap" width="16" height="16">
-                                </span>
+                                    <span class="input-group-text">
+                                        <img src="/bootstrap-icons-1.9.1/person-square.svg" alt="Bootstrap" width="16" height="16">
+                                    </span>
                                 </div>
                                 <input name="loginName" type="text" class="form-control" placeholder="用户名">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <img src="/bootstrap-icons-1.9.1/file-excel.svg" alt="Bootstrap" width="12" height="16">
+                                    </span>
+                                </div>
                             </div>
 
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    <img src="/bootstrap-icons-1.9.1/file-earmark-lock2.svg" alt="Bootstrap" width="16" height="16">
-                                </span>
+                                    <span class="input-group-text">
+                                        <img src="/bootstrap-icons-1.9.1/file-earmark-lock2.svg" alt="Bootstrap" width="16" height="16">
+                                    </span>
                                 </div>
                                 <input name="loginPass" type="password" class="form-control pword m-b" placeholder="密码">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <img src="/bootstrap-icons-1.9.1/file-excel.svg" alt="Bootstrap" width="12" height="16">
+                                    </span>
+                                </div>
                             </div>
                             <div class="submit">
                                 <button style="border-radius:8px; background-color: #00A3FF" onclick="login()" class="btn btn-lg  btn-login btn-block">登录</button>
@@ -51,7 +61,7 @@
 
     <script>
         function login(xx){
-            alert("xx");
+            alert("登录");
             return false;
         }
     </script>

@@ -4,17 +4,24 @@ import com.coin.entity.TSysUser;
 import com.coin.entity.TSysUserExample;
 import com.coin.mapper.TSysUserMapper;
 import com.coin.req.SysUserReq;
+import com.coin.rsp.SysUserRsp;
 import com.coin.service.SysUserService;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.exception.BizException;
 import com.coin.service.util.BizUtil;
 import com.coin.service.util.MD5Util;
+import com.coin.service.util.PageUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SysUserServiceImpl implements SysUserService {
@@ -42,6 +49,27 @@ public class SysUserServiceImpl implements SysUserService {
         TSysUser updateUser = BizUtil.getUpdateInfo(new TSysUser(), user.getId(), req.getLoginName(), new Date());
         updateUser.setLoginPass(MD5Util.MD5(req.getNewPass()));
         tSysUserMapper.updateByPrimaryKeySelective(updateUser);
+    }
+
+    @Override
+    public PageInfo<SysUserRsp> pageList(SysUserReq req) throws Exception {
+        PageHelper.startPage(req.getPageNum(), req.getPageSize());
+        TSysUserExample example = new TSysUserExample();
+        TSysUserExample.Criteria criteria = example.createCriteria();
+        if(StringUtils.isNotBlank(req.getQueryLoginName())){
+            criteria.andLoginNameEqualTo(req.getQueryLoginName());
+        }
+        example.setOrderByClause(" id desc");
+        List<TSysUser> sysUsers = tSysUserMapper.selectByExample(example);
+        PageInfo<TSysUser> page = new PageInfo<>(sysUsers);
+        List<SysUserRsp> rspList = sysUsers.stream().map(sysUser->this.convertRsp(sysUser)).collect(Collectors.toList());
+        return PageUtil.pageInfo2PageRsp(page, rspList);
+    }
+
+    private SysUserRsp convertRsp(TSysUser sysUser){
+        SysUserRsp rsp = new SysUserRsp();
+        BeanUtils.copyProperties(sysUser, rsp);
+        return rsp;
     }
 
 }

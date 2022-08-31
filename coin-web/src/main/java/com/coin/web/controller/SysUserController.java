@@ -2,6 +2,7 @@ package com.coin.web.controller;
 
 import com.coin.entity.TSysUser;
 import com.coin.req.SysUserReq;
+import com.coin.rsp.SysUserRsp;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.SysUserService;
 import com.coin.service.constant.BizCons;
@@ -12,6 +13,7 @@ import com.coin.service.util.MD5Util;
 import com.coin.service.util.ParamUtil;
 import com.coin.service.util.RedisUtil;
 import com.coin.web.annotation.OfficeSecure;
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +34,26 @@ public class SysUserController {
     private SysUserService userService;
     @Resource
     private RedisUtil redisUtil;
+
+    @PostMapping("/pageList")
+    @OfficeSecure
+    public MyResp pageList(@RequestBody SysUserReq req){
+        logger.info("custPrize-pageList-req={}", req);
+        try{
+            MyResp valid = ParamUtil.NotBlankValid(req.getPageNum(), "页码", req.getPageSize(), "分页大小");
+            if(valid != null){
+                return valid;
+            }
+            PageInfo<SysUserRsp> page = userService.pageList(req);
+            return new MyResp(CodeCons.SUCCESS, "", page);
+        }catch(BizException e){
+            logger.error("custPrize-pageList-BizException", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("custPrize-pageList-Exception", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
 
     @PostMapping("/login")
     @OfficeSecure

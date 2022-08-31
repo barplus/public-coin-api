@@ -141,6 +141,11 @@ public class CustPrizeServiceImpl implements CustPrizeService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public PrizeRsp doLottery(String loginName) throws Exception {
+        String intervalStr = dictService.getValByTypeAndCode("SCHEDULE_TIME", "ROULETTE_END_TIME");
+        Date date = DateUtil.getDateByStr(intervalStr);
+        if(date.before(new Date())){
+            throw new BizException(CodeCons.NO_ROULETTE_TIME, "抽奖活动已结束");
+        }
         TCustomer customer = customerService.getInfoByLoginName(loginName);
         if(customer.getRouletteTotalTime() - customer.getRouletteUsedTime() <= 0){
             throw new BizException(CodeCons.NO_ROULETTE_TIME, "您已无抽奖次数 请您继续游戏获取更多抽奖次数");
@@ -186,7 +191,10 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         }
         boolean isFake = false;
         List<String> list = new ArrayList<>();
-        List<TCustPrize> custPrizes = custPrizeMapper.getTwoCustPrize30s();
+        String intervalStr = dictService.getValByTypeAndCode("INTERVAL_TIME", "ROULETTE_NOTICE");
+        Integer interval = Integer.parseInt(intervalStr) -1;
+        interval = interval >= 5?interval:5;
+        List<TCustPrize> custPrizes = custPrizeMapper.getTwoCustPrizeByInterval(interval);
         if(CollectionUtils.isEmpty(custPrizes)){
             custPrizes = custPrizeMapper.getTwoCustPrize();
             if(CollectionUtils.isEmpty(custPrizes)){
@@ -215,7 +223,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         }
         if(isFake && !CollectionUtils.isEmpty(custPrizes)){
             String fakeStr = list.get(0)+";"+list.get(1);
-            redisUtil.set("CUST_PRIZE_RECORD_STR", fakeStr, 29);
+            redisUtil.set("CUST_PRIZE_RECORD_STR", fakeStr, interval);
         }
         return list;
     }

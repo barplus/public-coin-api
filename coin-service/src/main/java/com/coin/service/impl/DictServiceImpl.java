@@ -73,6 +73,12 @@ public class DictServiceImpl implements DictService {
         return list.get(0);
     }
 
+    @Override
+    public String getValByTypeAndCode(String dictType, String dictCode) throws Exception {
+        TDict dict = this.getByTypeAndCode(dictType, dictCode);
+        return dict.getDictVal();
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void add(DictReq req) throws Exception {

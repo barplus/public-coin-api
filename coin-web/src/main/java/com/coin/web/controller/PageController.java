@@ -11,6 +11,7 @@ public class PageController {
     @RequestMapping("index")
     public ModelAndView index(){
         ModelAndView mv = new ModelAndView("index");
+        mv.addObject("sysName", "活动中心后台");
         return mv;
     }
 

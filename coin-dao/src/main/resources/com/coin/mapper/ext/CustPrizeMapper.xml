@@ -14,10 +14,10 @@
         <result column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <select id="getTwoCustPrize30s" resultMap="custPrizeMap">
+    <select id="getTwoCustPrizeByInterval" resultMap="custPrizeMap">
         select *
         from t_cust_prize t
-        where t.request_date > DATE_SUB(NOW(),INTERVAL 29 SECOND)
+        where t.request_date > DATE_SUB(NOW(),INTERVAL #{interval} SECOND)
         and t.prize_id is not null
         order by t.request_date desc
         limit 2
