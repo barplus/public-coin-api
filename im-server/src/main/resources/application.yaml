@@ -1,0 +1,27 @@
+spring:
+  main:
+    allow-circular-references: true
+  profiles:
+    active: fat
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 20MB
+  mvc:
+    static-path-pattern: /static/**
+  thymeleaf:
+    prefix: classpath:/templates/
+mybatis:
+  mapper-locations: classpath*:com/coin/mapper/*.xml,classpath*:com/coin/mapper/dao/*.xml
+  type-aliases-package: com.coin.entity
+pagehelper:
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countsql
+  auto-dialect: mysql
+netty:
+  websocket:
+    port: 1026
+    ip: 0.0.0.0
+    max-frame-size: 10240
+    path: /channel

@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * 业务用户请求对象
+ * 奖品请求对象
  */
 @Data
 @ToString(callSuper=true)

@@ -1,10 +1,10 @@
 server:
-  port: 8088
+  port: 8089
 spring:
   datasource:
-    username: admin
-    password: ;iohj355esa1
-    url: jdbc:mysql://34.92.68.153:3307/roulette?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8&allowMultiQueries=true
+    username: root1
+    password: y8sDksW3ScwcHAKL1
+    url: jdbc:mysql://154.19.200.244:3306/customer?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8&allowMultiQueries=true
     driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
     multipart:
@@ -12,7 +12,7 @@ spring:
       max-request-size: 20MB
   redis:
     database: 0
-    host: 127.0.0.1
+    host: 154.19.200.244
     port: 6379
     password: redisPlus
     timeout: 1000

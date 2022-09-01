@@ -13,6 +13,9 @@
         <module>coin-dao</module>
         <module>coin-entity</module>
         <module>coin-web</module>
+        <module>im-common</module>
+        <module>im-server</module>
+        <module>im-client</module>
     </modules>
 
     <parent>
@@ -24,7 +27,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <logback.version>1.1.7</logback.version>
+        <logback.version>1.2.3</logback.version>
         <slf4j.version>1.7.21</slf4j.version>
     </properties>
 
