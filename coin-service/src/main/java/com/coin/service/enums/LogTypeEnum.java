@@ -4,7 +4,8 @@ public enum LogTypeEnum {
 
     // 公共
     CLEAR_PASS(1, "清除密码"),
-    ADD_LOTTERY_TIME(2,"增加抽奖次数");
+    ADD_LOTTERY_TIME(2,"增加抽奖次数"),
+    EVERYDAY_SIGN(3,"幸运大转盘每日签到");
 
     public int code;
     public String message;

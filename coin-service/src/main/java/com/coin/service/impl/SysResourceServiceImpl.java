@@ -2,10 +2,14 @@ package com.coin.service.impl;
 
 import com.coin.entity.TSysResource;
 import com.coin.entity.TSysResourceExample;
+import com.coin.entity.TSysRole;
+import com.coin.entity.TSysRoleResource;
 import com.coin.mapper.TSysResourceMapper;
 import com.coin.req.SysResourceReq;
 import com.coin.rsp.SysResourceRsp;
 import com.coin.service.SysResourceService;
+import com.coin.service.SysRoleResourceService;
+import com.coin.service.SysRoleService;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.exception.BizException;
 import com.coin.service.util.BizUtil;
@@ -24,6 +28,10 @@ public class SysResourceServiceImpl implements SysResourceService {
 
     @Resource
     private TSysResourceMapper tSysResourceMapper;
+    @Resource
+    private SysRoleResourceService roleResourceService;
+    @Resource
+    private SysRoleService roleService;
 
     @Override
     public void addSysResource(SysResourceReq req) throws Exception {
@@ -39,6 +47,19 @@ public class SysResourceServiceImpl implements SysResourceService {
         sysResource.setStatus(req.getStatus());
         sysResource.setSortNum(req.getSortNum());
         tSysResourceMapper.insertSelective(sysResource);
+    }
+
+    @Override
+    public void deleteByCode(String code) throws Exception {
+        TSysResource resource = this.getInfoByCode(code, null);
+        if(resource != null){
+            List<TSysRoleResource> roleResources = roleResourceService.getListByResourceCode(resource.getResourceCode());
+            if(!CollectionUtils.isEmpty(roleResources)){
+                TSysRole role = roleService.getRoleByCode(roleResources.get(0).getRoleCode());
+                throw new BizException(CodeCons.ERROR, "资源已被分配到角色["+role.getRoleName()+"]，不能直接删除");
+            }
+            tSysResourceMapper.deleteByPrimaryKey(resource.getId());
+        }
     }
 
     @Override

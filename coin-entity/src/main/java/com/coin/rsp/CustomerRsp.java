@@ -22,6 +22,8 @@ public class CustomerRsp implements Serializable {
     private Integer rouletteUsedTime;
     @Excel(name = "剩余抽奖次数", width = 25, orderNum = "3")
     private Integer rouletteSurplusTime;
+    //签到次数
+    private Integer rouletteSignTime;
 
     private String wallet;
 

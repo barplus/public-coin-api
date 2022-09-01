@@ -1,9 +1,6 @@
 package com.coin.service.impl;
 
-import com.coin.entity.TCustPrize;
-import com.coin.entity.TCustomer;
-import com.coin.entity.TCustomerExample;
-import com.coin.entity.TDict;
+import com.coin.entity.*;
 import com.coin.mapper.TCustPrizeMapper;
 import com.coin.mapper.TCustomerMapper;
 import com.coin.mapper.ext.CustomerMapper;
@@ -17,6 +14,7 @@ import com.coin.service.constant.CodeCons;
 import com.coin.service.enums.LogTypeEnum;
 import com.coin.service.exception.BizException;
 import com.coin.service.util.BizUtil;
+import com.coin.service.util.DateUtil;
 import com.coin.service.util.PageUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -66,9 +64,18 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerRsp getByLoginName(String loginName) throws Exception {
+    public CustomerRsp getByLoginName(String loginName, boolean fill) throws Exception {
         TCustomer customer = this.getInfoByLoginName(loginName);
         CustomerRsp rsp = this.convertRsp(customer);
+        if(fill){
+            rsp.setRouletteSurplusTime(rsp.getRouletteTotalTime() - rsp.getRouletteUsedTime());
+            rsp.setRouletteSignTime(0);
+            TSysLog sysLog = sysLogService.getLastByLoginNameAndType(loginName, LogTypeEnum.EVERYDAY_SIGN);
+            Date today = DateUtil.getNoTimeDate(new Date());
+            if(sysLog != null && sysLog.getCreateDate().compareTo(today) > -1){
+                rsp.setRouletteSignTime(1);
+            }
+        }
         return rsp;
     }
 
@@ -118,7 +125,7 @@ public class CustomerServiceImpl implements CustomerService {
             throw new BizException("9999", "修改失败，用户信息已变化，请刷新后再修改");
         }
         sysLogService.addSysLog(customer.getLoginName(), LogTypeEnum.ADD_LOTTERY_TIME, customer.getRouletteTotalTime()+"", req.getRouletteTotalTime()+"",
-                customer.getRouletteTotalTime().intValue()+req.getRouletteTotalTime()+"", "", 1, req.getLoginName());
+                customer.getRouletteTotalTime().intValue()+req.getRouletteTotalTime()+"", "手动修改抽奖次数", 1, req.getLoginName());
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -151,7 +158,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void importCustomerList(List<CustomerRsp> rsps, String updateUser) throws Exception {
-        logger.info("CustomerServiceImpl-importCustomerList-size={}", rsps);
+        logger.info("CustomerServiceImpl-importCustomerList-size={}", rsps.size());
         List<TCustomer> insertList = new ArrayList<>();
         Date now = new Date();
         for(int i=0; i<rsps.size(); i++){
@@ -191,6 +198,26 @@ public class CustomerServiceImpl implements CustomerService {
                 customerMapper.createBatch(list);
             }
         }
+        logger.info("CustomerServiceImpl-importCustomerList-time={}", System.currentTimeMillis() - now.getTime());
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void everydaySign(CustomerReq req) throws Exception {
+        TSysLog sysLog = sysLogService.getLastByLoginNameAndType(req.getLoginName(), LogTypeEnum.EVERYDAY_SIGN);
+        Date today = DateUtil.getNoTimeDate(new Date());
+        if(sysLog != null && sysLog.getCreateDate().compareTo(today) > -1){
+            throw new BizException(CodeCons.ERROR, "请不要重复签到");
+        }
+        TCustomer customer = this.getInfoByLoginName(req.getLoginName());
+        TCustomer updateCustomer = BizUtil.getUpdateInfo(new TCustomer(), req.getId(), req.getLoginName(), new Date());
+        updateCustomer.setRouletteTotalTime(1);
+        int count = customerMapper.updateTotalNum(updateCustomer);
+        if(count != 1){
+            throw new BizException("9999", "签到失败，请稍后再试");
+        }
+        sysLogService.addSysLog(req.getLoginName(), LogTypeEnum.EVERYDAY_SIGN, customer.getRouletteTotalTime()+"", "1",
+                customer.getRouletteTotalTime()+1+"",  "会员签到增加抽奖次数", 2, req.getLoginName());
     }
 
     @Transactional(rollbackFor = Exception.class)

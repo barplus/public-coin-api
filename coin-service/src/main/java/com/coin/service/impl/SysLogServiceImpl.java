@@ -14,8 +14,10 @@ import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,6 +42,18 @@ public class SysLogServiceImpl implements SysLogService {
     }
 
     @Override
+    public TSysLog getLastByLoginNameAndType(String loginName, LogTypeEnum logType) throws Exception {
+        TSysLogExample example = new TSysLogExample();
+        example.createCriteria().andLoginNameEqualTo(loginName).andLogTypeEqualTo(logType.code);
+        example.setOrderByClause(" id desc");
+        List<TSysLog> list = tSysLogMapper.selectByExample(example);
+        if(CollectionUtils.isEmpty(list)){
+            return null;
+        }
+        return list.get(0);
+    }
+
+    @Override
     public PageInfo<SysLogRsp> pageList(SysLogReq req) throws Exception {
         TSysLogExample example = new TSysLogExample();
         TSysLogExample.Criteria criteria = example.createCriteria();
@@ -58,6 +72,7 @@ public class SysLogServiceImpl implements SysLogService {
         if(req.getMaxDate() != null){
             criteria.andCreateDateLessThanOrEqualTo(req.getMaxDate());
         }
+        criteria.andLogTypeIn(Arrays.asList(1, 2));
         example.setOrderByClause(" id desc");
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
         List<TSysLog> list = tSysLogMapper.selectByExample(example);

@@ -73,11 +73,11 @@ public class CustomerController {
                 redisUtil.remove(oldToken);
                 redisUtil.remove(tokenKey);
             }
-            customer.setLoginPass(null);
             String token = MD5Util.MD5(customer.getLoginName() + System.currentTimeMillis() + BizUtil.getStringRandom(5, 1));
             redisUtil.set(token, customer.getLoginName(), 1800);
             redisUtil.set(tokenKey, token, 1800);
-            return new MyResp(CodeCons.SUCCESS, token, customer);
+            CustomerRsp rsp = customerService.getByLoginName(customer.getLoginName(), true);
+            return new MyResp(CodeCons.SUCCESS, token, rsp);
         }catch(Exception e){
             logger.error("customer-login-error", e);
         }
@@ -256,6 +256,22 @@ public class CustomerController {
             logger.error("customer-updateWallet-Exception", e);
         }
         return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
+    @PostMapping("/everydaySign")
+    @CommonSecure
+    public MyResp everydaySign(@RequestBody CustomerReq req){
+        logger.info("customer-everydaySign-req={}", req);
+        try{
+            customerService.everydaySign(req);
+            return new MyResp(CodeCons.SUCCESS, "签到成功");
+        }catch(BizException e){
+            logger.error("customer-everydaySign-BizException", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("customer-everydaySign-Exception", e);
+        }
+        return new MyResp(CodeCons.ERROR, "签到失败");
     }
 
     @PostMapping("/clearLoginPass")

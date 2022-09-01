@@ -48,6 +48,26 @@ public class SysResourceController {
         return new MyResp(CodeCons.ERROR, "添加失败");
     }
 
+    @PostMapping("/del")
+    @OfficeSecure
+    public MyResp del(@RequestBody SysResourceReq req){
+        logger.info("resource-del-req={}", req);
+        try{
+            MyResp valid = ParamUtil.NotBlankValid(req.getResourceCode(), "资源编码");
+            if(valid != null){
+                return valid;
+            }
+            resourceService.deleteByCode(req.getResourceCode());
+            return new MyResp(CodeCons.SUCCESS, "删除成功");
+        }catch(BizException e){
+            logger.error("resource-del-BizException", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("resource-del-Exception", e);
+        }
+        return new MyResp(CodeCons.ERROR, "删除失败");
+    }
+
     @PostMapping("/update")
     @OfficeSecure
     public MyResp update(@RequestBody SysResourceReq req){

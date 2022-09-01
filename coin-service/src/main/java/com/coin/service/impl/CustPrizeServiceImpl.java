@@ -234,7 +234,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         if(prize != null){
             custPrize.setPrizeId(prize.getId());
             custPrize.setPrizeName(prize.getPrizeName());
-            CustomerRsp rsp = customerService.getByLoginName(loginName);
+            CustomerRsp rsp = customerService.getByLoginName(loginName, false);
             if(rsp==null || StringUtils.isEmpty(rsp.getWallet())){
                 throw new BizException(CodeCons.ERROR, "未设置收款钱包，无法抽奖");
             }

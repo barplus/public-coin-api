@@ -9,6 +9,7 @@ import java.util.List;
 public interface SysResourceService {
 
     void addSysResource(SysResourceReq req) throws Exception;
+    void deleteByCode(String code) throws Exception;
     void update(SysResourceReq req) throws Exception;
     TSysResource getInfoByCode(String code, Integer excludeId) throws Exception;
     List<SysResourceRsp> getSysResources(SysResourceReq req) throws Exception;
