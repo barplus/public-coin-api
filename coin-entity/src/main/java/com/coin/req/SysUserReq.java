@@ -20,5 +20,7 @@ public class SysUserReq extends CommonReq implements Serializable {
     private String newPass;
     /**查询登录名*/
     private String queryLoginName;
+    private String roleCode;
+    private Integer status;
 
 }

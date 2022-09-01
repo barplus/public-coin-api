@@ -48,6 +48,26 @@ public class SysResourceController {
         return new MyResp(CodeCons.ERROR, "添加失败");
     }
 
+    @PostMapping("/update")
+    @OfficeSecure
+    public MyResp update(@RequestBody SysResourceReq req){
+        logger.info("resource-update-req={}", req);
+        try{
+            MyResp valid = ParamUtil.NotBlankValid(req.getId(), "id");
+            if(valid != null){
+                return valid;
+            }
+            resourceService.update(req);
+            return new MyResp(CodeCons.SUCCESS, "保存成功");
+        }catch(BizException e){
+            logger.error("resource-update-BizException", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("resource-update-Exception", e);
+        }
+        return new MyResp(CodeCons.ERROR, "保存失败");
+    }
+
     @PostMapping("/queryList")
     @OfficeSecure
     public MyResp pageList(@RequestBody SysResourceReq req){

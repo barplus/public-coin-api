@@ -41,6 +41,16 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
+    public SysUserRsp getUserByLogName(String loginName) throws Exception {
+        TSysUser sysUser = this.getUserByLoginName(loginName);
+        if(sysUser == null){
+            return null;
+        }
+        SysUserRsp rsp = this.convertRsp(sysUser);
+        return rsp;
+    }
+
+    @Override
     public void updatePass(SysUserReq req) throws Exception {
         TSysUser user = this.getUserByLoginName(req.getLoginName());
         if(!MD5Util.MD5(req.getLoginPass()).equals(user.getLoginPass())){
@@ -48,6 +58,14 @@ public class SysUserServiceImpl implements SysUserService {
         }
         TSysUser updateUser = BizUtil.getUpdateInfo(new TSysUser(), user.getId(), req.getLoginName(), new Date());
         updateUser.setLoginPass(MD5Util.MD5(req.getNewPass()));
+        tSysUserMapper.updateByPrimaryKeySelective(updateUser);
+    }
+
+    @Override
+    public void update(SysUserReq req) throws Exception {
+        TSysUser updateUser = BizUtil.getUpdateInfo(new TSysUser(), req.getId(), req.getLoginName(), new Date());
+        updateUser.setRoleCode(req.getRoleCode());
+        updateUser.setStatus(req.getStatus());
         tSysUserMapper.updateByPrimaryKeySelective(updateUser);
     }
 

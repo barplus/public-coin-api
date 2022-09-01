@@ -137,4 +137,24 @@ public class SysUserController {
         return new MyResp(CodeCons.ERROR, "修改失败");
     }
 
+    @PostMapping("/update")
+    @OfficeSecure
+    public MyResp update(@RequestBody SysUserReq req){
+        logger.info("user-update-req={}", req);
+        try{
+            MyResp valid = ParamUtil.NotBlankValid(req.getId(), "id");
+            if(valid != null){
+                return valid;
+            }
+            userService.update(req);
+            return new MyResp(CodeCons.SUCCESS, "修改成功");
+        }catch(BizException e){
+            logger.error("user-update-error", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("user-update-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "修改失败");
+    }
+
 }

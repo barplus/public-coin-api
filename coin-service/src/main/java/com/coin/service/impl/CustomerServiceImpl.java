@@ -217,7 +217,7 @@ public class CustomerServiceImpl implements CustomerService {
     private void updateImportInfo(TCustomer updateCust, int rouletteTotalTime, String loginName) throws Exception{
         if(updateCust.getRouletteTotalTime() != null && updateCust.getRouletteTotalTime() != rouletteTotalTime){
             sysLogService.addSysLog(loginName, LogTypeEnum.ADD_LOTTERY_TIME, rouletteTotalTime+"", updateCust.getRouletteTotalTime()-rouletteTotalTime + "",
-                    updateCust.getRouletteTotalTime()+"",  "批量导入修改次数", 2, updateCust.getUpdateUser());
+                    updateCust.getRouletteTotalTime()+"",  "批量导入修改次数", 1, updateCust.getUpdateUser());
         }
         tCustomerMapper.updateByPrimaryKeySelective(updateCust);
     }
