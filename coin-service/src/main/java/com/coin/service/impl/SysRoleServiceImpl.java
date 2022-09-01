@@ -92,13 +92,13 @@ public class SysRoleServiceImpl implements SysRoleService {
 
     @Override
     public PageInfo<SysRoleRsp> pageList(SysRoleReq req) throws Exception {
-        PageHelper.startPage(req.getPageNum(), req.getPageSize());
         TSysRoleExample example = new TSysRoleExample();
         TSysRoleExample.Criteria criteria = example.createCriteria();
         if(StringUtils.isNotBlank(req.getRoleName())){
             criteria.andRoleNameEqualTo(req.getRoleName());
         }
         example.setOrderByClause(" sort_num");
+        PageHelper.startPage(req.getPageNum(), req.getPageSize());
         List<TSysRole> sysRoles = sysRoleMapper.selectByExample(example);
         PageInfo<TSysRole> page = new PageInfo<>(sysRoles);
         List<SysRoleRsp> rspList = sysRoles.stream().map(sysUser->this.convertRsp(sysUser)).collect(Collectors.toList());

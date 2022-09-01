@@ -53,13 +53,13 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public PageInfo<SysUserRsp> pageList(SysUserReq req) throws Exception {
-        PageHelper.startPage(req.getPageNum(), req.getPageSize());
         TSysUserExample example = new TSysUserExample();
         TSysUserExample.Criteria criteria = example.createCriteria();
         if(StringUtils.isNotBlank(req.getQueryLoginName())){
             criteria.andLoginNameEqualTo(req.getQueryLoginName());
         }
         example.setOrderByClause(" id desc");
+        PageHelper.startPage(req.getPageNum(), req.getPageSize());
         List<TSysUser> sysUsers = tSysUserMapper.selectByExample(example);
         PageInfo<TSysUser> page = new PageInfo<>(sysUsers);
         List<SysUserRsp> rspList = sysUsers.stream().map(sysUser->this.convertRsp(sysUser)).collect(Collectors.toList());

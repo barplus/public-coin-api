@@ -6,7 +6,7 @@ import lombok.ToString;
 import java.io.Serializable;
 
 /**
- * 业务用户请求对象
+ * 系统角色请求对象
  */
 @Data
 @ToString(callSuper=true)

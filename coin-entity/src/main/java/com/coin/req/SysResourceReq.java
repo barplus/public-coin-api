@@ -18,6 +18,9 @@ public class SysResourceReq extends CommonReq implements Serializable {
     private String resourceType;
     private String resourceCode;
     private String resourceName;
+    private String resourcePath;
     private String parentCode;
+    private Integer status;
+    private Integer sortNum;
 
 }
