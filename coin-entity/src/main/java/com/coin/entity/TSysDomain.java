@@ -6,9 +6,15 @@ import java.util.Date;
 public class TSysDomain implements Serializable {
     private Integer id;
 
+    private String sysName;
+
     private String domainUrl;
 
     private String belongUser;
+
+    private String remark;
+
+    private Integer status;
 
     private String createUser;
 
@@ -28,6 +34,14 @@ public class TSysDomain implements Serializable {
         this.id = id;
     }
 
+    public String getSysName() {
+        return sysName;
+    }
+
+    public void setSysName(String sysName) {
+        this.sysName = sysName;
+    }
+
     public String getDomainUrl() {
         return domainUrl;
     }
@@ -42,6 +56,22 @@ public class TSysDomain implements Serializable {
 
     public void setBelongUser(String belongUser) {
         this.belongUser = belongUser;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public String getCreateUser() {
@@ -83,8 +113,11 @@ public class TSysDomain implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", sysName=").append(sysName);
         sb.append(", domainUrl=").append(domainUrl);
         sb.append(", belongUser=").append(belongUser);
+        sb.append(", remark=").append(remark);
+        sb.append(", status=").append(status);
         sb.append(", createUser=").append(createUser);
         sb.append(", createDate=").append(createDate);
         sb.append(", updateUser=").append(updateUser);

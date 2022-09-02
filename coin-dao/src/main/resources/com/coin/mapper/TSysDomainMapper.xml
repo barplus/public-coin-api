@@ -3,8 +3,11 @@
 <mapper namespace="com.coin.mapper.TSysDomainMapper">
   <resultMap id="BaseResultMap" type="com.coin.entity.TSysDomain">
     <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="sys_name" jdbcType="VARCHAR" property="sysName" />
     <result column="domain_url" jdbcType="VARCHAR" property="domainUrl" />
     <result column="belong_user" jdbcType="VARCHAR" property="belongUser" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
@@ -69,7 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, domain_url, belong_user, create_user, create_date, update_user, update_date
+    id, sys_name, domain_url, belong_user, remark, status, create_user, create_date, 
+    update_user, update_date
   </sql>
   <select id="selectByExample" parameterType="com.coin.entity.TSysDomainExample" resultMap="BaseResultMap">
     select
@@ -105,10 +109,12 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_sys_domain (domain_url, belong_user, create_user, 
+    insert into t_sys_domain (sys_name, domain_url, belong_user, 
+      remark, status, create_user, 
       create_date, update_user, update_date
       )
-    values (#{domainUrl,jdbcType=VARCHAR}, #{belongUser,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, 
+    values (#{sysName,jdbcType=VARCHAR}, #{domainUrl,jdbcType=VARCHAR}, #{belongUser,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, 
       #{createDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -118,11 +124,20 @@
     </selectKey>
     insert into t_sys_domain
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sysName != null">
+        sys_name,
+      </if>
       <if test="domainUrl != null">
         domain_url,
       </if>
       <if test="belongUser != null">
         belong_user,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="status != null">
+        status,
       </if>
       <if test="createUser != null">
         create_user,
@@ -138,11 +153,20 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sysName != null">
+        #{sysName,jdbcType=VARCHAR},
+      </if>
       <if test="domainUrl != null">
         #{domainUrl,jdbcType=VARCHAR},
       </if>
       <if test="belongUser != null">
         #{belongUser,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="createUser != null">
         #{createUser,jdbcType=VARCHAR},
@@ -170,11 +194,20 @@
       <if test="row.id != null">
         id = #{row.id,jdbcType=INTEGER},
       </if>
+      <if test="row.sysName != null">
+        sys_name = #{row.sysName,jdbcType=VARCHAR},
+      </if>
       <if test="row.domainUrl != null">
         domain_url = #{row.domainUrl,jdbcType=VARCHAR},
       </if>
       <if test="row.belongUser != null">
         belong_user = #{row.belongUser,jdbcType=VARCHAR},
+      </if>
+      <if test="row.remark != null">
+        remark = #{row.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="row.status != null">
+        status = #{row.status,jdbcType=INTEGER},
       </if>
       <if test="row.createUser != null">
         create_user = #{row.createUser,jdbcType=VARCHAR},
@@ -196,8 +229,11 @@
   <update id="updateByExample" parameterType="map">
     update t_sys_domain
     set id = #{row.id,jdbcType=INTEGER},
+      sys_name = #{row.sysName,jdbcType=VARCHAR},
       domain_url = #{row.domainUrl,jdbcType=VARCHAR},
       belong_user = #{row.belongUser,jdbcType=VARCHAR},
+      remark = #{row.remark,jdbcType=VARCHAR},
+      status = #{row.status,jdbcType=INTEGER},
       create_user = #{row.createUser,jdbcType=VARCHAR},
       create_date = #{row.createDate,jdbcType=TIMESTAMP},
       update_user = #{row.updateUser,jdbcType=VARCHAR},
@@ -209,11 +245,20 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.coin.entity.TSysDomain">
     update t_sys_domain
     <set>
+      <if test="sysName != null">
+        sys_name = #{sysName,jdbcType=VARCHAR},
+      </if>
       <if test="domainUrl != null">
         domain_url = #{domainUrl,jdbcType=VARCHAR},
       </if>
       <if test="belongUser != null">
         belong_user = #{belongUser,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="createUser != null">
         create_user = #{createUser,jdbcType=VARCHAR},
@@ -232,8 +277,11 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.coin.entity.TSysDomain">
     update t_sys_domain
-    set domain_url = #{domainUrl,jdbcType=VARCHAR},
+    set sys_name = #{sysName,jdbcType=VARCHAR},
+      domain_url = #{domainUrl,jdbcType=VARCHAR},
       belong_user = #{belongUser,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
       create_user = #{createUser,jdbcType=VARCHAR},
       create_date = #{createDate,jdbcType=TIMESTAMP},
       update_user = #{updateUser,jdbcType=VARCHAR},

@@ -165,6 +165,76 @@ public class TSysDomainExample {
             return (Criteria) this;
         }
 
+        public Criteria andSysNameIsNull() {
+            addCriterion("sys_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysNameIsNotNull() {
+            addCriterion("sys_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysNameEqualTo(String value) {
+            addCriterion("sys_name =", value, "sysName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysNameNotEqualTo(String value) {
+            addCriterion("sys_name <>", value, "sysName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysNameGreaterThan(String value) {
+            addCriterion("sys_name >", value, "sysName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysNameGreaterThanOrEqualTo(String value) {
+            addCriterion("sys_name >=", value, "sysName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysNameLessThan(String value) {
+            addCriterion("sys_name <", value, "sysName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysNameLessThanOrEqualTo(String value) {
+            addCriterion("sys_name <=", value, "sysName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysNameLike(String value) {
+            addCriterion("sys_name like", value, "sysName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysNameNotLike(String value) {
+            addCriterion("sys_name not like", value, "sysName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysNameIn(List<String> values) {
+            addCriterion("sys_name in", values, "sysName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysNameNotIn(List<String> values) {
+            addCriterion("sys_name not in", values, "sysName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysNameBetween(String value1, String value2) {
+            addCriterion("sys_name between", value1, value2, "sysName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysNameNotBetween(String value1, String value2) {
+            addCriterion("sys_name not between", value1, value2, "sysName");
+            return (Criteria) this;
+        }
+
         public Criteria andDomainUrlIsNull() {
             addCriterion("domain_url is null");
             return (Criteria) this;
@@ -302,6 +372,136 @@ public class TSysDomainExample {
 
         public Criteria andBelongUserNotBetween(String value1, String value2) {
             addCriterion("belong_user not between", value1, value2, "belongUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkIsNull() {
+            addCriterion("remark is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkIsNotNull() {
+            addCriterion("remark is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkEqualTo(String value) {
+            addCriterion("remark =", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkNotEqualTo(String value) {
+            addCriterion("remark <>", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkGreaterThan(String value) {
+            addCriterion("remark >", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkGreaterThanOrEqualTo(String value) {
+            addCriterion("remark >=", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkLessThan(String value) {
+            addCriterion("remark <", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkLessThanOrEqualTo(String value) {
+            addCriterion("remark <=", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkLike(String value) {
+            addCriterion("remark like", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkNotLike(String value) {
+            addCriterion("remark not like", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkIn(List<String> values) {
+            addCriterion("remark in", values, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkNotIn(List<String> values) {
+            addCriterion("remark not in", values, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkBetween(String value1, String value2) {
+            addCriterion("remark between", value1, value2, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkNotBetween(String value1, String value2) {
+            addCriterion("remark not between", value1, value2, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNull() {
+            addCriterion("status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNotNull() {
+            addCriterion("status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusEqualTo(Integer value) {
+            addCriterion("status =", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotEqualTo(Integer value) {
+            addCriterion("status <>", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThan(Integer value) {
+            addCriterion("status >", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThanOrEqualTo(Integer value) {
+            addCriterion("status >=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThan(Integer value) {
+            addCriterion("status <", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThanOrEqualTo(Integer value) {
+            addCriterion("status <=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIn(List<Integer> values) {
+            addCriterion("status in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotIn(List<Integer> values) {
+            addCriterion("status not in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusBetween(Integer value1, Integer value2) {
+            addCriterion("status between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotBetween(Integer value1, Integer value2) {
+            addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
 
