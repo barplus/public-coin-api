@@ -13,5 +13,7 @@ public interface SysResourceService {
     void update(SysResourceReq req) throws Exception;
     TSysResource getInfoByCode(String code, Integer excludeId) throws Exception;
     List<SysResourceRsp> getSysResources(SysResourceReq req) throws Exception;
+    List<SysResourceRsp> getSysResourcesByType(String resourceType, String roleCode) throws Exception;
+    List<SysResourceRsp> getAllSysResources(String roleCode) throws Exception;
 
 }

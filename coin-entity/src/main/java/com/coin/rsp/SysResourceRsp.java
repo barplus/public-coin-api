@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class SysResourceRsp implements Serializable {
@@ -33,5 +34,9 @@ public class SysResourceRsp implements Serializable {
     private String updateUser;
 
     private Date updateDate;
+
+    private Integer isAuth;
+
+    private List<SysResourceRsp> childList;
 
 }

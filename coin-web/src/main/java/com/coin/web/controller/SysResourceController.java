@@ -104,4 +104,20 @@ public class SysResourceController {
         return new MyResp(CodeCons.ERROR, "请求失败");
     }
 
+    @PostMapping("/getAllSysResources")
+    @OfficeSecure
+    public MyResp getAllSysResources(@RequestBody SysResourceReq req){
+        logger.info("resource-getAllSysResources-req={}", req);
+        try{
+            List<SysResourceRsp> list = resourceService.getAllSysResources(req.getRoleCode());
+            return new MyResp(CodeCons.SUCCESS, "", list);
+        }catch(BizException e){
+            logger.error("resource-getAllSysResources-BizException", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("resource-getAllSysResources-Exception", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
 }

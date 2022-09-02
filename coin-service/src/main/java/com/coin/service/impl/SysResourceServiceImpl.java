@@ -14,6 +14,8 @@ import com.coin.service.constant.CodeCons;
 import com.coin.service.exception.BizException;
 import com.coin.service.util.BizUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -21,10 +23,13 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 public class SysResourceServiceImpl implements SysResourceService {
+
+    private static final Logger logger = LoggerFactory.getLogger(SysResourceServiceImpl.class);
 
     @Resource
     private TSysResourceMapper tSysResourceMapper;
@@ -99,13 +104,52 @@ public class SysResourceServiceImpl implements SysResourceService {
         }
         example.setOrderByClause(" resource_type, sort_num desc");
         List<TSysResource> sysResources = tSysResourceMapper.selectByExample(example);
-        List<SysResourceRsp> rspList = sysResources.stream().map(sysResource -> this.convertRsp(sysResource)).collect(Collectors.toList());
+        List<SysResourceRsp> rspList = sysResources.stream().map(sysResource -> this.convertRsp(sysResource, req.getRoleCode())).collect(Collectors.toList());
         return rspList;
     }
 
-    private SysResourceRsp convertRsp(TSysResource sysResource){
+    @Override
+    public List<SysResourceRsp> getSysResourcesByType(String resourceType, String roleCode) throws Exception {
+        TSysResourceExample example = new TSysResourceExample();
+        example.createCriteria().andResourceTypeEqualTo(resourceType);
+        example.setOrderByClause(" sort_num");
+        List<TSysResource> sysResources = tSysResourceMapper.selectByExample(example);
+        List<SysResourceRsp> rspList = sysResources.stream().map(sysResource -> this.convertRsp(sysResource, roleCode)).collect(Collectors.toList());
+        return rspList;
+    }
+
+    @Override
+    public List<SysResourceRsp> getAllSysResources(String roleCode) throws Exception {
+        List<SysResourceRsp> dList = this.getSysResourcesByType("D", roleCode);
+        List<SysResourceRsp> mList = this.getSysResourcesByType("M", roleCode);
+        List<SysResourceRsp> bList = this.getSysResourcesByType("B", roleCode);
+        Map<String, List<SysResourceRsp>> bGroup = bList.stream().collect(Collectors.groupingBy(SysResourceRsp::getParentCode));
+        for(SysResourceRsp rsp:mList){
+            rsp.setChildList(bGroup.get(rsp.getResourceCode()));
+        }
+        Map<String, List<SysResourceRsp>> mGroup = mList.stream().collect(Collectors.groupingBy(SysResourceRsp::getParentCode));
+        for(SysResourceRsp rsp:dList){
+            rsp.setChildList(mGroup.get(rsp.getResourceCode()));
+        }
+        return dList;
+    }
+
+    private SysResourceRsp convertRsp(TSysResource sysResource, String roleCode){
         SysResourceRsp rsp = new SysResourceRsp();
         BeanUtils.copyProperties(sysResource, rsp);
+        if(StringUtils.isNotBlank(roleCode)){
+            try{
+                TSysRoleResource roleResource = roleResourceService.getInfoByRoleCodeAndResCode(roleCode, sysResource.getResourceCode());
+                if(roleResource != null){
+                    rsp.setIsAuth(1);
+                } else {
+                    rsp.setIsAuth(0);
+                }
+            }catch(Exception e){
+                logger.error("SysResourceRsp-convertRsp-e", e);
+                throw new BizException(CodeCons.ERROR, "获取权限失败");
+            }
+        }
         return rsp;
     }
 

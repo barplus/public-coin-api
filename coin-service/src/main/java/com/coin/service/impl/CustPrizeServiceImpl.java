@@ -347,6 +347,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
             }
         }catch(Exception e){
             logger.error("CustPrizeRsp-convertRsp-e", e);
+            throw new BizException(CodeCons.ERROR, "获取奖品图片失败");
         }
         return rsp;
     }

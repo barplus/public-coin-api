@@ -14,4 +14,31 @@ public class StrUtil {
         return obj.toString();
     }
 
+    /**
+     * 从地址栏中获取某个参数的值
+     * @param url
+     * @param paramName
+     * @return
+     */
+    public static String getUrlParamVal(String url, String paramName){
+        String indexStr = "?"+paramName+"=";
+        int index = url.indexOf(indexStr);
+        if(index == -1){
+            index = url.indexOf("&"+paramName+"=");
+        }
+        if(index == -1){
+            return "";
+        }
+        String result = "";
+        int startIndex = index+indexStr.length();
+        for(int i=startIndex; i<url.length(); i++){
+            String charStr = url.substring(i, i+1);
+            if("&".equals(charStr)){
+                break;
+            }
+            result+=charStr;
+        }
+        return result;
+    }
+
 }

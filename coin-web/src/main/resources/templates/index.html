@@ -18,10 +18,8 @@
             <div class="row">
                 <div class="col-sm-5">
                     <div id="roll">
-                        <span id="span1">111111111111111111111111111111111</span>
-                        <span id="span2">222222222222222222222222222222222</span>
-                        <span id="span3">333333333333333333333333333333333</span>
-                        <span id="span4">444444444444444444444444444444444</span>
+                        <span id="span1">1111111111111111111111111111111111</span>
+                        <span id="span2">2222222222222222222222222222222222</span>
                     </div>
                 </div>
                 <div class="col-sm-4" style="display: none;">
@@ -75,19 +73,19 @@
         }
         function getStr(val){
             let str = "";
-            for(let i=0;i<35;i++){
+            for(let i=0;i<34;i++){
                 str += val;
             }
             return " " + str + " ";
         }
         let spanIndex = 1;
-        let val = 5;
+        let val = 3;
         setInterval(function(){
             $("#span"+(val-1)).after('<span id="span'+val+'">'+getStr(val>9?val%10:val)+'</span>');
             $("#span"+(val-4)).remove();
             val = val +1;
             $("#span"+(val-1)).after('<span id="span'+val+'">'+getStr(val>9?val%10:val)+'</span>');
-            $("#span"+(val-4)).remove("");
+            $("#span"+(val-4)).remove();
             val = val +1;
             if(spanIndex == 1){
                 spanIndex = 0;

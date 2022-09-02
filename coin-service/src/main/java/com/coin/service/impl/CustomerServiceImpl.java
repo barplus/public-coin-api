@@ -261,6 +261,7 @@ public class CustomerServiceImpl implements CustomerService {
                 }
             }catch(Exception e){
                 logger.error("customer-convertRsp-error", e);
+                throw new BizException(CodeCons.ERROR, "获取钱包信息失败");
             }
         }
         return rsp;

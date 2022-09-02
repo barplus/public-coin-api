@@ -3,7 +3,6 @@ package com.coin.service.impl;
 import com.coin.entity.TDict;
 import com.coin.entity.TDictExample;
 import com.coin.mapper.TDictMapper;
-import com.coin.mapper.ext.DictMapper;
 import com.coin.req.DictReq;
 import com.coin.service.DictService;
 import com.coin.service.constant.CodeCons;

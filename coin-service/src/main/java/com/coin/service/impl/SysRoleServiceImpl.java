@@ -4,7 +4,9 @@ import com.coin.entity.TSysRole;
 import com.coin.entity.TSysRoleExample;
 import com.coin.mapper.TSysRoleMapper;
 import com.coin.req.SysRoleReq;
+import com.coin.req.SysRoleResourceReq;
 import com.coin.rsp.SysRoleRsp;
+import com.coin.service.SysRoleResourceService;
 import com.coin.service.SysRoleService;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.exception.BizException;
@@ -15,6 +17,7 @@ import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindException;
 
@@ -28,6 +31,8 @@ public class SysRoleServiceImpl implements SysRoleService {
 
     @Resource
     private TSysRoleMapper sysRoleMapper;
+    @Resource
+    private SysRoleResourceService roleResourceService;
 
     @Override
     public void addSysRole(SysRoleReq req) throws Exception {
@@ -61,6 +66,17 @@ public class SysRoleServiceImpl implements SysRoleService {
         updateRole.setStatus(req.getStatus());
         updateRole.setSortNum(req.getSortNum());
         sysRoleMapper.updateByPrimaryKeySelective(updateRole);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void saveRoleResources(SysRoleResourceReq req) throws Exception {
+        if(StringUtils.isNotBlank(req.getAddResourceCodes())){
+            roleResourceService.addSysRoleResources(req);
+        }
+        if(StringUtils.isNotBlank(req.getDelResourceCodes())){
+            roleResourceService.delSysRoleResources(req);
+        }
     }
 
     @Override

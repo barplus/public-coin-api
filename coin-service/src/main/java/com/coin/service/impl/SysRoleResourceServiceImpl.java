@@ -8,6 +8,7 @@ import com.coin.req.SysRoleResourceReq;
 import com.coin.service.SysRoleResourceService;
 import com.coin.service.util.BizUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -28,9 +29,9 @@ public class SysRoleResourceServiceImpl implements SysRoleResourceService {
         String[] addResourceCodes = req.getAddResourceCodes().split(",");
         List<String> resourceCodeList = Arrays.asList(addResourceCodes);
         List<TSysRoleResource> datas = new ArrayList<>(resourceCodeList.size());
-        TSysRoleResource newRoleResource = BizUtil.getInsertInfo(new TSysRoleResource(), req.getLoginName(), new Date());
-        newRoleResource.setRoleCode(req.getRoleCode());
         for(String resourceCode:resourceCodeList){
+            TSysRoleResource newRoleResource = BizUtil.getInsertInfo(new TSysRoleResource(), req.getLoginName(), new Date());
+            newRoleResource.setRoleCode(req.getRoleCode());
             newRoleResource.setResourceCode(resourceCode);
             datas.add(newRoleResource);
         }
@@ -42,6 +43,17 @@ public class SysRoleResourceServiceImpl implements SysRoleResourceService {
         String[] delResourceCodes = req.getDelResourceCodes().split(",");
         List<String> resourceCodeList = Arrays.asList(delResourceCodes);
         sysRoleResourceMapper.delBatch(req.getRoleCode(), resourceCodeList);
+    }
+
+    @Override
+    public TSysRoleResource getInfoByRoleCodeAndResCode(String roleCode, String resourceCode) throws Exception {
+        TSysRoleResourceExample example = new TSysRoleResourceExample();
+        example.createCriteria().andRoleCodeEqualTo(roleCode).andResourceCodeEqualTo(resourceCode);
+        List<TSysRoleResource> list = tSysRoleResourceMapper.selectByExample(example);
+        if(CollectionUtils.isEmpty(list)){
+            return null;
+        }
+        return list.get(0);
     }
 
     @Override
