@@ -7,4 +7,9 @@ import java.lang.annotation.*;
 @Documented
 public @interface OfficeSecure {
 
+    boolean needAuth() default true;
+    boolean needLogin() default true;
+    boolean doDownLoad() default false;
+    boolean fastQuery() default false;
+    
 }

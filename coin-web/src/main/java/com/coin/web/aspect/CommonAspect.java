@@ -12,7 +12,6 @@ import com.coin.service.util.StrUtil;
 import com.coin.web.annotation.CommonSecure;
 import com.coin.web.utils.IpUtils;
 import com.coin.web.utils.ParamUtil;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -37,8 +36,6 @@ public class CommonAspect {
     private RedisUtil redisUtil;
     @Resource
     private CustomerService customerService;
-    String[] noNeedLoginPath = {"/customer/login"};
-    String[] fastQueryPath = {"/custPrize/pageList", "/customer/getCustInfo"};
 
     @Around(value="within(com.coin.web.controller.*Controller) && @annotation(commonSecure)")
     public Object commonSecure(ProceedingJoinPoint pj, CommonSecure commonSecure){
@@ -49,20 +46,20 @@ public class CommonAspect {
             String method = request.getServletPath();
             String token = StrUtil.getStr(request.getHeader("token"));
             String loginName = redisUtil.get(token);
-            if(StringUtils.isBlank(loginName) && !ArrayUtils.contains(noNeedLoginPath, method)){
+            if(StringUtils.isBlank(loginName) && commonSecure.needLogin()){
                 return new MyResp(CodeCons.LOGIN_OUT, "登录已过期，请重新登录");
             }
             long waitMill = 1688l;
-            if(ArrayUtils.contains(fastQueryPath, method)){
+            if(commonSecure.fastQuery()){
                 waitMill = 168l;
             }
-            if(ArrayUtils.contains(noNeedLoginPath, method)){
+            if(!commonSecure.needLogin()){
                 loginName = req.getLoginName();
             }
             if(!redisUtil.setNx(loginName+method, "1", waitMill)){
                 return new MyResp(CodeCons.ERROR, "请求太快，请稍后");
             }
-            if(!ArrayUtils.contains(noNeedLoginPath, method)){
+            if(commonSecure.needLogin()){
                 TCustomer customer = customerService.getInfoByLoginName(loginName);
                 if(customer == null || customer.getStatus() != 1){
                     return new MyResp(CodeCons.CUSTOMER_NO_EXISTS, "用户不存在或已失效");

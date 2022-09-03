@@ -12,6 +12,7 @@ public interface SysResourceService {
     void deleteByCode(String code) throws Exception;
     void update(SysResourceReq req) throws Exception;
     TSysResource getInfoByCode(String code, Integer excludeId) throws Exception;
+    TSysResource getLikePath(String path) throws Exception;
     List<SysResourceRsp> getSysResources(SysResourceReq req) throws Exception;
     List<SysResourceRsp> getSysResourcesByType(String resourceType, String roleCode) throws Exception;
     List<SysResourceRsp> getAllSysResources(String roleCode) throws Exception;

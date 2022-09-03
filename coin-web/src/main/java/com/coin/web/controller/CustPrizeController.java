@@ -32,7 +32,7 @@ public class CustPrizeController {
     private CustPrizeService custPrizeService;
 
     @PostMapping("/pageList")
-    @CommonSecure
+    @CommonSecure(fastQuery = true)
     public MyResp pageList(@RequestBody CustPrizeReq req){
         logger.info("custPrize-pageList-req={}", req);
         try{
@@ -52,7 +52,7 @@ public class CustPrizeController {
     }
 
     @PostMapping("/pageDatas")
-    @OfficeSecure
+    @OfficeSecure(fastQuery = true)
     public MyResp pageDatas(@RequestBody CustPrizeReq req){
         logger.info("custPrize-pageDatas-req={}", req);
         try{
@@ -72,7 +72,7 @@ public class CustPrizeController {
     }
 
     @RequestMapping("/exportDatas")
-    @OfficeSecure
+    @OfficeSecure(doDownLoad = true)
     public MyResp exportDatas(CustPrizeReq req, HttpServletResponse response){
         logger.info("custPrize-exportDatas-req={}", req);
         try{

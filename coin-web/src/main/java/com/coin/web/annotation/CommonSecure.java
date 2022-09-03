@@ -7,4 +7,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface CommonSecure {
 
+    boolean needLogin() default true;
+    boolean fastQuery() default false;
+
 }

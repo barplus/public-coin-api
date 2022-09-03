@@ -3,6 +3,8 @@ package com.coin.web.aspect;
 import com.coin.entity.TSysUser;
 import com.coin.req.CommonReq;
 import com.coin.service.BizEntity.MyResp;
+import com.coin.service.SysResourceService;
+import com.coin.service.SysRoleResourceService;
 import com.coin.service.SysUserService;
 import com.coin.service.constant.BizCons;
 import com.coin.service.constant.CodeCons;
@@ -12,7 +14,6 @@ import com.coin.service.util.StrUtil;
 import com.coin.web.annotation.OfficeSecure;
 import com.coin.web.utils.IpUtils;
 import com.coin.web.utils.ParamUtil;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -36,10 +37,11 @@ public class OfficeAspect {
     @Resource
     private SysUserService sysUserService;
     @Resource
+    private SysResourceService sysResourceService;
+    @Resource
+    private SysRoleResourceService sysRoleResourceService;
+    @Resource
     private RedisUtil redisUtil;
-    String[] noNeedLoginPath = {"/user/login"};
-    String[] downLoadPath = {"/custPrize/exportDatas", "/customer/exportDatas", "/file/downloadExcel", "/sysLog/exportDatas"};
-    String[] fastQueryPath = {"/prize/pageList", "/customer/pageList", "/custPrize/pageDatas"};
 
     @Around(value="within(com.coin.web.controller.*Controller) && @annotation(officeSecure)")
     public Object officeSecure(ProceedingJoinPoint pj, OfficeSecure officeSecure){
@@ -50,31 +52,46 @@ public class OfficeAspect {
             String method = request.getServletPath();
 
             String token = StrUtil.getStr(request.getHeader("token"));
-            if(ArrayUtils.contains(downLoadPath, method)){
+            long waitMill = 1688l;
+            if(officeSecure.doDownLoad()){
+                waitMill = 168168l;
                 token = req.getToken();
             }
             String loginName = redisUtil.get(token);
-            if(StringUtils.isBlank(loginName) && !ArrayUtils.contains(noNeedLoginPath, method)){
+            if(StringUtils.isBlank(loginName) && officeSecure.needLogin()){
                 return new MyResp(CodeCons.LOGIN_OUT, "登录已过期，请重新登录");
             }
             if(StringUtils.isBlank(loginName)){
-                if(!ArrayUtils.contains(noNeedLoginPath, method)){
+                if(officeSecure.needLogin()){
                     return new MyResp(CodeCons.ERROR, "登录名 不能为空");
                 }
                 loginName = req.getLoginName();
             }
-            long waitMill = 1688l;
-            if(ArrayUtils.contains(fastQueryPath, method)){
+            if(officeSecure.fastQuery()){
                 waitMill = 168l;
             }
             if(!redisUtil.setNx(loginName+method, "1", waitMill)){
                 return new MyResp(CodeCons.ERROR, "请求太快，请稍后");
             }
-            if(!ArrayUtils.contains(noNeedLoginPath, method)){
+            if(officeSecure.needLogin()){
                 TSysUser sysUser = sysUserService.getUserByLoginName(loginName);
                 if(sysUser == null){
                     return new MyResp(CodeCons.ERROR, "非法用户请求");
                 }
+//                if(StringUtils.isBlank(sysUser.getRoleCode())){
+//                    return new MyResp(CodeCons.ERROR, "账号尚未分配角色，请联系系统管理员");
+//                }
+//                boolean doAuth = officeSecure.doAuth();
+//                if(doAuth){
+//                    TSysResource sysResource = sysResourceService.getLikePath(method);
+//                    if(sysResource == null){
+//                        return new MyResp(CodeCons.ERROR, "用户资源权限不足，请联系系统管理员");
+//                    }
+//                    TSysRoleResource roleResource = sysRoleResourceService.getInfoByRoleCodeAndResCode(sysUser.getRoleCode(), sysResource.getResourceCode());
+//                    if(roleResource == null){
+//                        return new MyResp(CodeCons.ERROR, "用户角色权限不足，请联系系统管理员");
+//                    }
+//                }
             }
             String tokenKey = BizCons.SYS_OFFICE + loginName + ":token";
             logger.info("loginName={}, request-ip={}", loginName, IpUtils.getIpAddr(request));

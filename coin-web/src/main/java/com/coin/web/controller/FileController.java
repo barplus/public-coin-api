@@ -83,7 +83,7 @@ public class FileController {
     }
 
     @RequestMapping(value = "downloadExcel")
-    @OfficeSecure
+    @OfficeSecure(doDownLoad = true)
     public void downloadExcel(FileReq req, HttpServletResponse response) {
         try{
             if("customer.xlsx".equals(req.getFileName())){

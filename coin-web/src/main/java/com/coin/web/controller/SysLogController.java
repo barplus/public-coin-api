@@ -51,7 +51,7 @@ public class SysLogController {
     }
 
     @RequestMapping("/exportDatas")
-    @OfficeSecure
+    @OfficeSecure(doDownLoad = true)
     public MyResp exportDatas(SysLogReq req, HttpServletResponse response){
         logger.info("sysLog-exportDatas-req={}", req);
         try{

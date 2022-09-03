@@ -94,7 +94,7 @@ public class PrizeController {
     }
 
     @PostMapping("/pageList")
-    @OfficeSecure
+    @OfficeSecure(fastQuery = true)
     public MyResp pageList(@RequestBody PrizeReq req){
         logger.info("prize-pageList-req={}", req);
         try{

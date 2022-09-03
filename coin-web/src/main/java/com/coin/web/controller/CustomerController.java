@@ -43,7 +43,7 @@ public class CustomerController {
     private RedisUtil redisUtil;
 
     @PostMapping("/login")
-    @CommonSecure
+    @CommonSecure(needLogin = false)
     public MyResp login(@RequestBody CustomerReq req){
         logger.info("customer-login-req={}", req);
         try{
@@ -106,7 +106,7 @@ public class CustomerController {
     }
 
     @PostMapping("/getCustInfo")
-    @CommonSecure
+    @CommonSecure(fastQuery = true)
     public MyResp getCustInfo(@RequestBody CommonReq req){
         logger.info("customer-getCustInfo-req={}", req);
         try{
@@ -157,7 +157,7 @@ public class CustomerController {
     }
 
     @PostMapping("/pageList")
-    @OfficeSecure
+    @OfficeSecure(fastQuery = true)
     public MyResp pageList(@RequestBody CustomerReq req){
         logger.info("customer-pageList-req={}", req);
         try{
@@ -174,7 +174,7 @@ public class CustomerController {
     }
 
     @RequestMapping("/exportDatas")
-    @OfficeSecure
+    @OfficeSecure(doDownLoad = true)
     public MyResp exportDatas(CustomerReq req, HttpServletResponse response){
         logger.info("customer-exportDatas-req={}", req);
         try{

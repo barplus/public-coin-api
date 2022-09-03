@@ -93,6 +93,17 @@ public class SysResourceServiceImpl implements SysResourceService {
     }
 
     @Override
+    public TSysResource getLikePath(String path) throws Exception {
+        TSysResourceExample example = new TSysResourceExample();
+        example.createCriteria().andResourcePathEqualTo(path);
+        List<TSysResource> list = tSysResourceMapper.selectByExample(example);
+        if(CollectionUtils.isEmpty(list)){
+            return null;
+        }
+        return list.get(0);
+    }
+
+    @Override
     public List<SysResourceRsp> getSysResources(SysResourceReq req) throws Exception {
         TSysResourceExample example = new TSysResourceExample();
         TSysResourceExample.Criteria criteria = example.createCriteria();

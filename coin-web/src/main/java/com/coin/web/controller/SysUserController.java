@@ -56,7 +56,7 @@ public class SysUserController {
     }
 
     @PostMapping("/login")
-    @OfficeSecure
+    @OfficeSecure(needLogin = false)
     public MyResp login(@RequestBody SysUserReq req){
         logger.info("user-login-req={}", req);
         try{
