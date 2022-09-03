@@ -30,5 +30,7 @@ public class CustomerReq extends CommonReq implements Serializable {
     private Integer isLogin;
     /**当前抽奖方式：1、10*/
     private Integer lotteryType;
+    /**来源*/
+    private String source;
 
 }

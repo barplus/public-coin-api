@@ -56,7 +56,7 @@ public class CustomerController {
             }
             TCustomer customer = customerService.getInfoByLoginName(req.getLoginName());
             if(customer == null){
-                customerService.createCustomer(req.getLoginName(), MD5Util.MD5(req.getLoginPass()));
+                customerService.createCustomer(req.getLoginName(), MD5Util.MD5(req.getLoginPass()), req.getSource());
                 customer = customerService.getInfoByLoginName(req.getLoginName());
             }
             customerService.updateIsLogin(req.getLoginName());

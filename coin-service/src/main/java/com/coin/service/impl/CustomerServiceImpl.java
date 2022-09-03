@@ -233,10 +233,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void createCustomer(String loginName, String loginPass) throws Exception {
+    public void createCustomer(String loginName, String loginPass, String source) throws Exception {
         TCustomer customer = BizUtil.getInsertInfo(new TCustomer(), "sys-api", new Date());
         customer.setLoginName(loginName);
         customer.setLoginPass(loginPass);
+        customer.setSource(source);
         customer.setIsLogin(1);
         tCustomerMapper.insertSelective(customer);
     }

@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coin.mapper.TContestMapper">
+  <resultMap id="BaseResultMap" type="com.coin.entity.TContest">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="contest_type" jdbcType="VARCHAR" property="contestType" />
+    <result column="contest_name" jdbcType="VARCHAR" property="contestName" />
+    <result column="contest_date" jdbcType="TIMESTAMP" property="contestDate" />
+    <result column="team_first" jdbcType="VARCHAR" property="teamFirst" />
+    <result column="team_second" jdbcType="VARCHAR" property="teamSecond" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="sort_num" jdbcType="INTEGER" property="sortNum" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, contest_type, contest_name, contest_date, team_first, team_second, status, sort_num, 
+    create_user, create_date, update_user, update_date
+  </sql>
+  <select id="selectByExample" parameterType="com.coin.entity.TContestExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_contest
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_contest
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_contest
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.coin.entity.TContestExample">
+    delete from t_contest
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.coin.entity.TContest">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_contest (contest_type, contest_name, contest_date, 
+      team_first, team_second, status, 
+      sort_num, create_user, create_date, 
+      update_user, update_date)
+    values (#{contestType,jdbcType=VARCHAR}, #{contestName,jdbcType=VARCHAR}, #{contestDate,jdbcType=TIMESTAMP}, 
+      #{teamFirst,jdbcType=VARCHAR}, #{teamSecond,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{sortNum,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.coin.entity.TContest">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_contest
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="contestType != null">
+        contest_type,
+      </if>
+      <if test="contestName != null">
+        contest_name,
+      </if>
+      <if test="contestDate != null">
+        contest_date,
+      </if>
+      <if test="teamFirst != null">
+        team_first,
+      </if>
+      <if test="teamSecond != null">
+        team_second,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="sortNum != null">
+        sort_num,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="contestType != null">
+        #{contestType,jdbcType=VARCHAR},
+      </if>
+      <if test="contestName != null">
+        #{contestName,jdbcType=VARCHAR},
+      </if>
+      <if test="contestDate != null">
+        #{contestDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="teamFirst != null">
+        #{teamFirst,jdbcType=VARCHAR},
+      </if>
+      <if test="teamSecond != null">
+        #{teamSecond,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="sortNum != null">
+        #{sortNum,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.coin.entity.TContestExample" resultType="java.lang.Long">
+    select count(*) from t_contest
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_contest
+    <set>
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
+      </if>
+      <if test="row.contestType != null">
+        contest_type = #{row.contestType,jdbcType=VARCHAR},
+      </if>
+      <if test="row.contestName != null">
+        contest_name = #{row.contestName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.contestDate != null">
+        contest_date = #{row.contestDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.teamFirst != null">
+        team_first = #{row.teamFirst,jdbcType=VARCHAR},
+      </if>
+      <if test="row.teamSecond != null">
+        team_second = #{row.teamSecond,jdbcType=VARCHAR},
+      </if>
+      <if test="row.status != null">
+        status = #{row.status,jdbcType=INTEGER},
+      </if>
+      <if test="row.sortNum != null">
+        sort_num = #{row.sortNum,jdbcType=INTEGER},
+      </if>
+      <if test="row.createUser != null">
+        create_user = #{row.createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="row.createDate != null">
+        create_date = #{row.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.updateUser != null">
+        update_user = #{row.updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="row.updateDate != null">
+        update_date = #{row.updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_contest
+    set id = #{row.id,jdbcType=INTEGER},
+      contest_type = #{row.contestType,jdbcType=VARCHAR},
+      contest_name = #{row.contestName,jdbcType=VARCHAR},
+      contest_date = #{row.contestDate,jdbcType=TIMESTAMP},
+      team_first = #{row.teamFirst,jdbcType=VARCHAR},
+      team_second = #{row.teamSecond,jdbcType=VARCHAR},
+      status = #{row.status,jdbcType=INTEGER},
+      sort_num = #{row.sortNum,jdbcType=INTEGER},
+      create_user = #{row.createUser,jdbcType=VARCHAR},
+      create_date = #{row.createDate,jdbcType=TIMESTAMP},
+      update_user = #{row.updateUser,jdbcType=VARCHAR},
+      update_date = #{row.updateDate,jdbcType=TIMESTAMP}
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.coin.entity.TContest">
+    update t_contest
+    <set>
+      <if test="contestType != null">
+        contest_type = #{contestType,jdbcType=VARCHAR},
+      </if>
+      <if test="contestName != null">
+        contest_name = #{contestName,jdbcType=VARCHAR},
+      </if>
+      <if test="contestDate != null">
+        contest_date = #{contestDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="teamFirst != null">
+        team_first = #{teamFirst,jdbcType=VARCHAR},
+      </if>
+      <if test="teamSecond != null">
+        team_second = #{teamSecond,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="sortNum != null">
+        sort_num = #{sortNum,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.coin.entity.TContest">
+    update t_contest
+    set contest_type = #{contestType,jdbcType=VARCHAR},
+      contest_name = #{contestName,jdbcType=VARCHAR},
+      contest_date = #{contestDate,jdbcType=TIMESTAMP},
+      team_first = #{teamFirst,jdbcType=VARCHAR},
+      team_second = #{teamSecond,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      sort_num = #{sortNum,jdbcType=INTEGER},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
