@@ -61,10 +61,7 @@ public class OfficeAspect {
             if(StringUtils.isBlank(loginName) && officeSecure.needLogin()){
                 return new MyResp(CodeCons.LOGIN_OUT, "登录已过期，请重新登录");
             }
-            if(StringUtils.isBlank(loginName)){
-                if(officeSecure.needLogin()){
-                    return new MyResp(CodeCons.ERROR, "登录名 不能为空");
-                }
+            if(!officeSecure.needLogin()){
                 loginName = req.getLoginName();
             }
             if(officeSecure.fastQuery()){

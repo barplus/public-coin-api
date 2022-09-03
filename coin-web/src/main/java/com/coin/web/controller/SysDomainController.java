@@ -28,7 +28,7 @@ public class SysDomainController {
     private SysDomainService domainService;
 
     @PostMapping("/pageList")
-    @OfficeSecure
+    @OfficeSecure(fastQuery = true)
     public MyResp pageList(@RequestBody SysDomainReq req){
         logger.info("domain-pageList-req={}", req);
         try{
