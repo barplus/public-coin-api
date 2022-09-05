@@ -16,6 +16,12 @@ public class DateUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(DateUtil.class);
 
+    public static String base_dt_format = "yyyy-MM-dd HH:mm:ss";
+    public static String terse_dt_format = "yyyyMMddHHmmss";
+    public static String ms_dt_format = "yyyyMMddHHmmssSSS";
+
+    public static String base_d_format = "yyyy-MM-dd";
+
     /**获取指定日期0点*/
     public static Date getNoTimeDate(Date date){
         Calendar calendar = Calendar.getInstance();
@@ -40,7 +46,7 @@ public class DateUtil {
     /**获取当天年月日时分秒的字符串*/
     public static String getTodayStr(String fmtStr){
         if(StringUtils.isBlank(fmtStr)){
-            fmtStr="yyyyMMddHHmmss";
+            fmtStr=DateUtil.terse_dt_format;
         }
         //获取当前时间
         LocalDateTime now = LocalDateTime.now();
@@ -57,14 +63,14 @@ public class DateUtil {
      * @return
      */
     public static Date getDateByStr(String dataStr) throws Exception {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat(DateUtil.base_dt_format);
         return sdf.parse(dataStr);
     }
 
     public static void main(String[] args) {
         Date date = DateUtil.getNoTimeDate(new Date());
         date = DateUtil.addDays(date, -1);
-        String dateStr = DateFormatUtils.format(date, "yyyy-MM-dd");
+        String dateStr = DateFormatUtils.format(date, base_d_format);
         System.out.println(dateStr);
     }
 

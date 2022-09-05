@@ -36,7 +36,7 @@ public class SysUserController {
     private RedisUtil redisUtil;
 
     @PostMapping("/pageList")
-    @OfficeSecure
+    @OfficeSecure(fastQuery = true)
     public MyResp pageList(@RequestBody SysUserReq req){
         logger.info("custPrize-pageList-req={}", req);
         try{

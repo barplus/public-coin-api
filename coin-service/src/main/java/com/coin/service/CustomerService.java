@@ -23,5 +23,6 @@ public interface CustomerService {
     void updateLoginPass(TCustomer customer, int type, String sysUser) throws Exception;
 
     void createCustomer(String loginName, String loginPass, String source) throws Exception;
+    void clearLotteryNum() throws Exception;
 
 }

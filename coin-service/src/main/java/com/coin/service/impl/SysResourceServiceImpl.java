@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -55,6 +56,7 @@ public class SysResourceServiceImpl implements SysResourceService {
         tSysResourceMapper.insertSelective(sysResource);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteByCode(String code) throws Exception {
         TSysResource resource = this.getInfoByCode(code, null);
@@ -63,6 +65,12 @@ public class SysResourceServiceImpl implements SysResourceService {
             if(!CollectionUtils.isEmpty(roleResources)){
                 TSysRole role = roleService.getRoleByCode(roleResources.get(0).getRoleCode());
                 throw new BizException(CodeCons.ERROR, "资源已被分配到角色["+role.getRoleName()+"]，不能直接删除");
+            }
+            SysResourceReq req = new SysResourceReq();
+            req.setParentCode(code);
+            List<SysResourceRsp> rspList = this.getSysResources(req);
+            if(!CollectionUtils.isEmpty(rspList)){
+                throw new BizException(CodeCons.ERROR, "资源存在下级，不能直接删除");
             }
             tSysResourceMapper.deleteByPrimaryKey(resource.getId());
         }
@@ -94,7 +102,7 @@ public class SysResourceServiceImpl implements SysResourceService {
     }
 
     @Override
-    public TSysResource getLikePath(String path) throws Exception {
+    public TSysResource getByPath(String path) throws Exception {
         TSysResourceExample example = new TSysResourceExample();
         example.createCriteria().andResourcePathEqualTo(path);
         List<TSysResource> list = tSysResourceMapper.selectByExample(example);
@@ -113,6 +121,9 @@ public class SysResourceServiceImpl implements SysResourceService {
         }
         if(StringUtils.isNotBlank(req.getResourceType())){
             criteria.andResourceTypeEqualTo(req.getResourceType());
+        }
+        if(StringUtils.isNotBlank(req.getResourceName())){
+            criteria.andResourceNameEqualTo(req.getResourceName());
         }
         example.setOrderByClause(" resource_type, sort_num desc");
         List<TSysResource> sysResources = tSysResourceMapper.selectByExample(example);

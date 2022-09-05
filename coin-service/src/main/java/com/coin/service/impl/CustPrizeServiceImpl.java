@@ -241,7 +241,7 @@ public class CustPrizeServiceImpl implements CustPrizeService {
             custPrize.setWallet(rsp.getWallet());
         }
         custPrize.setLoginName(loginName);
-        custPrize.setBillNo(DateUtil.getTodayStr("yyyyMMddHHmmssSSS")+BizUtil.getStringRandom(4, 0));
+        custPrize.setBillNo(DateUtil.getTodayStr(DateUtil.ms_dt_format)+BizUtil.getStringRandom(4, 0));
         return tCustPrizeMapper.insertSelective(custPrize);
     }
 

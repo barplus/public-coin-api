@@ -110,8 +110,7 @@ public class CustomerController {
     public MyResp getCustInfo(@RequestBody CommonReq req){
         logger.info("customer-getCustInfo-req={}", req);
         try{
-            TCustomer customer = customerService.getInfoByLoginName(req.getLoginName());
-            customer.setLoginPass(null);
+            CustomerRsp customer = customerService.getByLoginName(req.getLoginName(), true);
             return new MyResp(CodeCons.SUCCESS, "", customer);
         }catch(Exception e){
             logger.error("customer-getCustInfo-error", e);

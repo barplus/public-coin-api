@@ -24,6 +24,7 @@ public class CustomerRsp implements Serializable {
     private Integer rouletteSurplusTime;
     //签到次数
     private Integer rouletteSignTime;
+    private Integer everyDayMaxTime;
 
     private String wallet;
 

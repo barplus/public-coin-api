@@ -5,6 +5,7 @@ import com.coin.mapper.TCustPrizeMapper;
 import com.coin.mapper.TCustomerMapper;
 import com.coin.mapper.ext.CustomerMapper;
 import com.coin.req.CustomerReq;
+import com.coin.req.DictReq;
 import com.coin.rsp.CustomerRsp;
 import com.coin.service.CustPrizeService;
 import com.coin.service.CustomerService;
@@ -16,6 +17,7 @@ import com.coin.service.exception.BizException;
 import com.coin.service.util.BizUtil;
 import com.coin.service.util.DateUtil;
 import com.coin.service.util.PageUtil;
+import com.coin.service.util.RedisUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -51,6 +53,8 @@ public class CustomerServiceImpl implements CustomerService {
     private DictService dictService;
     @Resource
     private CustPrizeService custPrizeService;
+    @Resource
+    private RedisUtil redisUtil;
 
     @Override
     public TCustomer getInfoByLoginName(String loginName) throws Exception {
@@ -67,14 +71,16 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerRsp getByLoginName(String loginName, boolean fill) throws Exception {
         TCustomer customer = this.getInfoByLoginName(loginName);
         CustomerRsp rsp = this.convertRsp(customer);
+        rsp.setRouletteSurplusTime(rsp.getRouletteTotalTime() - rsp.getRouletteUsedTime());
         if(fill){
-            rsp.setRouletteSurplusTime(rsp.getRouletteTotalTime() - rsp.getRouletteUsedTime());
             rsp.setRouletteSignTime(0);
             TSysLog sysLog = sysLogService.getLastByLoginNameAndType(loginName, LogTypeEnum.EVERYDAY_SIGN);
             Date today = DateUtil.getNoTimeDate(new Date());
             if(sysLog != null && sysLog.getCreateDate().compareTo(today) > -1){
                 rsp.setRouletteSignTime(1);
             }
+            String lastExecuteDateStr = dictService.getValByTypeAndCode("MAX_NUM", "MAX_LOTTERY_TIME_EVERYDAY");
+            rsp.setEveryDayMaxTime(Integer.parseInt(lastExecuteDateStr));
         }
         return rsp;
     }
@@ -117,6 +123,10 @@ public class CustomerServiceImpl implements CustomerService {
         TCustomer customer = tCustomerMapper.selectByPrimaryKey(req.getId());
         if(req.getRouletteTotalTime().intValue() + customer.getRouletteTotalTime() < customer.getRouletteUsedTime()){
             throw new BizException("9999", "用户剩余次数不足以扣减，请确认");
+        }
+        String numStr = dictService.getValByTypeAndCode("MAX_NUM", "MAX_LOTTERY_TIME_EVERYDAY");
+        if(req.getRouletteTotalTime().intValue() + customer.getRouletteTotalTime() > Integer.parseInt(numStr)){
+            throw new BizException("9999", "每日抽奖次数不能超过上限:"+Integer.parseInt(numStr));
         }
         TCustomer updateCustomer = BizUtil.getUpdateInfo(new TCustomer(), req.getId(), req.getLoginName(), new Date());
         updateCustomer.setRouletteTotalTime(req.getRouletteTotalTime());
@@ -186,6 +196,10 @@ public class CustomerServiceImpl implements CustomerService {
                 if(rsp.getRouletteTotalTime() > customer.getRouletteTotalTime()){
                     isChange = true;
                     updateCust.setRouletteTotalTime(rsp.getRouletteTotalTime());
+                    String numStr = dictService.getValByTypeAndCode("MAX_NUM", "MAX_LOTTERY_TIME_EVERYDAY");
+                    if(rsp.getRouletteTotalTime() > Integer.parseInt(numStr)){
+                        updateCust.setRouletteTotalTime(Integer.parseInt(numStr));
+                    }
                 }
                 if(isChange){
                     this.updateImportInfo(updateCust, customer.getRouletteTotalTime(), customer.getLoginName());
@@ -210,7 +224,7 @@ public class CustomerServiceImpl implements CustomerService {
             throw new BizException(CodeCons.ERROR, "请不要重复签到");
         }
         TCustomer customer = this.getInfoByLoginName(req.getLoginName());
-        TCustomer updateCustomer = BizUtil.getUpdateInfo(new TCustomer(), req.getId(), req.getLoginName(), new Date());
+        TCustomer updateCustomer = BizUtil.getUpdateInfo(new TCustomer(), customer.getId(), req.getLoginName(), new Date());
         updateCustomer.setRouletteTotalTime(1);
         int count = customerMapper.updateTotalNum(updateCustomer);
         if(count != 1){
@@ -240,6 +254,33 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setSource(source);
         customer.setIsLogin(1);
         tCustomerMapper.insertSelective(customer);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void clearLotteryNum() throws Exception {
+        String lastExecuteDateStrKey = "LAST_CLEAR_LOTTERY_NUM_DATA";
+        String lastExecuteDateStr = redisUtil.get(lastExecuteDateStrKey);
+        Integer dictId = null;
+        if(StringUtils.isBlank(lastExecuteDateStr)){
+            TDict dict = dictService.getByTypeAndCode("EXECUTION_TIME", "LOTTERY_NUM_CLEAR_TIME");
+            lastExecuteDateStr = dict.getDictVal();
+            dictId = dict.getId();
+        }
+        Date today = DateUtil.getNoTimeDate(new Date());
+        if(DateUtil.getDateByStr(lastExecuteDateStr).before(today)){
+            logger.info("doLottery-clearLotteryNum");
+            customerMapper.clearLotteryNum();
+            if(dictId != null){
+                DictReq req = new DictReq();
+                req.setId(dictId);
+                req.setDictVal(DateUtil.getTodayStr(DateUtil.base_dt_format));
+                dictService.update(req);
+            }
+            redisUtil.set(lastExecuteDateStrKey, DateUtil.getTodayStr(DateUtil.base_dt_format));
+        } else {
+            logger.info("今日抽奖次数已清零过，跳过执行");
+        }
     }
 
     private void updateImportInfo(TCustomer updateCust, int rouletteTotalTime, String loginName) throws Exception{

@@ -78,8 +78,7 @@ public class OfficeAspect {
 //                if(StringUtils.isBlank(sysUser.getRoleCode())){
 //                    return new MyResp(CodeCons.ERROR, "账号尚未分配角色，请联系系统管理员");
 //                }
-//                boolean doAuth = officeSecure.doAuth();
-//                if(doAuth){
+//                if(officeSecure.doAuth()){
 //                    TSysResource sysResource = sysResourceService.getLikePath(method);
 //                    if(sysResource == null){
 //                        return new MyResp(CodeCons.ERROR, "用户资源权限不足，请联系系统管理员");

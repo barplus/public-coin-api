@@ -74,4 +74,10 @@
         where t.login_name = #{loginName}
     </update>
 
+    <update id="clearLotteryNum">
+        update t_customer t
+        set t.roulette_total_time = 0
+        where 1=1
+    </update>
+
 </mapper>

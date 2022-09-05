@@ -17,4 +17,6 @@ public interface CustomerMapper {
 
     int addUsedNum(@Param("loginName") String loginName, @Param("rouletteUsedTime") Integer addTime);
 
+    int clearLotteryNum();
+
 }

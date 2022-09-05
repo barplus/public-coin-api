@@ -34,7 +34,7 @@ public class FileController {
     public MyResp upload(FileReq req, @RequestParam("file") MultipartFile file, HttpServletRequest request) {
         String fileName = "";
         try {
-            fileName = DateUtil.getTodayStr("yyyyMMddHHmmssSSS") + file.getOriginalFilename();
+            fileName = DateUtil.getTodayStr(DateUtil.ms_dt_format) + file.getOriginalFilename();
             File newFile = new File(picUrl +'/'+ fileName);
             if (!newFile.getParentFile().exists()) {
                 newFile.getParentFile().mkdirs();

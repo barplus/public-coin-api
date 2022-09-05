@@ -65,6 +65,7 @@ public class CommonAspect {
                     return new MyResp(CodeCons.CUSTOMER_NO_EXISTS, "用户不存在或已失效");
                 }
             }
+            customerService.clearLotteryNum();
             String tokenKey = BizCons.SYS_API + loginName + ":token";
             logger.info("loginName={}, request-ip={}", loginName, IpUtils.getIpAddr(request));
             redisUtil.setExpire(token, 1800l);

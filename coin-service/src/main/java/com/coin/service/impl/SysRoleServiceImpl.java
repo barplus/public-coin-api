@@ -19,7 +19,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.validation.BindException;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -39,11 +38,11 @@ public class SysRoleServiceImpl implements SysRoleService {
     public void addSysRole(SysRoleReq req) throws Exception {
         TSysRole role = this.getRoleByCode(req.getRoleCode());
         if(role != null){
-            throw new BindException(CodeCons.ERROR, "角色编码已被占用，请更改");
+            throw new BizException(CodeCons.ERROR, "角色编码已被占用，请更改");
         }
         role = this.getRoleByName(req.getRoleName(), null);
         if(role != null){
-            throw new BindException(CodeCons.ERROR, "角色名称已被占用，请更改");
+            throw new BizException(CodeCons.ERROR, "角色名称已被占用，请更改");
         }
         TSysRole newSysRole = BizUtil.getInsertInfo(new TSysRole(), req.getLoginName(), new Date());
         newSysRole.setRoleCode(req.getRoleCode());
