@@ -13,7 +13,6 @@ public class SysUserRsp implements Serializable {
 
     private Integer id;
     private String loginName;
-    private String loginPass;
     private String roleCode;
     private Integer status;
     private String createUser;

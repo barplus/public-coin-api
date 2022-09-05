@@ -88,24 +88,24 @@ public class SysRoleController {
         return new MyResp(CodeCons.ERROR, "保存失败");
     }
 
-    @PostMapping("/saveRoleResources")
-    @OfficeSecure
-    public MyResp saveRoleResources(@RequestBody SysRoleResourceReq req){
-        logger.info("role-saveRoleResources-req={}", req);
-        try{
-            MyResp valid = ParamUtil.NotBlankValid(req.getRoleCode(), "roleCode");
-            if(valid != null){
-                return valid;
-            }
-            roleService.saveRoleResources(req);
-            return new MyResp(CodeCons.SUCCESS, "保存成功");
-        }catch(BizException e){
-            logger.error("role-saveRoleResources-BizException", e);
-            return new MyResp(e.getCode(), e.getErrMsg());
-        }catch(Exception e){
-            logger.error("role-saveRoleResources-Exception", e);
-        }
-        return new MyResp(CodeCons.ERROR, "保存失败");
-    }
+//    @PostMapping("/saveRoleResources")
+//    @OfficeSecure
+//    public MyResp saveRoleResources(@RequestBody SysRoleResourceReq req){
+//        logger.info("role-saveRoleResources-req={}", req);
+//        try{
+//            MyResp valid = ParamUtil.NotBlankValid(req.getRoleCode(), "roleCode");
+//            if(valid != null){
+//                return valid;
+//            }
+//            roleService.saveRoleResources(req);
+//            return new MyResp(CodeCons.SUCCESS, "保存成功");
+//        }catch(BizException e){
+//            logger.error("role-saveRoleResources-BizException", e);
+//            return new MyResp(e.getCode(), e.getErrMsg());
+//        }catch(Exception e){
+//            logger.error("role-saveRoleResources-Exception", e);
+//        }
+//        return new MyResp(CodeCons.ERROR, "保存失败");
+//    }
 
 }

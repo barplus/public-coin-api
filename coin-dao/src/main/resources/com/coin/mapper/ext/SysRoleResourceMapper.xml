@@ -33,13 +33,18 @@
         </foreach>
     </insert>
 
-    <insert id="delBatch">
+    <delete id="delBatch">
         DELETE FROM t_sys_role_resource
         WHERE role_code = #{roleCode}
         AND resource_code IN
         <foreach collection ="list" item="resourceCode" separator ="," open="(" close=")" index="">
             #{resourceCode}
         </foreach>
-    </insert>
+    </delete>
+
+    <delete id="delAllByRoleCode">
+        DELETE FROM t_sys_role_resource
+        WHERE role_code = #{roleCode}
+    </delete>
 
 </mapper>

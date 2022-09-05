@@ -39,7 +39,9 @@ public class SysDomainServiceImpl implements SysDomainService {
         }
         TSysDomain sysDomain = BizUtil.getInsertInfo(new TSysDomain(), req.getLoginName(), new Date());
         sysDomain.setSysName(req.getSysName());
-        sysDomain.setBelongUser(req.getBelongUser());
+        if(StringUtils.isNotBlank(req.getBelongUser())){
+            sysDomain.setBelongUser(req.getBelongUser());
+        }
         sysDomain.setRemark(req.getRemark());
         sysDomain.setStatus(req.getStatus());
         for(int i=startNum; i<startNum+req.getNum(); i++){
@@ -52,7 +54,9 @@ public class SysDomainServiceImpl implements SysDomainService {
     @Override
     public void update(SysDomainReq req) throws Exception {
         TSysDomain updateDomain = BizUtil.getUpdateInfo(new TSysDomain(), req.getId(), req.getLoginName(), new Date());
-        updateDomain.setBelongUser(req.getBelongUser());
+        if(StringUtils.isNotBlank(req.getBelongUser())){
+            updateDomain.setBelongUser(req.getBelongUser());
+        }
         updateDomain.setRemark(req.getRemark());
         updateDomain.setStatus(req.getStatus());
         tSysDomainMapper.updateByPrimaryKeySelective(updateDomain);

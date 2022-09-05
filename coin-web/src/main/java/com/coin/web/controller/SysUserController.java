@@ -157,4 +157,25 @@ public class SysUserController {
         return new MyResp(CodeCons.ERROR, "修改失败");
     }
 
+    @PostMapping("/add")
+    @OfficeSecure
+    public MyResp add(@RequestBody SysUserReq req){
+        logger.info("user-add-req={}", req);
+        try{
+            MyResp valid = ParamUtil.NotBlankValid(req.getQueryLoginName(), "queryLoginName", req.getLoginPass(), "loginPass",
+                    req.getRoleCode(), "roleCode", req.getStatus(), "status");
+            if(valid != null){
+                return valid;
+            }
+            userService.add(req);
+            return new MyResp(CodeCons.SUCCESS, "添加成功");
+        }catch(BizException e){
+            logger.error("user-add-error", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("user-add-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "添加失败");
+    }
+
 }

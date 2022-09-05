@@ -51,6 +51,7 @@ public class SysResourceServiceImpl implements SysResourceService {
         sysResource.setResourcePath(req.getResourcePath());
         sysResource.setStatus(req.getStatus());
         sysResource.setSortNum(req.getSortNum());
+        sysResource.setParentCode(req.getParentCode());
         tSysResourceMapper.insertSelective(sysResource);
     }
 

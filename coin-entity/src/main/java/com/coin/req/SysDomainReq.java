@@ -6,7 +6,7 @@ import lombok.ToString;
 import java.io.Serializable;
 
 /**
- * 系统用户请求对象
+ * 系统域名地址请求对象
  */
 @Data
 @ToString(callSuper=true)

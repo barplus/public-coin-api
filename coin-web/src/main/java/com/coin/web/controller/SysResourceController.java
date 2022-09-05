@@ -89,7 +89,7 @@ public class SysResourceController {
     }
 
     @PostMapping("/queryList")
-    @OfficeSecure
+    @OfficeSecure(fastQuery = true)
     public MyResp pageList(@RequestBody SysResourceReq req){
         logger.info("resource-queryList-req={}", req);
         try{

@@ -34,6 +34,7 @@ public class SysRoleServiceImpl implements SysRoleService {
     @Resource
     private SysRoleResourceService roleResourceService;
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void addSysRole(SysRoleReq req) throws Exception {
         TSysRole role = this.getRoleByCode(req.getRoleCode());
@@ -50,8 +51,10 @@ public class SysRoleServiceImpl implements SysRoleService {
         newSysRole.setStatus(req.getStatus());
         newSysRole.setSortNum(req.getSortNum());
         sysRoleMapper.insertSelective(newSysRole);
+        this.saveRoleResources(req);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateSysRole(SysRoleReq req) throws Exception {
         TSysRole oldRole = sysRoleMapper.selectByPrimaryKey(req.getId());
@@ -66,16 +69,22 @@ public class SysRoleServiceImpl implements SysRoleService {
         updateRole.setStatus(req.getStatus());
         updateRole.setSortNum(req.getSortNum());
         sysRoleMapper.updateByPrimaryKeySelective(updateRole);
+        this.saveRoleResources(req);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void saveRoleResources(SysRoleResourceReq req) throws Exception {
+    public void saveRoleResources(SysRoleReq req) throws Exception {
+        SysRoleResourceReq roleResourceReq = new SysRoleResourceReq();
+        roleResourceReq.setRoleCode(req.getRoleCode());
+        roleResourceReq.setAddResourceCodes(req.getAddResourceCodes());
+        roleResourceReq.setDelResourceCodes(req.getDelResourceCodes());
         if(StringUtils.isNotBlank(req.getAddResourceCodes())){
-            roleResourceService.addSysRoleResources(req);
+//            roleResourceService.delAllByRoleCode(req.getRoleCode());
+            roleResourceService.addSysRoleResources(roleResourceReq);
         }
         if(StringUtils.isNotBlank(req.getDelResourceCodes())){
-            roleResourceService.delSysRoleResources(req);
+            roleResourceService.delSysRoleResources(roleResourceReq);
         }
     }
 

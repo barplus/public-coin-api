@@ -46,6 +46,11 @@ public class SysRoleResourceServiceImpl implements SysRoleResourceService {
     }
 
     @Override
+    public void delAllByRoleCode(String roleCode) throws Exception {
+        sysRoleResourceMapper.delAllByRoleCode(roleCode);
+    }
+
+    @Override
     public TSysRoleResource getInfoByRoleCodeAndResCode(String roleCode, String resourceCode) throws Exception {
         TSysRoleResourceExample example = new TSysRoleResourceExample();
         example.createCriteria().andRoleCodeEqualTo(roleCode).andResourceCodeEqualTo(resourceCode);

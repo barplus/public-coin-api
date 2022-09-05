@@ -11,16 +11,16 @@
         <!--<script src="/popper.min.js"></script>-->
         <script type="text/javascript" src="/bootstrap-4.6.1-dist/js/bootstrap.min.js"></script>
     </head>
-    <body style="background: #5a6268; background: url('/pic/bg2.gif') no-repeat center center fixed; background-size: cover;">
+    <body style="background: #5a6268; background: url('/pic/bg.gif') no-repeat center center fixed; background-size: cover;">
         <div style="margin-top:320px;">
         </div>
         <div class="container">
             <div class="row">
                 <div class="col-sm-5">
-                    <div id="roll">
+                    <!--<div id="roll">
                         <span id="span1">1111111111111111111111111111111111</span>
                         <span id="span2">2222222222222222222222222222222222</span>
-                    </div>
+                    </div>-->
                 </div>
                 <div class="col-sm-4" style="display: none;">
                     <form class="form-horizontal" action="">
@@ -71,29 +71,27 @@
             alert("登录");
             return false;
         }
-        function getStr(val){
+        /*function getStr(val){
             let str = "";
             for(let i=0;i<34;i++){
                 str += val;
             }
             return " " + str + " ";
         }
-        let spanIndex = 1;
         let val = 3;
         setInterval(function(){
             $("#span"+(val-1)).after('<span id="span'+val+'">'+getStr(val>9?val%10:val)+'</span>');
-            $("#span"+(val-4)).remove();
             val = val +1;
             $("#span"+(val-1)).after('<span id="span'+val+'">'+getStr(val>9?val%10:val)+'</span>');
-            $("#span"+(val-4)).remove();
-            val = val +1;
-            if(spanIndex == 1){
-                spanIndex = 0;
-            } else {
-                spanIndex= 1;
+            $('#roll').liMarquee('update');
+            if(val%30 == 0){
+                for(let i=val-4; i>val-34 && i>0; i--){
+                    $("#span"+i).remove();
+                }
+                doMarquee();
             }
-            doMarquee();
-        }, 30000);
+            val = val +1;
+        }, 10000);
         $(function(){
             doMarquee();
         });
@@ -101,13 +99,13 @@
             let roll = $('#roll').liMarquee();
             roll.liMarquee('destroy');
             let rollWith = $("#roll").width();
-            let speed = rollWith/30;
+            let speed = rollWith/10;
             console.log(speed);
             $('#roll').liMarquee({
                 direction:'left',
                 scrollamount:speed,
                 hoverstop:false
             });
-        }
+        }*/
     </script>
 </html>

@@ -11,4 +11,6 @@ public interface SysRoleResourceMapper {
 
     void delBatch(@Param("roleCode") String roleCode, List<String> resourceCodes) throws Exception;
 
+    void delAllByRoleCode(@Param("roleCode") String roleCode) throws Exception;
+
 }

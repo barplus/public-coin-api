@@ -70,11 +70,31 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
+    public void add(SysUserReq req) throws Exception {
+        TSysUser oldUser = this.getUserByLoginName(req.getQueryLoginName());
+        if(oldUser != null){
+            throw new BizException(CodeCons.ERROR, "登录名已存在，请更换");
+        }
+        TSysUser sysUser = BizUtil.getInsertInfo(new TSysUser(), req.getLoginName(), new Date());
+        sysUser.setLoginName(req.getQueryLoginName());
+        sysUser.setLoginPass(MD5Util.MD5(req.getLoginPass()));
+        sysUser.setRoleCode(req.getRoleCode());
+        sysUser.setStatus(req.getStatus());
+        tSysUserMapper.insertSelective(sysUser);
+    }
+
+    @Override
     public PageInfo<SysUserRsp> pageList(SysUserReq req) throws Exception {
         TSysUserExample example = new TSysUserExample();
         TSysUserExample.Criteria criteria = example.createCriteria();
         if(StringUtils.isNotBlank(req.getQueryLoginName())){
             criteria.andLoginNameEqualTo(req.getQueryLoginName());
+        }
+        if(StringUtils.isNotBlank(req.getRoleCode())){
+            criteria.andRoleCodeEqualTo(req.getRoleCode());
+        }
+        if(req.getStatus() != null){
+            criteria.andStatusEqualTo(req.getStatus());
         }
         example.setOrderByClause(" id desc");
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
