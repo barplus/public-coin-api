@@ -20,8 +20,6 @@ public class TAgentPageConfig implements Serializable {
 
     private String platformRegisterLink;
 
-    private String activitySysName;
-
     private String activityLink;
 
     private String createUser;
@@ -98,14 +96,6 @@ public class TAgentPageConfig implements Serializable {
         this.platformRegisterLink = platformRegisterLink;
     }
 
-    public String getActivitySysName() {
-        return activitySysName;
-    }
-
-    public void setActivitySysName(String activitySysName) {
-        this.activitySysName = activitySysName;
-    }
-
     public String getActivityLink() {
         return activityLink;
     }
@@ -160,7 +150,6 @@ public class TAgentPageConfig implements Serializable {
         sb.append(", letstalk=").append(letstalk);
         sb.append(", agentRegisterLink=").append(agentRegisterLink);
         sb.append(", platformRegisterLink=").append(platformRegisterLink);
-        sb.append(", activitySysName=").append(activitySysName);
         sb.append(", activityLink=").append(activityLink);
         sb.append(", createUser=").append(createUser);
         sb.append(", createDate=").append(createDate);

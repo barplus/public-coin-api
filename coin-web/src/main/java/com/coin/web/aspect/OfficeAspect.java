@@ -54,7 +54,7 @@ public class OfficeAspect {
             String token = StrUtil.getStr(request.getHeader("token"));
             long waitMill = 1688l;
             if(officeSecure.doDownLoad()){
-                waitMill = 168168l;
+                waitMill = 16168l;
                 token = req.getToken();
             }
             String loginName = redisUtil.get(token);

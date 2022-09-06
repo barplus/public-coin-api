@@ -21,9 +21,9 @@ public class EveryDayTask {
     private CustomerService customerService;
 
     /**
-     * 抽奖次数清零-每分钟执行一次
+     * 抽奖次数清零-整点检测，每日执行一次
      */
-    @Scheduled(cron = "0 */1 * * * ?")
+    @Scheduled(cron = "0 0 * * * ?")
     public void clearLotteryNum() {
         String uuid = UUID.randomUUID().toString();
         try{

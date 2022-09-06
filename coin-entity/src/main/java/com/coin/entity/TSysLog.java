@@ -12,7 +12,7 @@ public class TSysLog implements Serializable {
     private String loginName;
     /**1-office 2-api*/
     private Integer sysType;
-    /**日志类型:修改密码-1, 增加抽奖次数-2*/
+    /**日志类型:修改密码-1, 增加抽奖次数-2, 幸运大转盘签到-3 代理落地页配置变化-4、5、6、7*/
     private Integer logType;
     /**修改前值*/
     private String beforeVal;

@@ -1,6 +1,7 @@
 package com.coin.web.controller;
 
 import com.coin.req.FileReq;
+import com.coin.rsp.template.AgentConfigTemplate;
 import com.coin.rsp.template.CustomerTemplate;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.constant.CodeCons;
@@ -88,6 +89,9 @@ public class FileController {
         try{
             if("customer.xlsx".equals(req.getFileName())){
                 FileUtil.exportExcel(new ArrayList<>(), CustomerTemplate.class, req.getFileName(), response);
+            }
+            if("agentConfig.xlsx".equals(req.getFileName())){
+                FileUtil.exportExcel(new ArrayList<>(), AgentConfigTemplate.class, req.getFileName(), response);
             }
         }catch(Exception e){
             logger.error("file-downloadExcel-error", e);

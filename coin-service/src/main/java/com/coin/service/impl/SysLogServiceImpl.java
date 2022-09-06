@@ -4,6 +4,7 @@ import com.coin.entity.TSysLog;
 import com.coin.entity.TSysLogExample;
 import com.coin.mapper.TSysLogMapper;
 import com.coin.req.SysLogReq;
+import com.coin.rsp.SysLogAgentRsp;
 import com.coin.rsp.SysLogRsp;
 import com.coin.service.SysLogService;
 import com.coin.service.enums.LogTypeEnum;
@@ -29,7 +30,7 @@ public class SysLogServiceImpl implements SysLogService {
     private TSysLogMapper tSysLogMapper;
 
     @Override
-    public void addSysLog(String loginName, LogTypeEnum logType, String beforeVal, String changeVal, String afterVal, String logRemark, Integer SysType, String sysUser) throws Exception {
+    public int addSysLog(String loginName, LogTypeEnum logType, String beforeVal, String changeVal, String afterVal, String logRemark, Integer SysType, String sysUser) throws Exception {
         TSysLog log = BizUtil.getInsertInfo(new TSysLog(), sysUser, new Date());
         log.setLoginName(loginName);
         log.setSysType(SysType);
@@ -38,7 +39,8 @@ public class SysLogServiceImpl implements SysLogService {
         log.setChangeVal(changeVal);
         log.setAfterVal(afterVal);
         log.setLogRemark(logRemark);
-        tSysLogMapper.insertSelective(log);
+        int count = tSysLogMapper.insertSelective(log);
+        return count;
     }
 
     @Override
@@ -66,13 +68,16 @@ public class SysLogServiceImpl implements SysLogService {
         if(req.getLogType() != null){
             criteria.andLogTypeEqualTo(req.getLogType());
         }
+        if(StringUtils.isNotBlank(req.getLogTypes())){
+            List<Integer> list = BizUtil.strToListInt(req.getLogTypes(), ",");
+            criteria.andLogTypeIn(list);
+        }
         if(req.getMinDate() != null){
             criteria.andCreateDateGreaterThanOrEqualTo(req.getMinDate());
         }
         if(req.getMaxDate() != null){
             criteria.andCreateDateLessThanOrEqualTo(req.getMaxDate());
         }
-        criteria.andLogTypeIn(Arrays.asList(1, 2));
         example.setOrderByClause(" id desc");
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
         List<TSysLog> list = tSysLogMapper.selectByExample(example);
@@ -81,8 +86,21 @@ public class SysLogServiceImpl implements SysLogService {
         return PageUtil.pageInfo2PageRsp(page, rspList);
     }
 
+    @Override
+    public List<SysLogAgentRsp> getAgentLogList(SysLogReq req) throws Exception {
+        List<SysLogRsp> list = this.pageList(req).getList();
+        List<SysLogAgentRsp> result = list.stream().map(sysLog->this.convertAgnetRsp(sysLog)).collect(Collectors.toList());
+        return result;
+    }
+
     private SysLogRsp convertRsp(TSysLog sysLog){
         SysLogRsp rsp = new SysLogRsp();
+        BeanUtils.copyProperties(sysLog, rsp);
+        return rsp;
+    }
+
+    private SysLogAgentRsp convertAgnetRsp(SysLogRsp sysLog){
+        SysLogAgentRsp rsp = new SysLogAgentRsp();
         BeanUtils.copyProperties(sysLog, rsp);
         return rsp;
     }
