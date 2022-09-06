@@ -99,7 +99,7 @@ public class AgentConfigServiceImpl implements AgentConfigService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void add(AgentConfigReq req) throws Exception {
+    public String add(AgentConfigReq req) throws Exception {
         TAgentPageConfig agentPageConfig = BizUtil.getInsertInfo(new TAgentPageConfig(), req.getLoginName(), new Date());
         agentPageConfig.setUserName(req.getUserName());
         agentPageConfig.setTelegram(req.getTelegram());
@@ -110,7 +110,8 @@ public class AgentConfigServiceImpl implements AgentConfigService {
         agentPageConfig.setPlatformRegisterLink(req.getPlatformRegisterLink());
         TDict dict = dictService.getByTypeAndCode("PAGE_DOMAIN", "AGENT_CONFIG_PAGE");
         int num = Integer.parseInt(dict.getDictValBig()) + 1;
-        agentPageConfig.setActivityLink(dict.getDictVal() + "?code="+num);
+        String activityLink = dict.getDictVal() + "?code="+num;
+        agentPageConfig.setActivityLink(activityLink);
         String afterVal = this.getLogJSONStr(agentPageConfig);
         int count = sysLogService.addSysLog(null, LogTypeEnum.AGENT_CONFIG_ADD, "", "", afterVal, "", 1, req.getLoginName());
         if(count < 1){
@@ -122,6 +123,7 @@ public class AgentConfigServiceImpl implements AgentConfigService {
         dictReq.setDictValBig(""+num);
         dictService.update(dictReq);
         tAgentPageConfigMapper.insertSelective(agentPageConfig);
+        return activityLink;
     }
 
     @Transactional(rollbackFor = Exception.class)

@@ -10,7 +10,7 @@ public interface AgentConfigService {
 
     PageInfo<AgentConfigRsp> pageList(AgentConfigReq req) throws Exception;
     AgentConfigRsp getByAgentCode(AgentConfigReq req) throws Exception;
-    void add(AgentConfigReq req) throws Exception;
+    String add(AgentConfigReq req) throws Exception;
     void update(AgentConfigReq req) throws Exception;
     void delete(Integer id, String updateUser) throws Exception;
     void importAgentConfigList(List<AgentConfigRsp> list, String createUser, String fileName) throws Exception;

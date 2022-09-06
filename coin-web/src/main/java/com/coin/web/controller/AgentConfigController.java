@@ -43,8 +43,8 @@ public class AgentConfigController {
             if(valid != null){
                 return valid;
             }
-            agentConfigService.add(req);
-            return new MyResp(CodeCons.SUCCESS, "保存成功");
+            String activityLink = agentConfigService.add(req);
+            return new MyResp(CodeCons.SUCCESS, "保存成功", activityLink);
         }catch(BizException e){
             logger.error("agentConfig-add-e", e);
             return new MyResp(e.getCode(), e.getErrMsg());

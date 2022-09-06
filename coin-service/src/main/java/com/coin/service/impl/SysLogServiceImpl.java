@@ -78,7 +78,11 @@ public class SysLogServiceImpl implements SysLogService {
         if(req.getMaxDate() != null){
             criteria.andCreateDateLessThanOrEqualTo(req.getMaxDate());
         }
-        example.setOrderByClause(" id desc");
+        if(StringUtils.isNotBlank(req.getOrderBy())){
+            example.setOrderByClause(req.getOrderBy());
+        } else {
+            example.setOrderByClause(" id desc");
+        }
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
         List<TSysLog> list = tSysLogMapper.selectByExample(example);
         PageInfo<TSysLog> page = new PageInfo<>(list);
