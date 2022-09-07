@@ -12,6 +12,7 @@ import com.coin.service.util.DateUtil;
 import com.coin.service.util.ParamUtil;
 import com.coin.web.annotation.CommonSecure;
 import com.coin.web.annotation.OfficeSecure;
+import com.coin.web.utils.FileUtil;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.List;
 
@@ -55,7 +57,7 @@ public class AgentConfigController {
     }
 
     @PostMapping("/getByAgentCode")
-    @CommonSecure(fastQuery = true)
+    @CommonSecure(needLogin = false)
     public MyResp getByAgentCode(@RequestBody AgentConfigReq req){
         logger.info("agentConfig-getByAgentCode-req={}", req);
         try{
@@ -159,6 +161,25 @@ public class AgentConfigController {
             logger.error("custPrize-pageDatas-Exception", e);
         }
         return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
+    @RequestMapping("/exportDatas")
+    @OfficeSecure(doDownLoad = true)
+    public MyResp exportDatas(AgentConfigReq req, HttpServletResponse response){
+        logger.info("agentConfig-exportDatas-req={}", req);
+        try{
+            req.setPageNum(1);
+            req.setPageSize(20000);
+            PageInfo<AgentConfigRsp> page = agentConfigService.pageList(req);
+            List<AgentConfigRsp> rsps = page.getList();
+            FileUtil.exportExcel(rsps, AgentConfigRsp.class, DateUtil.getTodayStr()+"代理招商配置.xlsx", response);
+        }catch(BizException e){
+            logger.error("agentConfig-exportDatas-BizException", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("agentConfig-exportDatas-Exception", e);
+        }
+        return new MyResp(CodeCons.ERROR, "导出失败");
     }
 
 }

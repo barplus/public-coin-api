@@ -54,7 +54,7 @@ public class FileController {
     }
 
     @RequestMapping("/download")
-    @OfficeSecure
+    @OfficeSecure(doDownLoad = true)
     public void download(FileReq req, HttpServletResponse response) {
         try {
             MyResp valid = ParamUtil.NotBlankValid(req.getFileName(), "文件名");

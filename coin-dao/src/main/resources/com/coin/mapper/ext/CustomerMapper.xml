@@ -76,7 +76,7 @@
 
     <update id="clearLotteryNum">
         update t_customer t
-        set t.roulette_total_time = 0
+        set t.roulette_total_time = t.roulette_used_time
         where 1=1
     </update>
 

@@ -19,6 +19,7 @@ public class SysLogRsp implements Serializable {
     private Integer logType;
     @Excel(name = "操作前", width = 25, orderNum = "4")
     private String beforeVal;
+    private String changeVal;
     @Excel(name = "操作后", width = 25, orderNum = "5")
     private String afterVal;
     @Excel(name = "操作人", width = 20, orderNum = "7")

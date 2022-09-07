@@ -1,7 +1,6 @@
 package com.coin.web.controller;
 
 import com.coin.req.SysRoleReq;
-import com.coin.req.SysRoleResourceReq;
 import com.coin.rsp.SysRoleRsp;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.SysRoleService;
