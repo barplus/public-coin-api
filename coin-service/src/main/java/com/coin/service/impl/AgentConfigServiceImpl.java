@@ -165,8 +165,8 @@ public class AgentConfigServiceImpl implements AgentConfigService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void importAgentConfigList(List<AgentConfigRsp> list, String createUser, String fileName) throws Exception {
-        if(list.size() == 0 || list.size() > 1000){
-            throw new BizException(CodeCons.ERROR, "请将单次上传的数量控制在1-1000条之间");
+        if(list.size() == 0 || list.size() > 200){
+            throw new BizException(CodeCons.ERROR, "请将单次上传的数量控制在1-200条之间");
         }
         int count = sysLogService.addSysLog(null, LogTypeEnum.AGENT_CONFIG_BATCH_IMPORT, null, fileName, "", "", 1, createUser);
         if(count < 1){
