@@ -1,6 +1,9 @@
 package com.coin.service.impl;
 
-import com.coin.entity.*;
+import com.coin.entity.TCustPrize;
+import com.coin.entity.TCustPrizeExample;
+import com.coin.entity.TCustomer;
+import com.coin.entity.TPrize;
 import com.coin.mapper.TCustPrizeMapper;
 import com.coin.mapper.TPrizeMapper;
 import com.coin.mapper.ext.CustPrizeMapper;
@@ -243,6 +246,14 @@ public class CustPrizeServiceImpl implements CustPrizeService {
         custPrize.setLoginName(loginName);
         custPrize.setBillNo(DateUtil.getTodayStr(DateUtil.ms_dt_format)+BizUtil.getStringRandom(4, 0));
         return tCustPrizeMapper.insertSelective(custPrize);
+    }
+
+    @Override
+    public int countTodayLottery(String loginName) throws Exception {
+        Date today = DateUtil.getNoTimeDate(new Date());
+        TCustPrizeExample example = new TCustPrizeExample();
+        example.createCriteria().andLoginNameEqualTo(loginName).andCreateDateGreaterThanOrEqualTo(today);
+        return tCustPrizeMapper.selectByExample(example).size();
     }
 
     private TCustPrize getFakeCustPrize(){

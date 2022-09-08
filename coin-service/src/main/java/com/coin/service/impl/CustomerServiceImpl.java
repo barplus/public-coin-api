@@ -74,11 +74,8 @@ public class CustomerServiceImpl implements CustomerService {
         rsp.setRouletteSurplusTime(rsp.getRouletteTotalTime() - rsp.getRouletteUsedTime());
         if(fill){
             rsp.setRouletteSignTime(0);
-            TSysLog sysLog = sysLogService.getLastByLoginNameAndType(loginName, LogTypeEnum.EVERYDAY_SIGN);
-            Date today = DateUtil.getNoTimeDate(new Date());
-            if(sysLog != null && sysLog.getCreateDate().compareTo(today) > -1){
-                rsp.setRouletteSignTime(1);
-            }
+            int num = this.sumTodaySign(loginName);
+            rsp.setRouletteSignTime(num);
             String lastExecuteDateStr = dictService.getValByTypeAndCode("MAX_NUM", "MAX_LOTTERY_TIME_EVERYDAY");
             rsp.setEveryDayMaxTime(Integer.parseInt(lastExecuteDateStr));
         }
@@ -114,6 +111,16 @@ public class CustomerServiceImpl implements CustomerService {
         return list;
     }
 
+    @Override
+    public int sumTodaySign(String loginName) throws Exception {
+        TSysLog sysLog = sysLogService.getLastByLoginNameAndType(loginName, LogTypeEnum.EVERYDAY_SIGN);
+        Date today = DateUtil.getNoTimeDate(new Date());
+        if(sysLog != null && sysLog.getCreateDate().compareTo(today) > -1){
+            return 1;
+        }
+        return 0;
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateTotalNum(CustomerReq req) throws Exception {
@@ -125,8 +132,12 @@ public class CustomerServiceImpl implements CustomerService {
             throw new BizException("9999", "用户剩余次数不足以扣减，请确认");
         }
         String numStr = dictService.getValByTypeAndCode("MAX_NUM", "MAX_LOTTERY_TIME_EVERYDAY");
-        if(req.getRouletteTotalTime().intValue() + customer.getRouletteTotalTime() > Integer.parseInt(numStr)){
-            throw new BizException("9999", "每日抽奖次数不能超过上限:"+Integer.parseInt(numStr));
+        int todayMaxNum = Integer.parseInt(numStr);
+        int todayUsedNum = custPrizeService.countTodayLottery(req.getLoginName());
+        int todaySignNum = this.sumTodaySign(req.getLoginName());
+        boolean isNumOut = customer.getRouletteTotalTime() + req.getRouletteTotalTime().intValue() > customer.getRouletteUsedTime() - todayUsedNum + todayMaxNum + todaySignNum;
+        if(isNumOut){
+            throw new BizException("9999", "新增抽奖次数不能超过每日上限:"+Integer.parseInt(numStr));
         }
         TCustomer updateCustomer = BizUtil.getUpdateInfo(new TCustomer(), req.getId(), req.getLoginName(), new Date());
         updateCustomer.setRouletteTotalTime(req.getRouletteTotalTime());
@@ -218,9 +229,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void everydaySign(CustomerReq req) throws Exception {
-        TSysLog sysLog = sysLogService.getLastByLoginNameAndType(req.getLoginName(), LogTypeEnum.EVERYDAY_SIGN);
-        Date today = DateUtil.getNoTimeDate(new Date());
-        if(sysLog != null && sysLog.getCreateDate().compareTo(today) > -1){
+        int num = this.sumTodaySign(req.getLoginName());
+        if(num == 1){
             throw new BizException(CodeCons.ERROR, "请不要重复签到");
         }
         TCustomer customer = this.getInfoByLoginName(req.getLoginName());

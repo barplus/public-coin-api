@@ -15,6 +15,7 @@ public interface CustomerService {
     PageInfo<CustomerRsp> pageList(CustomerReq req) throws Exception;
     List<TCustomer> getList(CustomerReq req) throws Exception;
 
+    int sumTodaySign(String loginName) throws Exception;
     void updateTotalNum(CustomerReq req) throws Exception;
     void updateWallet(CustomerReq req) throws Exception;
     void updateIsLogin(String loginName) throws Exception;

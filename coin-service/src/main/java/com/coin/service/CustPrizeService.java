@@ -27,4 +27,6 @@ public interface CustPrizeService {
 
     int addCustPrize(String loginName, TPrize prize) throws Exception;
 
+    int countTodayLottery(String loginName) throws Exception;
+
 }
