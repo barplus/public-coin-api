@@ -160,13 +160,12 @@ public class SysResourceServiceImpl implements SysResourceService {
     private SysResourceRsp convertRsp(TSysResource sysResource, String roleCode){
         SysResourceRsp rsp = new SysResourceRsp();
         BeanUtils.copyProperties(sysResource, rsp);
+        rsp.setIsAuth(0);
         if(StringUtils.isNotBlank(roleCode)){
             try{
                 TSysRoleResource roleResource = roleResourceService.getInfoByRoleCodeAndResCode(roleCode, sysResource.getResourceCode());
                 if(roleResource != null){
                     rsp.setIsAuth(1);
-                } else {
-                    rsp.setIsAuth(0);
                 }
             }catch(Exception e){
                 logger.error("SysResourceRsp-convertRsp-e", e);

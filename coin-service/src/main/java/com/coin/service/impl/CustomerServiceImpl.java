@@ -289,7 +289,7 @@ public class CustomerServiceImpl implements CustomerService {
             }
             redisUtil.set(lastExecuteDateStrKey, DateUtil.getTodayStr(DateUtil.base_dt_format), 24*60*60*1000);
         } else {
-            logger.info("今日抽奖次数已清零过，跳过执行");
+            logger.info("每日抽奖次数已清零过，跳过执行");
         }
     }
 
