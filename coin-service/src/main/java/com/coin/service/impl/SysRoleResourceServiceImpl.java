@@ -30,10 +30,13 @@ public class SysRoleResourceServiceImpl implements SysRoleResourceService {
         List<String> resourceCodeList = Arrays.asList(addResourceCodes);
         List<TSysRoleResource> datas = new ArrayList<>(resourceCodeList.size());
         for(String resourceCode:resourceCodeList){
-            TSysRoleResource newRoleResource = BizUtil.getInsertInfo(new TSysRoleResource(), req.getLoginName(), new Date());
-            newRoleResource.setRoleCode(req.getRoleCode());
-            newRoleResource.setResourceCode(resourceCode);
-            datas.add(newRoleResource);
+            TSysRoleResource oldRoleResource = this.getInfoByRoleCodeAndResCode(req.getRoleCode(), resourceCode);
+            if(oldRoleResource == null){
+                TSysRoleResource newRoleResource = BizUtil.getInsertInfo(new TSysRoleResource(), req.getLoginName(), new Date());
+                newRoleResource.setRoleCode(req.getRoleCode());
+                newRoleResource.setResourceCode(resourceCode);
+                datas.add(newRoleResource);
+            }
         }
         sysRoleResourceMapper.addBatch(datas);
     }

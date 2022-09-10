@@ -68,7 +68,7 @@ public class OfficeAspect {
                 waitMill = 168l;
             }
             if(!redisUtil.setNx(loginName+method, "1", waitMill)){
-                return new MyResp(CodeCons.ERROR, "请求太快，请稍后");
+                return new MyResp(CodeCons.REQ_TOO_FAST, "请求太快，请稍后");
             }
             if(officeSecure.needLogin()){
                 TSysUser sysUser = sysUserService.getUserByLoginName(loginName);

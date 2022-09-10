@@ -57,7 +57,7 @@ public class CommonAspect {
                 loginName = req.getLoginName();
             }
             if(!redisUtil.setNx(loginName+method, "1", waitMill)){
-                return new MyResp(CodeCons.ERROR, "请求太快，请稍后");
+                return new MyResp(CodeCons.REQ_TOO_FAST, "请求太快，请稍后");
             }
             if(commonSecure.needLogin()){
                 TCustomer customer = customerService.getInfoByLoginName(loginName);

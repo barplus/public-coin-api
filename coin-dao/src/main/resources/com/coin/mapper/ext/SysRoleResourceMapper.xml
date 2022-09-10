@@ -25,10 +25,10 @@
             (
             #{sysRoleResource.roleCode},
             #{sysRoleResource.resourceCode},
-            #{customer.createUser},
-            #{customer.createDate},
-            #{customer.updateUser},
-            #{customer.updateDate}
+            #{sysRoleResource.createUser},
+            #{sysRoleResource.createDate},
+            #{sysRoleResource.updateUser},
+            #{sysRoleResource.updateDate}
             )
         </foreach>
     </insert>
@@ -37,7 +37,7 @@
         DELETE FROM t_sys_role_resource
         WHERE role_code = #{roleCode}
         AND resource_code IN
-        <foreach collection ="list" item="resourceCode" separator ="," open="(" close=")" index="">
+        <foreach collection ="resourceCodes" item="resourceCode" separator ="," open="(" close=")" index="">
             #{resourceCode}
         </foreach>
     </delete>

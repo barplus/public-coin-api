@@ -73,7 +73,6 @@ public class CustomerServiceImpl implements CustomerService {
         CustomerRsp rsp = this.convertRsp(customer);
         rsp.setRouletteSurplusTime(rsp.getRouletteTotalTime() - rsp.getRouletteUsedTime());
         if(fill){
-            rsp.setRouletteSignTime(0);
             int num = this.sumTodaySign(loginName);
             rsp.setRouletteSignTime(num);
             String lastExecuteDateStr = dictService.getValByTypeAndCode("MAX_NUM", "MAX_LOTTERY_TIME_EVERYDAY");

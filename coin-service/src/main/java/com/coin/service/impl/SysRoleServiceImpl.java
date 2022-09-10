@@ -78,6 +78,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         roleResourceReq.setRoleCode(req.getRoleCode());
         roleResourceReq.setAddResourceCodes(req.getAddResourceCodes());
         roleResourceReq.setDelResourceCodes(req.getDelResourceCodes());
+        roleResourceReq.setLoginName(req.getLoginName());
         if(StringUtils.isNotBlank(req.getAddResourceCodes())){
 //            roleResourceService.delAllByRoleCode(req.getRoleCode());
             roleResourceService.addSysRoleResources(roleResourceReq);
