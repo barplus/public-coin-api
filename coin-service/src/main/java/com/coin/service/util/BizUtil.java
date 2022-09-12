@@ -177,6 +177,20 @@ public class BizUtil {
     }
 
     /**
+     * 数组转Set
+     * @param ts
+     * @param <T>
+     * @return
+     */
+    public static <T> Set<T> arrayToSet(T[] ts){
+        Set<T> set = new HashSet<>();
+        for(T t:ts){
+            set.add(t);
+        }
+        return set;
+    }
+
+    /**
      * 对一个字符串进行遮罩，如果长度小于4返回原字符串
      * @param oldStr
      * @return
