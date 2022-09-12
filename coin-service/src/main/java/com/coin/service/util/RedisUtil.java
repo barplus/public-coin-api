@@ -70,5 +70,24 @@ public class RedisUtil {
         return redisTemplate.opsForValue().setIfAbsent(namespace + key, val, Duration.ofMillis(mill));
     }
 
+    public boolean setSetVal(String key, String val){
+        Long count = redisTemplate.opsForSet().add(namespace + key, val);
+        return count > 0;
+    }
+
+    public Set getSetVal(String key){
+        Set set = redisTemplate.opsForSet().members(namespace + key);
+        return set;
+    }
+
+    public long getSetSize(String key){
+        long setLength = redisTemplate.opsForSet().size(namespace + key);
+        return setLength;
+    }
+
+    public boolean removeSetSize(String key, String value){
+        long removeCount = redisTemplate.opsForSet().remove(namespace + key,value);
+        return removeCount > 0;
+    }
 
 }

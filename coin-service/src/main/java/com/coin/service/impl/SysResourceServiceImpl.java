@@ -142,7 +142,7 @@ public class SysResourceServiceImpl implements SysResourceService {
     }
 
     @Override
-    public List<SysResourceRsp> getAllSysResources(String roleCode) throws Exception {
+    public List<SysResourceRsp> getAllSysResources(String roleCode, Integer onlyAuth) throws Exception {
         List<SysResourceRsp> dList = this.getSysResourcesByType("D", roleCode);
         List<SysResourceRsp> mList = this.getSysResourcesByType("M", roleCode);
         List<SysResourceRsp> bList = this.getSysResourcesByType("B", roleCode);
@@ -153,6 +153,10 @@ public class SysResourceServiceImpl implements SysResourceService {
         Map<String, List<SysResourceRsp>> mGroup = mList.stream().collect(Collectors.groupingBy(SysResourceRsp::getParentCode));
         for(SysResourceRsp rsp:dList){
             rsp.setChildList(mGroup.get(rsp.getResourceCode()));
+        }
+        if(onlyAuth != null && onlyAuth.intValue() == 1){
+            List<SysResourceRsp> result = dList.stream().filter(obj->obj.getIsAuth().intValue() == 1).collect(Collectors.toList());
+            return result;
         }
         return dList;
     }

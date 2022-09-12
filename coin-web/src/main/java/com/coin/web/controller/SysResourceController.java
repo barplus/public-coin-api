@@ -109,7 +109,7 @@ public class SysResourceController {
     public MyResp getAllSysResources(@RequestBody SysResourceReq req){
         logger.info("resource-getAllSysResources-req={}", req);
         try{
-            List<SysResourceRsp> list = resourceService.getAllSysResources(req.getRoleCode());
+            List<SysResourceRsp> list = resourceService.getAllSysResources(req.getRoleCode(), req.getOnlyAuth());
             return new MyResp(CodeCons.SUCCESS, "", list);
         }catch(BizException e){
             logger.error("resource-getAllSysResources-BizException", e);

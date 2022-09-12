@@ -15,6 +15,6 @@ public interface SysResourceService {
     TSysResource getByPath(String path) throws Exception;
     List<SysResourceRsp> getSysResources(SysResourceReq req) throws Exception;
     List<SysResourceRsp> getSysResourcesByType(String resourceType, String roleCode) throws Exception;
-    List<SysResourceRsp> getAllSysResources(String roleCode) throws Exception;
+    List<SysResourceRsp> getAllSysResources(String roleCode, Integer onlyAuth) throws Exception;
 
 }
