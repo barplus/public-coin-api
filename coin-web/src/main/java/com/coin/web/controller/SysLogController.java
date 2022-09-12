@@ -101,7 +101,7 @@ public class SysLogController {
             req.setPageNum(1);
             req.setPageSize(20000);
             req.setLogTypes("4,5,6,7");
-            req.setOrderBy(" id");
+            req.setOrderBy(" id desc");
             List<SysLogAgentRsp> list = sysLogService.getAgentLogList(req);
             FileUtil.exportExcel(list, SysLogAgentRsp.class, "操作日志.xlsx", response);
         }catch(BizException e){
