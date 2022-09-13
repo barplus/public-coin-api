@@ -1,8 +1,12 @@
 package com.coin.web.aspect;
 
+import com.coin.entity.TDict;
+import com.coin.entity.TSysResource;
+import com.coin.entity.TSysRoleResource;
 import com.coin.entity.TSysUser;
 import com.coin.req.CommonReq;
 import com.coin.service.BizEntity.MyResp;
+import com.coin.service.DictService;
 import com.coin.service.SysResourceService;
 import com.coin.service.SysRoleResourceService;
 import com.coin.service.SysUserService;
@@ -14,6 +18,7 @@ import com.coin.service.util.StrUtil;
 import com.coin.web.annotation.OfficeSecure;
 import com.coin.web.utils.IpUtils;
 import com.coin.web.utils.ParamUtil;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -37,6 +42,8 @@ public class OfficeAspect {
     @Resource
     private SysUserService sysUserService;
     @Resource
+    private DictService dictService;
+    @Resource
     private SysResourceService sysResourceService;
     @Resource
     private SysRoleResourceService sysRoleResourceService;
@@ -50,11 +57,11 @@ public class OfficeAspect {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
             String method = request.getServletPath();
-
+            this.authReqIp(IpUtils.getIpAddr(request));
             String token = StrUtil.getStr(request.getHeader("token"));
-            long waitMill = 1688l;
+            long waitMill = BizCons.SYS_REQ_INTERVAL_M;
             if(officeSecure.doDownLoad()){
-                waitMill = 16168l;
+                waitMill = BizCons.SYS_REQ_INTERVAL_L;
                 token = req.getToken();
             }
             String loginName = redisUtil.get(token);
@@ -65,7 +72,7 @@ public class OfficeAspect {
                 loginName = req.getLoginName();
             }
             if(officeSecure.fastQuery()){
-                waitMill = 168l;
+                waitMill = BizCons.SYS_REQ_INTERVAL_S;
             }
             if(!redisUtil.setNx(loginName+method, "1", waitMill)){
                 return new MyResp(CodeCons.REQ_TOO_FAST, "请求太快，请稍后");
@@ -78,21 +85,22 @@ public class OfficeAspect {
 //                if(StringUtils.isBlank(sysUser.getRoleCode())){
 //                    return new MyResp(CodeCons.ERROR, "账号尚未分配角色，请联系系统管理员");
 //                }
-//                if(officeSecure.doAuth()){
-//                    TSysResource sysResource = sysResourceService.getLikePath(method);
+//                if(officeSecure.needAuth()){
+//                    TSysResource sysResource = sysResourceService.getByPath(method);
 //                    if(sysResource == null){
-//                        return new MyResp(CodeCons.ERROR, "用户资源权限不足，请联系系统管理员");
-//                    }
-//                    TSysRoleResource roleResource = sysRoleResourceService.getInfoByRoleCodeAndResCode(sysUser.getRoleCode(), sysResource.getResourceCode());
-//                    if(roleResource == null){
-//                        return new MyResp(CodeCons.ERROR, "用户角色权限不足，请联系系统管理员");
+//                        logger.info("officeSecure-权限认证-当前权限未控制，直接放行："+method);
+//                    } else {
+//                        TSysRoleResource roleResource = sysRoleResourceService.getInfoByRoleCodeAndResCode(sysUser.getRoleCode(), sysResource.getResourceCode());
+//                        if(roleResource == null){
+//                            return new MyResp(CodeCons.ERROR, "用户角色权限不足，请联系系统管理员");
+//                        }
 //                    }
 //                }
             }
             String tokenKey = BizCons.SYS_OFFICE + loginName + ":token";
             logger.info("loginName={}, request-ip={}", loginName, IpUtils.getIpAddr(request));
-            redisUtil.setExpire(token, 1800l);
-            redisUtil.setExpire(tokenKey, 1800l);
+            redisUtil.setExpire(token, BizCons.SESSION_OUT_TIME);
+            redisUtil.setExpire(tokenKey, BizCons.SESSION_OUT_TIME);
             req.setLoginName(loginName);
             return pj.proceed();
         } catch (BizException e){
@@ -121,6 +129,20 @@ public class OfficeAspect {
         }
         ParamUtil.xssCheck(object);
         return req;
+    }
+
+    private void authReqIp(String ip){
+        try{
+            TDict dict = dictService.getByTypeAndCode("AUTH_CONFIG", "REQ_IP");
+            if(dict != null && dict.getStatus().intValue() == 1){
+                String[] ips = StrUtil.getStr(dict.getDictValBig()).split(",");
+                if(!ArrayUtils.contains(ips, ip)){
+                    throw new BizException(CodeCons.ERROR, "IP权限不足，请联系管理员添加");
+                }
+            }
+        } catch(Exception e) {
+            throw new BizException(CodeCons.ERROR, "IP权限不足，请联系管理员添加");
+        }
     }
 
 }

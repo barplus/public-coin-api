@@ -125,7 +125,7 @@ public class SysResourceServiceImpl implements SysResourceService {
         if(StringUtils.isNotBlank(req.getResourceName())){
             criteria.andResourceNameEqualTo(req.getResourceName());
         }
-        example.setOrderByClause(" resource_type, sort_num desc");
+        example.setOrderByClause(" resource_type, sort_num");
         List<TSysResource> sysResources = tSysResourceMapper.selectByExample(example);
         List<SysResourceRsp> rspList = sysResources.stream().map(sysResource -> this.convertRsp(sysResource, req.getRoleCode())).collect(Collectors.toList());
         return rspList;

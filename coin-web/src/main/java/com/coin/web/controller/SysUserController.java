@@ -83,8 +83,8 @@ public class SysUserController {
             }
             user.setLoginPass(null);
             String token = MD5Util.MD5(user.getLoginName() + System.currentTimeMillis() + BizUtil.getStringRandom(5, 1));
-            redisUtil.set(token, user.getLoginName(), 1800);
-            redisUtil.set(tokenKey, token, 1800);
+            redisUtil.set(token, user.getLoginName(), BizCons.SESSION_OUT_TIME);
+            redisUtil.set(tokenKey, token, BizCons.SESSION_OUT_TIME);
             return new MyResp(CodeCons.SUCCESS, token, user);
         }catch(Exception e){
             logger.error("user-login-error", e);
@@ -93,10 +93,13 @@ public class SysUserController {
     }
 
     @PostMapping("/logout")
-    @OfficeSecure
+    @OfficeSecure(needLogin = false)
     public MyResp logout(@RequestBody SysUserReq req){
         logger.info("user-logout-req={}", req);
         try{
+            if(req.getLoginName() == null){
+                return new MyResp(CodeCons.SUCCESS, "退出成功");
+            }
             TSysUser user = userService.getUserByLoginName(req.getLoginName());
             String tokenKey = BizCons.SYS_OFFICE + user.getLoginName()+":token";
             if(redisUtil.get(tokenKey) != null){

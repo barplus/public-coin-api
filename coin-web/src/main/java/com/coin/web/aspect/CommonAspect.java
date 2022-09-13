@@ -49,9 +49,9 @@ public class CommonAspect {
             if(StringUtils.isBlank(loginName) && commonSecure.needLogin()){
                 return new MyResp(CodeCons.LOGIN_OUT, "登录已过期，请重新登录");
             }
-            long waitMill = 1688l;
+            long waitMill = BizCons.SYS_REQ_INTERVAL_M;
             if(commonSecure.fastQuery()){
-                waitMill = 168l;
+                waitMill = BizCons.SYS_REQ_INTERVAL_S;
             }
             if(!commonSecure.needLogin()){
                 loginName = req.getLoginName();
@@ -68,8 +68,8 @@ public class CommonAspect {
             customerService.clearLotteryNum();
             String tokenKey = BizCons.SYS_API + loginName + ":token";
             logger.info("loginName={}, request-ip={}", loginName, IpUtils.getIpAddr(request));
-            redisUtil.setExpire(token, 1800l);
-            redisUtil.setExpire(tokenKey, 1800l);
+            redisUtil.setExpire(token, BizCons.SESSION_OUT_TIME);
+            redisUtil.setExpire(tokenKey, BizCons.SESSION_OUT_TIME);
             req.setLoginName(loginName);
             return pj.proceed();
         } catch (BizException e){

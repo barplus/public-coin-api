@@ -68,6 +68,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         updateRole.setStatus(req.getStatus());
         updateRole.setSortNum(req.getSortNum());
         sysRoleMapper.updateByPrimaryKeySelective(updateRole);
+        req.setRoleCode(oldRole.getRoleCode());
         this.saveRoleResources(req);
     }
 

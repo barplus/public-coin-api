@@ -74,8 +74,8 @@ public class CustomerController {
                 redisUtil.remove(tokenKey);
             }
             String token = MD5Util.MD5(customer.getLoginName() + System.currentTimeMillis() + BizUtil.getStringRandom(5, 1));
-            redisUtil.set(token, customer.getLoginName(), 1800);
-            redisUtil.set(tokenKey, token, 1800);
+            redisUtil.set(token, customer.getLoginName(), BizCons.SESSION_OUT_TIME);
+            redisUtil.set(tokenKey, token, BizCons.SESSION_OUT_TIME);
             CustomerRsp rsp = customerService.getByLoginName(customer.getLoginName(), true);
             return new MyResp(CodeCons.SUCCESS, token, rsp);
         }catch(Exception e){
