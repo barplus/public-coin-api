@@ -18,6 +18,8 @@ public class ContestReq extends CommonReq implements Serializable {
     private String contestType;
     private String contestName;
     private Date contestDate;
+    private Date contestDateMin;
+    private Date contestDateMax;
     private String teamFirst;
     private String teamSecond;
     private Integer status;
