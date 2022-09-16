@@ -132,11 +132,12 @@ public class CustomerServiceImpl implements CustomerService {
         }
         String numStr = dictService.getValByTypeAndCode("MAX_NUM", "MAX_LOTTERY_TIME_EVERYDAY");
         int todayMaxNum = Integer.parseInt(numStr);
-        int todayUsedNum = custPrizeService.countTodayLottery(req.getLoginName());
-        int todaySignNum = this.sumTodaySign(req.getLoginName());
+        int todayUsedNum = custPrizeService.countTodayLottery(customer.getLoginName());
+        int todaySignNum = this.sumTodaySign(customer.getLoginName());
         boolean isNumOut = customer.getRouletteTotalTime() + req.getRouletteTotalTime().intValue() > customer.getRouletteUsedTime() - todayUsedNum + todayMaxNum + todaySignNum;
         if(isNumOut){
-            throw new BizException("9999", "新增抽奖次数不能超过每日上限:"+Integer.parseInt(numStr));
+            int num = customer.getRouletteUsedTime() - todayUsedNum + todayMaxNum + todaySignNum - customer.getRouletteTotalTime();
+            throw new BizException("9999", "新增抽奖次数不能超过每日上限:"+Integer.parseInt(numStr)+",当前剩余："+(num>0?num:0));
         }
         TCustomer updateCustomer = BizUtil.getUpdateInfo(new TCustomer(), req.getId(), req.getLoginName(), new Date());
         updateCustomer.setRouletteTotalTime(req.getRouletteTotalTime());
