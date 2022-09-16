@@ -67,7 +67,7 @@ public class CustomerController {
             } else if(!MD5Util.MD5(req.getLoginPass()).equals(customer.getLoginPass())){
                 return new MyResp(CodeCons.ERROR, "登录失败，请输入正确专用码");
             }
-            String tokenKey = BizCons.SYS_API + customer.getLoginName() + ":token";
+            String tokenKey = RedisUtil.getApiKey(customer.getLoginName() + ":token");
             String oldToken = redisUtil.get(tokenKey);
             if(StringUtils.isNotBlank(oldToken)){
                 redisUtil.remove(oldToken);

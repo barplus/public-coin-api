@@ -66,7 +66,7 @@ public class CommonAspect {
                 }
             }
             customerService.clearLotteryNum();
-            String tokenKey = BizCons.SYS_API + loginName + ":token";
+            String tokenKey = RedisUtil.getApiKey(loginName + ":token");
             logger.info("loginName={}, request-ip={}", loginName, IpUtils.getIpAddr(request));
             redisUtil.setExpire(token, BizCons.SESSION_OUT_TIME);
             redisUtil.setExpire(tokenKey, BizCons.SESSION_OUT_TIME);

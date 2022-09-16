@@ -75,7 +75,7 @@ public class SysUserController {
             if(user.getStatus().intValue() == 0){
                 return new MyResp(CodeCons.ERROR, "用户已被禁用");
             }
-            String tokenKey = BizCons.SYS_OFFICE + user.getLoginName() + ":token";
+            String tokenKey = RedisUtil.getOfficeKey(user.getLoginName() + ":token");
             String oldToken = redisUtil.get(tokenKey);
             if(StringUtils.isNotBlank(oldToken)){
                 redisUtil.remove(oldToken);
@@ -101,7 +101,7 @@ public class SysUserController {
                 return new MyResp(CodeCons.SUCCESS, "退出成功");
             }
             TSysUser user = userService.getUserByLoginName(req.getLoginName());
-            String tokenKey = BizCons.SYS_OFFICE + user.getLoginName()+":token";
+            String tokenKey = RedisUtil.getOfficeKey(user.getLoginName() + ":token");
             if(redisUtil.get(tokenKey) != null){
                 String oldToken = redisUtil.get(redisUtil.get(tokenKey));
                 if(oldToken != null){

@@ -1,5 +1,6 @@
 package com.coin.service.util;
 
+import com.coin.service.constant.BizCons;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,14 @@ public class RedisUtil {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
     private String namespace = "public-api-office:";
+
+    public static String getOfficeKey(String keyStr){
+        return BizCons.SYS_OFFICE + keyStr;
+    }
+
+    public static String getApiKey(String keyStr){
+        return BizCons.SYS_API + keyStr;
+    }
 
     public void set(String k, Object v, long time) {
         String key = namespace + k;
