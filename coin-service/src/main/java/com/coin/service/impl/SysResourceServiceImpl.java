@@ -146,6 +146,11 @@ public class SysResourceServiceImpl implements SysResourceService {
         List<SysResourceRsp> dList = this.getSysResourcesByType("D", roleCode);
         List<SysResourceRsp> mList = this.getSysResourcesByType("M", roleCode);
         List<SysResourceRsp> bList = this.getSysResourcesByType("B", roleCode);
+        if(onlyAuth != null && onlyAuth.intValue() == 1){
+            dList = dList.stream().filter(d->d.getIsAuth().intValue() == 1).collect(Collectors.toList());
+            mList = mList.stream().filter(m->m.getIsAuth().intValue() == 1).collect(Collectors.toList());
+            bList = bList.stream().filter(b->b.getIsAuth().intValue() == 1).collect(Collectors.toList());
+        }
         Map<String, List<SysResourceRsp>> bGroup = bList.stream().collect(Collectors.groupingBy(SysResourceRsp::getParentCode));
         for(SysResourceRsp rsp:mList){
             rsp.setChildList(bGroup.get(rsp.getResourceCode()));
@@ -153,10 +158,6 @@ public class SysResourceServiceImpl implements SysResourceService {
         Map<String, List<SysResourceRsp>> mGroup = mList.stream().collect(Collectors.groupingBy(SysResourceRsp::getParentCode));
         for(SysResourceRsp rsp:dList){
             rsp.setChildList(mGroup.get(rsp.getResourceCode()));
-        }
-        if(onlyAuth != null && onlyAuth.intValue() == 1){
-            List<SysResourceRsp> result = dList.stream().filter(obj->obj.getIsAuth().intValue() == 1).collect(Collectors.toList());
-            return result;
         }
         return dList;
     }

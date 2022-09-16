@@ -5,6 +5,7 @@ import com.coin.rsp.template.AgentConfigTemplate;
 import com.coin.rsp.template.CustomerTemplate;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.constant.CodeCons;
+import com.coin.service.util.BizUtil;
 import com.coin.service.util.DateUtil;
 import com.coin.service.util.ParamUtil;
 import com.coin.web.annotation.OfficeSecure;
@@ -35,7 +36,8 @@ public class FileController {
     public MyResp upload(FileReq req, @RequestParam("file") MultipartFile file, HttpServletRequest request) {
         String fileName = "";
         try {
-            fileName = DateUtil.getTodayStr(DateUtil.ms_dt_format) + file.getOriginalFilename();
+            fileName = DateUtil.getTodayStr(DateUtil.ms_dt_format) + BizUtil.getStringRandom(3, 0);
+            logger.info("file-upload-fileName={}, newFileName={}", file.getOriginalFilename(), fileName);
             File newFile = new File(picUrl +'/'+ fileName);
             if (!newFile.getParentFile().exists()) {
                 newFile.getParentFile().mkdirs();
