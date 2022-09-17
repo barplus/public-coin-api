@@ -134,6 +134,14 @@ public class DictServiceImpl implements DictService {
         }
     }
 
+    @Override
+    public void delete(Integer id) throws Exception {
+        TDict dict = tDictMapper.selectByPrimaryKey(id);
+        if("CONTEST_TAG".equals(dict.getDictType())){
+            tDictMapper.deleteByPrimaryKey(id);
+        }
+    }
+
     /**
      * 清除指定类型的字典当前默认项
      * @param dictType 类型

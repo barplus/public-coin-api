@@ -21,4 +21,6 @@ public interface DictService {
 
     void update(DictReq req) throws Exception;
 
+    void delete(Integer id) throws Exception;
+
 }

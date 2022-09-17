@@ -107,4 +107,24 @@ public class DictController {
         return new MyResp(CodeCons.ERROR, "请求失败");
     }
 
+    @PostMapping("/del")
+    @OfficeSecure
+    public MyResp del(@RequestBody DictReq req){
+        logger.info("dict-del-req={}", req);
+        try{
+            MyResp valid = ParamUtil.NotBlankValid(req.getId(), "id");
+            if(valid != null){
+                return valid;
+            }
+            dictService.delete(req.getId());
+            return new MyResp(CodeCons.SUCCESS, "删除成功");
+        }catch(BizException e){
+            logger.error("dict-del-e", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("dict-del-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
 }

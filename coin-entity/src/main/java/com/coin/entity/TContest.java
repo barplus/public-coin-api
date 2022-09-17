@@ -6,15 +6,35 @@ import java.util.Date;
 public class TContest implements Serializable {
     private Integer id;
 
+    private Integer parentId;
+
     private String contestType;
 
     private String contestName;
+
+    private String contestSchedule;
 
     private Date contestDate;
 
     private String teamFirst;
 
+    private String teamFirstPic;
+
     private String teamSecond;
+
+    private String teamSecondPic;
+
+    private Integer isHot;
+
+    private Integer isRecommend;
+
+    private String contestResult;
+
+    private Integer contestPhase;
+
+    private Integer isPublish;
+
+    private Date publishDate;
 
     private Integer status;
 
@@ -38,6 +58,14 @@ public class TContest implements Serializable {
         this.id = id;
     }
 
+    public Integer getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
+    }
+
     public String getContestType() {
         return contestType;
     }
@@ -52,6 +80,14 @@ public class TContest implements Serializable {
 
     public void setContestName(String contestName) {
         this.contestName = contestName;
+    }
+
+    public String getContestSchedule() {
+        return contestSchedule;
+    }
+
+    public void setContestSchedule(String contestSchedule) {
+        this.contestSchedule = contestSchedule;
     }
 
     public Date getContestDate() {
@@ -70,12 +106,76 @@ public class TContest implements Serializable {
         this.teamFirst = teamFirst;
     }
 
+    public String getTeamFirstPic() {
+        return teamFirstPic;
+    }
+
+    public void setTeamFirstPic(String teamFirstPic) {
+        this.teamFirstPic = teamFirstPic;
+    }
+
     public String getTeamSecond() {
         return teamSecond;
     }
 
     public void setTeamSecond(String teamSecond) {
         this.teamSecond = teamSecond;
+    }
+
+    public String getTeamSecondPic() {
+        return teamSecondPic;
+    }
+
+    public void setTeamSecondPic(String teamSecondPic) {
+        this.teamSecondPic = teamSecondPic;
+    }
+
+    public Integer getIsHot() {
+        return isHot;
+    }
+
+    public void setIsHot(Integer isHot) {
+        this.isHot = isHot;
+    }
+
+    public Integer getIsRecommend() {
+        return isRecommend;
+    }
+
+    public void setIsRecommend(Integer isRecommend) {
+        this.isRecommend = isRecommend;
+    }
+
+    public String getContestResult() {
+        return contestResult;
+    }
+
+    public void setContestResult(String contestResult) {
+        this.contestResult = contestResult;
+    }
+
+    public Integer getContestPhase() {
+        return contestPhase;
+    }
+
+    public void setContestPhase(Integer contestPhase) {
+        this.contestPhase = contestPhase;
+    }
+
+    public Integer getIsPublish() {
+        return isPublish;
+    }
+
+    public void setIsPublish(Integer isPublish) {
+        this.isPublish = isPublish;
+    }
+
+    public Date getPublishDate() {
+        return publishDate;
+    }
+
+    public void setPublishDate(Date publishDate) {
+        this.publishDate = publishDate;
     }
 
     public Integer getStatus() {
@@ -133,11 +233,21 @@ public class TContest implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", parentId=").append(parentId);
         sb.append(", contestType=").append(contestType);
         sb.append(", contestName=").append(contestName);
+        sb.append(", contestSchedule=").append(contestSchedule);
         sb.append(", contestDate=").append(contestDate);
         sb.append(", teamFirst=").append(teamFirst);
+        sb.append(", teamFirstPic=").append(teamFirstPic);
         sb.append(", teamSecond=").append(teamSecond);
+        sb.append(", teamSecondPic=").append(teamSecondPic);
+        sb.append(", isHot=").append(isHot);
+        sb.append(", isRecommend=").append(isRecommend);
+        sb.append(", contestResult=").append(contestResult);
+        sb.append(", contestPhase=").append(contestPhase);
+        sb.append(", isPublish=").append(isPublish);
+        sb.append(", publishDate=").append(publishDate);
         sb.append(", status=").append(status);
         sb.append(", sortNum=").append(sortNum);
         sb.append(", createUser=").append(createUser);

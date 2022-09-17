@@ -3,11 +3,21 @@
 <mapper namespace="com.coin.mapper.TContestMapper">
   <resultMap id="BaseResultMap" type="com.coin.entity.TContest">
     <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
     <result column="contest_type" jdbcType="VARCHAR" property="contestType" />
     <result column="contest_name" jdbcType="VARCHAR" property="contestName" />
+    <result column="contest_schedule" jdbcType="VARCHAR" property="contestSchedule" />
     <result column="contest_date" jdbcType="TIMESTAMP" property="contestDate" />
     <result column="team_first" jdbcType="VARCHAR" property="teamFirst" />
+    <result column="team_first_pic" jdbcType="VARCHAR" property="teamFirstPic" />
     <result column="team_second" jdbcType="VARCHAR" property="teamSecond" />
+    <result column="team_second_pic" jdbcType="VARCHAR" property="teamSecondPic" />
+    <result column="is_hot" jdbcType="INTEGER" property="isHot" />
+    <result column="is_recommend" jdbcType="INTEGER" property="isRecommend" />
+    <result column="contest_result" jdbcType="VARCHAR" property="contestResult" />
+    <result column="contest_phase" jdbcType="INTEGER" property="contestPhase" />
+    <result column="is_publish" jdbcType="INTEGER" property="isPublish" />
+    <result column="publish_date" jdbcType="TIMESTAMP" property="publishDate" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="sort_num" jdbcType="INTEGER" property="sortNum" />
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />
@@ -74,8 +84,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, contest_type, contest_name, contest_date, team_first, team_second, status, sort_num, 
-    create_user, create_date, update_user, update_date
+    id, parent_id, contest_type, contest_name, contest_schedule, contest_date, team_first, 
+    team_first_pic, team_second, team_second_pic, is_hot, is_recommend, contest_result, 
+    contest_phase, is_publish, publish_date, status, sort_num, create_user, create_date, 
+    update_user, update_date
   </sql>
   <select id="selectByExample" parameterType="com.coin.entity.TContestExample" resultMap="BaseResultMap">
     select
@@ -111,14 +123,22 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_contest (contest_type, contest_name, contest_date, 
-      team_first, team_second, status, 
-      sort_num, create_user, create_date, 
-      update_user, update_date)
-    values (#{contestType,jdbcType=VARCHAR}, #{contestName,jdbcType=VARCHAR}, #{contestDate,jdbcType=TIMESTAMP}, 
-      #{teamFirst,jdbcType=VARCHAR}, #{teamSecond,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{sortNum,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
-      #{updateUser,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP})
+    insert into t_contest (parent_id, contest_type, contest_name, 
+      contest_schedule, contest_date, team_first, 
+      team_first_pic, team_second, team_second_pic, 
+      is_hot, is_recommend, contest_result, 
+      contest_phase, is_publish, publish_date, 
+      status, sort_num, create_user, 
+      create_date, update_user, update_date
+      )
+    values (#{parentId,jdbcType=INTEGER}, #{contestType,jdbcType=VARCHAR}, #{contestName,jdbcType=VARCHAR}, 
+      #{contestSchedule,jdbcType=VARCHAR}, #{contestDate,jdbcType=TIMESTAMP}, #{teamFirst,jdbcType=VARCHAR}, 
+      #{teamFirstPic,jdbcType=VARCHAR}, #{teamSecond,jdbcType=VARCHAR}, #{teamSecondPic,jdbcType=VARCHAR}, 
+      #{isHot,jdbcType=INTEGER}, #{isRecommend,jdbcType=INTEGER}, #{contestResult,jdbcType=VARCHAR}, 
+      #{contestPhase,jdbcType=INTEGER}, #{isPublish,jdbcType=INTEGER}, #{publishDate,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=INTEGER}, #{sortNum,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.coin.entity.TContest">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -126,11 +146,17 @@
     </selectKey>
     insert into t_contest
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="parentId != null">
+        parent_id,
+      </if>
       <if test="contestType != null">
         contest_type,
       </if>
       <if test="contestName != null">
         contest_name,
+      </if>
+      <if test="contestSchedule != null">
+        contest_schedule,
       </if>
       <if test="contestDate != null">
         contest_date,
@@ -138,8 +164,32 @@
       <if test="teamFirst != null">
         team_first,
       </if>
+      <if test="teamFirstPic != null">
+        team_first_pic,
+      </if>
       <if test="teamSecond != null">
         team_second,
+      </if>
+      <if test="teamSecondPic != null">
+        team_second_pic,
+      </if>
+      <if test="isHot != null">
+        is_hot,
+      </if>
+      <if test="isRecommend != null">
+        is_recommend,
+      </if>
+      <if test="contestResult != null">
+        contest_result,
+      </if>
+      <if test="contestPhase != null">
+        contest_phase,
+      </if>
+      <if test="isPublish != null">
+        is_publish,
+      </if>
+      <if test="publishDate != null">
+        publish_date,
       </if>
       <if test="status != null">
         status,
@@ -161,11 +211,17 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
       <if test="contestType != null">
         #{contestType,jdbcType=VARCHAR},
       </if>
       <if test="contestName != null">
         #{contestName,jdbcType=VARCHAR},
+      </if>
+      <if test="contestSchedule != null">
+        #{contestSchedule,jdbcType=VARCHAR},
       </if>
       <if test="contestDate != null">
         #{contestDate,jdbcType=TIMESTAMP},
@@ -173,8 +229,32 @@
       <if test="teamFirst != null">
         #{teamFirst,jdbcType=VARCHAR},
       </if>
+      <if test="teamFirstPic != null">
+        #{teamFirstPic,jdbcType=VARCHAR},
+      </if>
       <if test="teamSecond != null">
         #{teamSecond,jdbcType=VARCHAR},
+      </if>
+      <if test="teamSecondPic != null">
+        #{teamSecondPic,jdbcType=VARCHAR},
+      </if>
+      <if test="isHot != null">
+        #{isHot,jdbcType=INTEGER},
+      </if>
+      <if test="isRecommend != null">
+        #{isRecommend,jdbcType=INTEGER},
+      </if>
+      <if test="contestResult != null">
+        #{contestResult,jdbcType=VARCHAR},
+      </if>
+      <if test="contestPhase != null">
+        #{contestPhase,jdbcType=INTEGER},
+      </if>
+      <if test="isPublish != null">
+        #{isPublish,jdbcType=INTEGER},
+      </if>
+      <if test="publishDate != null">
+        #{publishDate,jdbcType=TIMESTAMP},
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
@@ -208,11 +288,17 @@
       <if test="row.id != null">
         id = #{row.id,jdbcType=INTEGER},
       </if>
+      <if test="row.parentId != null">
+        parent_id = #{row.parentId,jdbcType=INTEGER},
+      </if>
       <if test="row.contestType != null">
         contest_type = #{row.contestType,jdbcType=VARCHAR},
       </if>
       <if test="row.contestName != null">
         contest_name = #{row.contestName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.contestSchedule != null">
+        contest_schedule = #{row.contestSchedule,jdbcType=VARCHAR},
       </if>
       <if test="row.contestDate != null">
         contest_date = #{row.contestDate,jdbcType=TIMESTAMP},
@@ -220,8 +306,32 @@
       <if test="row.teamFirst != null">
         team_first = #{row.teamFirst,jdbcType=VARCHAR},
       </if>
+      <if test="row.teamFirstPic != null">
+        team_first_pic = #{row.teamFirstPic,jdbcType=VARCHAR},
+      </if>
       <if test="row.teamSecond != null">
         team_second = #{row.teamSecond,jdbcType=VARCHAR},
+      </if>
+      <if test="row.teamSecondPic != null">
+        team_second_pic = #{row.teamSecondPic,jdbcType=VARCHAR},
+      </if>
+      <if test="row.isHot != null">
+        is_hot = #{row.isHot,jdbcType=INTEGER},
+      </if>
+      <if test="row.isRecommend != null">
+        is_recommend = #{row.isRecommend,jdbcType=INTEGER},
+      </if>
+      <if test="row.contestResult != null">
+        contest_result = #{row.contestResult,jdbcType=VARCHAR},
+      </if>
+      <if test="row.contestPhase != null">
+        contest_phase = #{row.contestPhase,jdbcType=INTEGER},
+      </if>
+      <if test="row.isPublish != null">
+        is_publish = #{row.isPublish,jdbcType=INTEGER},
+      </if>
+      <if test="row.publishDate != null">
+        publish_date = #{row.publishDate,jdbcType=TIMESTAMP},
       </if>
       <if test="row.status != null">
         status = #{row.status,jdbcType=INTEGER},
@@ -249,11 +359,21 @@
   <update id="updateByExample" parameterType="map">
     update t_contest
     set id = #{row.id,jdbcType=INTEGER},
+      parent_id = #{row.parentId,jdbcType=INTEGER},
       contest_type = #{row.contestType,jdbcType=VARCHAR},
       contest_name = #{row.contestName,jdbcType=VARCHAR},
+      contest_schedule = #{row.contestSchedule,jdbcType=VARCHAR},
       contest_date = #{row.contestDate,jdbcType=TIMESTAMP},
       team_first = #{row.teamFirst,jdbcType=VARCHAR},
+      team_first_pic = #{row.teamFirstPic,jdbcType=VARCHAR},
       team_second = #{row.teamSecond,jdbcType=VARCHAR},
+      team_second_pic = #{row.teamSecondPic,jdbcType=VARCHAR},
+      is_hot = #{row.isHot,jdbcType=INTEGER},
+      is_recommend = #{row.isRecommend,jdbcType=INTEGER},
+      contest_result = #{row.contestResult,jdbcType=VARCHAR},
+      contest_phase = #{row.contestPhase,jdbcType=INTEGER},
+      is_publish = #{row.isPublish,jdbcType=INTEGER},
+      publish_date = #{row.publishDate,jdbcType=TIMESTAMP},
       status = #{row.status,jdbcType=INTEGER},
       sort_num = #{row.sortNum,jdbcType=INTEGER},
       create_user = #{row.createUser,jdbcType=VARCHAR},
@@ -267,11 +387,17 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.coin.entity.TContest">
     update t_contest
     <set>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
       <if test="contestType != null">
         contest_type = #{contestType,jdbcType=VARCHAR},
       </if>
       <if test="contestName != null">
         contest_name = #{contestName,jdbcType=VARCHAR},
+      </if>
+      <if test="contestSchedule != null">
+        contest_schedule = #{contestSchedule,jdbcType=VARCHAR},
       </if>
       <if test="contestDate != null">
         contest_date = #{contestDate,jdbcType=TIMESTAMP},
@@ -279,8 +405,32 @@
       <if test="teamFirst != null">
         team_first = #{teamFirst,jdbcType=VARCHAR},
       </if>
+      <if test="teamFirstPic != null">
+        team_first_pic = #{teamFirstPic,jdbcType=VARCHAR},
+      </if>
       <if test="teamSecond != null">
         team_second = #{teamSecond,jdbcType=VARCHAR},
+      </if>
+      <if test="teamSecondPic != null">
+        team_second_pic = #{teamSecondPic,jdbcType=VARCHAR},
+      </if>
+      <if test="isHot != null">
+        is_hot = #{isHot,jdbcType=INTEGER},
+      </if>
+      <if test="isRecommend != null">
+        is_recommend = #{isRecommend,jdbcType=INTEGER},
+      </if>
+      <if test="contestResult != null">
+        contest_result = #{contestResult,jdbcType=VARCHAR},
+      </if>
+      <if test="contestPhase != null">
+        contest_phase = #{contestPhase,jdbcType=INTEGER},
+      </if>
+      <if test="isPublish != null">
+        is_publish = #{isPublish,jdbcType=INTEGER},
+      </if>
+      <if test="publishDate != null">
+        publish_date = #{publishDate,jdbcType=TIMESTAMP},
       </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
@@ -305,11 +455,21 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.coin.entity.TContest">
     update t_contest
-    set contest_type = #{contestType,jdbcType=VARCHAR},
+    set parent_id = #{parentId,jdbcType=INTEGER},
+      contest_type = #{contestType,jdbcType=VARCHAR},
       contest_name = #{contestName,jdbcType=VARCHAR},
+      contest_schedule = #{contestSchedule,jdbcType=VARCHAR},
       contest_date = #{contestDate,jdbcType=TIMESTAMP},
       team_first = #{teamFirst,jdbcType=VARCHAR},
+      team_first_pic = #{teamFirstPic,jdbcType=VARCHAR},
       team_second = #{teamSecond,jdbcType=VARCHAR},
+      team_second_pic = #{teamSecondPic,jdbcType=VARCHAR},
+      is_hot = #{isHot,jdbcType=INTEGER},
+      is_recommend = #{isRecommend,jdbcType=INTEGER},
+      contest_result = #{contestResult,jdbcType=VARCHAR},
+      contest_phase = #{contestPhase,jdbcType=INTEGER},
+      is_publish = #{isPublish,jdbcType=INTEGER},
+      publish_date = #{publishDate,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=INTEGER},
       sort_num = #{sortNum,jdbcType=INTEGER},
       create_user = #{createUser,jdbcType=VARCHAR},

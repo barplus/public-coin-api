@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coin.mapper.TContestNoticeMapper">
+  <resultMap id="BaseResultMap" type="com.coin.entity.TContestNotice">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="notice_title" jdbcType="VARCHAR" property="noticeTitle" />
+    <result column="notice_content" jdbcType="VARCHAR" property="noticeContent" />
+    <result column="is_publish" jdbcType="INTEGER" property="isPublish" />
+    <result column="publish_date" jdbcType="TIMESTAMP" property="publishDate" />
+    <result column="show_date_start" jdbcType="TIMESTAMP" property="showDateStart" />
+    <result column="show_date_end" jdbcType="TIMESTAMP" property="showDateEnd" />
+    <result column="is_top" jdbcType="INTEGER" property="isTop" />
+    <result column="top_date_start" jdbcType="TIMESTAMP" property="topDateStart" />
+    <result column="top_date_end" jdbcType="TIMESTAMP" property="topDateEnd" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, notice_title, notice_content, is_publish, publish_date, show_date_start, show_date_end, 
+    is_top, top_date_start, top_date_end, status, is_delete, create_user, create_date, 
+    update_user, update_date
+  </sql>
+  <select id="selectByExample" parameterType="com.coin.entity.TContestNoticeExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_contest_notice
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_contest_notice
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_contest_notice
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.coin.entity.TContestNoticeExample">
+    delete from t_contest_notice
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.coin.entity.TContestNotice">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_contest_notice (notice_title, notice_content, is_publish, 
+      publish_date, show_date_start, show_date_end, 
+      is_top, top_date_start, top_date_end, 
+      status, is_delete, create_user, 
+      create_date, update_user, update_date
+      )
+    values (#{noticeTitle,jdbcType=VARCHAR}, #{noticeContent,jdbcType=VARCHAR}, #{isPublish,jdbcType=INTEGER}, 
+      #{publishDate,jdbcType=TIMESTAMP}, #{showDateStart,jdbcType=TIMESTAMP}, #{showDateEnd,jdbcType=TIMESTAMP}, 
+      #{isTop,jdbcType=INTEGER}, #{topDateStart,jdbcType=TIMESTAMP}, #{topDateEnd,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=INTEGER}, #{isDelete,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.coin.entity.TContestNotice">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_contest_notice
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="noticeTitle != null">
+        notice_title,
+      </if>
+      <if test="noticeContent != null">
+        notice_content,
+      </if>
+      <if test="isPublish != null">
+        is_publish,
+      </if>
+      <if test="publishDate != null">
+        publish_date,
+      </if>
+      <if test="showDateStart != null">
+        show_date_start,
+      </if>
+      <if test="showDateEnd != null">
+        show_date_end,
+      </if>
+      <if test="isTop != null">
+        is_top,
+      </if>
+      <if test="topDateStart != null">
+        top_date_start,
+      </if>
+      <if test="topDateEnd != null">
+        top_date_end,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="noticeTitle != null">
+        #{noticeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeContent != null">
+        #{noticeContent,jdbcType=VARCHAR},
+      </if>
+      <if test="isPublish != null">
+        #{isPublish,jdbcType=INTEGER},
+      </if>
+      <if test="publishDate != null">
+        #{publishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="showDateStart != null">
+        #{showDateStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="showDateEnd != null">
+        #{showDateEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isTop != null">
+        #{isTop,jdbcType=INTEGER},
+      </if>
+      <if test="topDateStart != null">
+        #{topDateStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="topDateEnd != null">
+        #{topDateEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.coin.entity.TContestNoticeExample" resultType="java.lang.Long">
+    select count(*) from t_contest_notice
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_contest_notice
+    <set>
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
+      </if>
+      <if test="row.noticeTitle != null">
+        notice_title = #{row.noticeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="row.noticeContent != null">
+        notice_content = #{row.noticeContent,jdbcType=VARCHAR},
+      </if>
+      <if test="row.isPublish != null">
+        is_publish = #{row.isPublish,jdbcType=INTEGER},
+      </if>
+      <if test="row.publishDate != null">
+        publish_date = #{row.publishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.showDateStart != null">
+        show_date_start = #{row.showDateStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.showDateEnd != null">
+        show_date_end = #{row.showDateEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.isTop != null">
+        is_top = #{row.isTop,jdbcType=INTEGER},
+      </if>
+      <if test="row.topDateStart != null">
+        top_date_start = #{row.topDateStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.topDateEnd != null">
+        top_date_end = #{row.topDateEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.status != null">
+        status = #{row.status,jdbcType=INTEGER},
+      </if>
+      <if test="row.isDelete != null">
+        is_delete = #{row.isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="row.createUser != null">
+        create_user = #{row.createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="row.createDate != null">
+        create_date = #{row.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.updateUser != null">
+        update_user = #{row.updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="row.updateDate != null">
+        update_date = #{row.updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_contest_notice
+    set id = #{row.id,jdbcType=INTEGER},
+      notice_title = #{row.noticeTitle,jdbcType=VARCHAR},
+      notice_content = #{row.noticeContent,jdbcType=VARCHAR},
+      is_publish = #{row.isPublish,jdbcType=INTEGER},
+      publish_date = #{row.publishDate,jdbcType=TIMESTAMP},
+      show_date_start = #{row.showDateStart,jdbcType=TIMESTAMP},
+      show_date_end = #{row.showDateEnd,jdbcType=TIMESTAMP},
+      is_top = #{row.isTop,jdbcType=INTEGER},
+      top_date_start = #{row.topDateStart,jdbcType=TIMESTAMP},
+      top_date_end = #{row.topDateEnd,jdbcType=TIMESTAMP},
+      status = #{row.status,jdbcType=INTEGER},
+      is_delete = #{row.isDelete,jdbcType=INTEGER},
+      create_user = #{row.createUser,jdbcType=VARCHAR},
+      create_date = #{row.createDate,jdbcType=TIMESTAMP},
+      update_user = #{row.updateUser,jdbcType=VARCHAR},
+      update_date = #{row.updateDate,jdbcType=TIMESTAMP}
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.coin.entity.TContestNotice">
+    update t_contest_notice
+    <set>
+      <if test="noticeTitle != null">
+        notice_title = #{noticeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeContent != null">
+        notice_content = #{noticeContent,jdbcType=VARCHAR},
+      </if>
+      <if test="isPublish != null">
+        is_publish = #{isPublish,jdbcType=INTEGER},
+      </if>
+      <if test="publishDate != null">
+        publish_date = #{publishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="showDateStart != null">
+        show_date_start = #{showDateStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="showDateEnd != null">
+        show_date_end = #{showDateEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isTop != null">
+        is_top = #{isTop,jdbcType=INTEGER},
+      </if>
+      <if test="topDateStart != null">
+        top_date_start = #{topDateStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="topDateEnd != null">
+        top_date_end = #{topDateEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.coin.entity.TContestNotice">
+    update t_contest_notice
+    set notice_title = #{noticeTitle,jdbcType=VARCHAR},
+      notice_content = #{noticeContent,jdbcType=VARCHAR},
+      is_publish = #{isPublish,jdbcType=INTEGER},
+      publish_date = #{publishDate,jdbcType=TIMESTAMP},
+      show_date_start = #{showDateStart,jdbcType=TIMESTAMP},
+      show_date_end = #{showDateEnd,jdbcType=TIMESTAMP},
+      is_top = #{isTop,jdbcType=INTEGER},
+      top_date_start = #{topDateStart,jdbcType=TIMESTAMP},
+      top_date_end = #{topDateEnd,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      is_delete = #{isDelete,jdbcType=INTEGER},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
