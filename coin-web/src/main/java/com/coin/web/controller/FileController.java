@@ -37,7 +37,7 @@ public class FileController {
     public MyResp upload(FileReq req, @RequestParam("file") MultipartFile file, HttpServletRequest request) {
         String fileName = "";
         try {
-            String suffix = Files.getFileExtension(file.getOriginalFilename());
+            String suffix = "."+Files.getFileExtension(file.getOriginalFilename());
             fileName = DateUtil.getTodayStr(DateUtil.ms_dt_format) + BizUtil.getStringRandom(3, 0) + suffix;
             logger.info("file-upload-fileName={}, newFileName={}", file.getOriginalFilename(), fileName);
             File newFile = new File(picUrl +'/'+ fileName);
