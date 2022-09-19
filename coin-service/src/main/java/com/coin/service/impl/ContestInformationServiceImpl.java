@@ -28,7 +28,7 @@ public class ContestInformationServiceImpl implements ContestInformationService 
     private TContestInformationMapper tContestInformationMapper;
 
     @Override
-    public PageInfo<TContestInformation> pageList(ContestInformationReq req) {
+    public PageInfo<TContestInformation> pageList(ContestInformationReq req) throws Exception {
         TContestInformationExample example = new TContestInformationExample();
         TContestInformationExample.Criteria criteria = example.createCriteria();
         if(StringUtils.isNotBlank(req.getInformationTitle())){

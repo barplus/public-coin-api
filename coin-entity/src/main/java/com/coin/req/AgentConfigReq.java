@@ -14,8 +14,6 @@ public class AgentConfigReq extends CommonReq implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer id;
-
     private String userName;
 
     private String telegram;

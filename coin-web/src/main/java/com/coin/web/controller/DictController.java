@@ -1,7 +1,9 @@
 package com.coin.web.controller;
 
 import com.coin.entity.TDict;
+import com.coin.req.ContestConfigReq;
 import com.coin.req.DictReq;
+import com.coin.rsp.ContestConfigRsp;
 import com.coin.service.BizEntity.MyResp;
 import com.coin.service.DictService;
 import com.coin.service.constant.CodeCons;
@@ -123,6 +125,38 @@ public class DictController {
             return new MyResp(e.getCode(), e.getErrMsg());
         }catch(Exception e){
             logger.error("dict-del-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
+    @PostMapping("/getContestConfig")
+    @OfficeSecure
+    public MyResp getContestConfig(@RequestBody DictReq req){
+        logger.info("dict-getContestConfig-req={}", req);
+        try{
+            ContestConfigRsp config = dictService.getContestConfig();
+            return new MyResp(CodeCons.SUCCESS, "", config);
+        }catch(BizException e){
+            logger.error("dict-getContestConfig-e", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("dict-getContestConfig-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
+    @PostMapping("/saveContestConfig")
+    @OfficeSecure
+    public MyResp saveContestConfig(@RequestBody ContestConfigReq req){
+        logger.info("dict-saveContestConfig-req={}", req);
+        try{
+            dictService.saveContestConfig(req);
+            return new MyResp(CodeCons.SUCCESS, "保存成功");
+        }catch(BizException e){
+            logger.error("dict-saveContestConfig-e", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("dict-saveContestConfig-error", e);
         }
         return new MyResp(CodeCons.ERROR, "请求失败");
     }

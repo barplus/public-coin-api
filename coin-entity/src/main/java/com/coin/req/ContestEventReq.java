@@ -17,8 +17,6 @@ public class ContestEventReq extends CommonReq implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer id;
-
     private String eventTitle;
 
     private String eventTag;
@@ -47,12 +45,6 @@ public class ContestEventReq extends CommonReq implements Serializable {
     private String createUser;
 
     private Date createDate;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date createDateMin;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date createDateMax;
 
     private String updateUser;
 

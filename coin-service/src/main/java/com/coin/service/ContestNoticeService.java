@@ -6,7 +6,7 @@ import com.github.pagehelper.PageInfo;
 
 public interface ContestNoticeService {
 
-    PageInfo<TContestNotice> pageList(ContestNoticeReq req);
+    PageInfo<TContestNotice> pageList(ContestNoticeReq req) throws Exception;
 
     void add(ContestNoticeReq req) throws Exception;
 

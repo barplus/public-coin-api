@@ -8,7 +8,7 @@ import com.github.pagehelper.PageInfo;
 
 public interface ContestInformationService {
 
-    PageInfo<TContestInformation> pageList(ContestInformationReq req);
+    PageInfo<TContestInformation> pageList(ContestInformationReq req) throws Exception;
 
     void add(ContestInformationReq req) throws Exception;
 

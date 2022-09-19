@@ -12,11 +12,10 @@ public class CommonReq implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**用户登录名*/
+    private Integer id;
     private String loginName;
     private Integer pageNum;
     private Integer pageSize;
-    private Integer id;
     private String token;
 
 }

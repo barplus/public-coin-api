@@ -17,8 +17,6 @@ public class ContestNoticeReq extends CommonReq implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer id;
-
     private String ids;
 
     private String noticeTitle;

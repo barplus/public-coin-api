@@ -14,7 +14,6 @@ public class SysResourceReq extends CommonReq implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer id;
     private String resourceType;
     private String resourceCode;
     private String resourceName;

@@ -29,9 +29,10 @@ public class ContestNoticeServiceImpl implements ContestNoticeService {
     private TContestNoticeMapper tContestNoticeMapper;
 
     @Override
-    public PageInfo<TContestNotice> pageList(ContestNoticeReq req) {
+    public PageInfo<TContestNotice> pageList(ContestNoticeReq req) throws Exception {
         TContestNoticeExample example = new TContestNoticeExample();
         TContestNoticeExample.Criteria criteria = example.createCriteria();
+        criteria.andIsDeleteEqualTo(0);
         if(StringUtils.isNotBlank(req.getNoticeTitle())){
             criteria.andNoticeTitleEqualTo(req.getNoticeTitle());
         }

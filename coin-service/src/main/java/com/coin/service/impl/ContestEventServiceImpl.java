@@ -6,6 +6,8 @@ import com.coin.entity.TContestInformation;
 import com.coin.mapper.TContestEventMapper;
 import com.coin.req.ContestEventReq;
 import com.coin.service.ContestEventService;
+import com.coin.service.constant.CodeCons;
+import com.coin.service.exception.BizException;
 import com.coin.service.util.BizUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -27,9 +29,14 @@ public class ContestEventServiceImpl implements ContestEventService {
     private TContestEventMapper tContestEventMapper;
 
     @Override
-    public PageInfo<TContestEvent> pageList(ContestEventReq req) {
+    public PageInfo<TContestEvent> pageList(ContestEventReq req) throws Exception {
         TContestEventExample example = new TContestEventExample();
         TContestEventExample.Criteria criteria = example.createCriteria();
+        if(req.getShowDateStart() != null && req.getShowDateEnd() != null){
+            if(req.getShowDateStart().after(req.getShowDateEnd())){
+                throw new BizException(CodeCons.ERROR, "展示结束时间不能小于开始时间");
+            }
+        }
         if(StringUtils.isNotBlank(req.getEventTitle())){
             criteria.andEventTitleEqualTo(req.getEventTitle());
         }
@@ -39,11 +46,11 @@ public class ContestEventServiceImpl implements ContestEventService {
         if(req.getStatus() != null){
             criteria.andStatusEqualTo(req.getStatus());
         }
-        if(req.getCreateDateMin() != null){
-            criteria.andCreateDateGreaterThanOrEqualTo(req.getCreateDateMin());
+        if(req.getShowDateStart() != null){
+            criteria.andShowDateEndGreaterThanOrEqualTo(req.getShowDateStart());
         }
-        if(req.getCreateDateMax() != null){
-            criteria.andCreateDateLessThanOrEqualTo(req.getCreateDateMax());
+        if(req.getShowDateEnd() != null){
+            criteria.andShowDateStartLessThanOrEqualTo(req.getShowDateEnd());
         }
         example.setOrderByClause(" sort_num");
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
@@ -60,6 +67,11 @@ public class ContestEventServiceImpl implements ContestEventService {
         event.setEventTag(req.getEventTag());
         event.setShowDateStart(req.getShowDateStart());
         event.setShowDateEnd(req.getShowDateEnd());
+        if(req.getShowDateStart() != null && req.getShowDateEnd() != null){
+            if(req.getShowDateEnd().before(req.getShowDateStart())){
+                throw new BizException(CodeCons.ERROR, "显示结束时间不能早于开始时间");
+            }
+        }
         event.setIsJump(req.getIsJump());
         event.setJumpUrl(req.getJumpUrl());
         event.setEventPic(req.getEventPic());
@@ -73,11 +85,19 @@ public class ContestEventServiceImpl implements ContestEventService {
     @Override
     public void update(ContestEventReq req) throws Exception {
         Date now = new Date();
+        TContestEvent oldEvent = tContestEventMapper.selectByPrimaryKey(req.getId());
         TContestEvent event = BizUtil.getUpdateInfo(new TContestEvent(), req.getId(), req.getLoginName(), now);
         event.setEventTitle(req.getEventTitle());
         event.setEventTag(req.getEventTag());
         event.setShowDateStart(req.getShowDateStart());
         event.setShowDateEnd(req.getShowDateEnd());
+        Date showDateStart = req.getShowDateStart() == null?oldEvent.getShowDateStart():req.getShowDateStart();
+        Date showDateEnd = req.getShowDateEnd() == null?oldEvent.getShowDateStart():req.getShowDateStart();
+        if(showDateStart != null && showDateEnd != null){
+            if(showDateEnd.before(showDateStart)){
+                throw new BizException(CodeCons.ERROR, "显示结束时间不能早于开始时间");
+            }
+        }
         event.setIsJump(req.getIsJump());
         event.setJumpUrl(req.getJumpUrl());
         event.setEventPic(req.getEventPic());

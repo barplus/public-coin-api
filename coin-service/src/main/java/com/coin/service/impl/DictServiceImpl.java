@@ -1,9 +1,13 @@
 package com.coin.service.impl;
 
+import com.coin.entity.TContestSponsorshipLogo;
 import com.coin.entity.TDict;
 import com.coin.entity.TDictExample;
 import com.coin.mapper.TDictMapper;
+import com.coin.req.ContestConfigReq;
 import com.coin.req.DictReq;
+import com.coin.rsp.ContestConfigRsp;
+import com.coin.service.ContestSponsorshipLogoService;
 import com.coin.service.DictService;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.exception.BizException;
@@ -26,6 +30,8 @@ public class DictServiceImpl implements DictService {
 
     @Resource
     private TDictMapper tDictMapper;
+    @Resource
+    private ContestSponsorshipLogoService contestSponsorshipLogoService;
 
     @Override
     public List<TDict> getListByType(DictReq dictReq) throws Exception {
@@ -76,6 +82,20 @@ public class DictServiceImpl implements DictService {
     public String getValByTypeAndCode(String dictType, String dictCode) throws Exception {
         TDict dict = this.getByTypeAndCode(dictType, dictCode);
         return dict.getDictVal();
+    }
+
+    @Override
+    public ContestConfigRsp getContestConfig() throws Exception {
+        ContestConfigRsp rsp = new ContestConfigRsp();
+        TDict dict = this.getByTypeAndCode("CONTEST_CONFIG", "TOP_LOGO_LINK");
+        rsp.setTopLogoLink(dict.getDictVal());
+        dict = this.getByTypeAndCode("CONTEST_CONFIG", "SPONSORSHIP_LOGO_LINK");
+        rsp.setSponsorshipLogoLink(dict.getDictVal());
+        dict = this.getByTypeAndCode("CONTEST_CONFIG", "BRAND_EXPLAIN");
+        rsp.setBrandExplain(dict.getDictValBig());
+        List<TContestSponsorshipLogo> list = contestSponsorshipLogoService.getAllList();
+        rsp.setContestSponsorshipLogos(list);
+        return rsp;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -140,6 +160,23 @@ public class DictServiceImpl implements DictService {
         if("CONTEST_TAG".equals(dict.getDictType())){
             tDictMapper.deleteByPrimaryKey(id);
         }
+    }
+
+    @Override
+    public void saveContestConfig(ContestConfigReq req) throws Exception{
+        Date now = new Date();
+        TDict dict = this.getByTypeAndCode("CONTEST_CONFIG", "TOP_LOGO_LINK");
+        TDict updateDict = BizUtil.getUpdateInfo(new TDict(), dict.getId(), req.getLoginName(), now);
+        updateDict.setDictVal(req.getTopLogoLink());
+        tDictMapper.updateByPrimaryKeySelective(updateDict);
+        dict = this.getByTypeAndCode("CONTEST_CONFIG", "SPONSORSHIP_LOGO_LINK");
+        updateDict = BizUtil.getUpdateInfo(new TDict(), dict.getId(), req.getLoginName(), now);
+        updateDict.setDictVal(req.getSponsorshipLogoLink());
+        tDictMapper.updateByPrimaryKeySelective(updateDict);
+        dict = this.getByTypeAndCode("CONTEST_CONFIG", "BRAND_EXPLAIN");
+        updateDict = BizUtil.getUpdateInfo(new TDict(), dict.getId(), req.getLoginName(), now);
+        updateDict.setDictValBig(req.getBrandExplain());
+        tDictMapper.updateByPrimaryKeySelective(updateDict);
     }
 
     /**
