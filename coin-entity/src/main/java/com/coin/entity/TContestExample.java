@@ -165,66 +165,6 @@ public class TContestExample {
             return (Criteria) this;
         }
 
-        public Criteria andParentIdIsNull() {
-            addCriterion("parent_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andParentIdIsNotNull() {
-            addCriterion("parent_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andParentIdEqualTo(Integer value) {
-            addCriterion("parent_id =", value, "parentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andParentIdNotEqualTo(Integer value) {
-            addCriterion("parent_id <>", value, "parentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andParentIdGreaterThan(Integer value) {
-            addCriterion("parent_id >", value, "parentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andParentIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("parent_id >=", value, "parentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andParentIdLessThan(Integer value) {
-            addCriterion("parent_id <", value, "parentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andParentIdLessThanOrEqualTo(Integer value) {
-            addCriterion("parent_id <=", value, "parentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andParentIdIn(List<Integer> values) {
-            addCriterion("parent_id in", values, "parentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andParentIdNotIn(List<Integer> values) {
-            addCriterion("parent_id not in", values, "parentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andParentIdBetween(Integer value1, Integer value2) {
-            addCriterion("parent_id between", value1, value2, "parentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andParentIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("parent_id not between", value1, value2, "parentId");
-            return (Criteria) this;
-        }
-
         public Criteria andContestTypeIsNull() {
             addCriterion("contest_type is null");
             return (Criteria) this;
@@ -965,66 +905,6 @@ public class TContestExample {
             return (Criteria) this;
         }
 
-        public Criteria andContestPhaseIsNull() {
-            addCriterion("contest_phase is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andContestPhaseIsNotNull() {
-            addCriterion("contest_phase is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andContestPhaseEqualTo(Integer value) {
-            addCriterion("contest_phase =", value, "contestPhase");
-            return (Criteria) this;
-        }
-
-        public Criteria andContestPhaseNotEqualTo(Integer value) {
-            addCriterion("contest_phase <>", value, "contestPhase");
-            return (Criteria) this;
-        }
-
-        public Criteria andContestPhaseGreaterThan(Integer value) {
-            addCriterion("contest_phase >", value, "contestPhase");
-            return (Criteria) this;
-        }
-
-        public Criteria andContestPhaseGreaterThanOrEqualTo(Integer value) {
-            addCriterion("contest_phase >=", value, "contestPhase");
-            return (Criteria) this;
-        }
-
-        public Criteria andContestPhaseLessThan(Integer value) {
-            addCriterion("contest_phase <", value, "contestPhase");
-            return (Criteria) this;
-        }
-
-        public Criteria andContestPhaseLessThanOrEqualTo(Integer value) {
-            addCriterion("contest_phase <=", value, "contestPhase");
-            return (Criteria) this;
-        }
-
-        public Criteria andContestPhaseIn(List<Integer> values) {
-            addCriterion("contest_phase in", values, "contestPhase");
-            return (Criteria) this;
-        }
-
-        public Criteria andContestPhaseNotIn(List<Integer> values) {
-            addCriterion("contest_phase not in", values, "contestPhase");
-            return (Criteria) this;
-        }
-
-        public Criteria andContestPhaseBetween(Integer value1, Integer value2) {
-            addCriterion("contest_phase between", value1, value2, "contestPhase");
-            return (Criteria) this;
-        }
-
-        public Criteria andContestPhaseNotBetween(Integer value1, Integer value2) {
-            addCriterion("contest_phase not between", value1, value2, "contestPhase");
-            return (Criteria) this;
-        }
-
         public Criteria andIsPublishIsNull() {
             addCriterion("is_publish is null");
             return (Criteria) this;
@@ -1142,6 +1022,126 @@ public class TContestExample {
 
         public Criteria andPublishDateNotBetween(Date value1, Date value2) {
             addCriterion("publish_date not between", value1, value2, "publishDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateStartIsNull() {
+            addCriterion("show_date_start is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateStartIsNotNull() {
+            addCriterion("show_date_start is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateStartEqualTo(Date value) {
+            addCriterion("show_date_start =", value, "showDateStart");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateStartNotEqualTo(Date value) {
+            addCriterion("show_date_start <>", value, "showDateStart");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateStartGreaterThan(Date value) {
+            addCriterion("show_date_start >", value, "showDateStart");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateStartGreaterThanOrEqualTo(Date value) {
+            addCriterion("show_date_start >=", value, "showDateStart");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateStartLessThan(Date value) {
+            addCriterion("show_date_start <", value, "showDateStart");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateStartLessThanOrEqualTo(Date value) {
+            addCriterion("show_date_start <=", value, "showDateStart");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateStartIn(List<Date> values) {
+            addCriterion("show_date_start in", values, "showDateStart");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateStartNotIn(List<Date> values) {
+            addCriterion("show_date_start not in", values, "showDateStart");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateStartBetween(Date value1, Date value2) {
+            addCriterion("show_date_start between", value1, value2, "showDateStart");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateStartNotBetween(Date value1, Date value2) {
+            addCriterion("show_date_start not between", value1, value2, "showDateStart");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateEndIsNull() {
+            addCriterion("show_date_end is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateEndIsNotNull() {
+            addCriterion("show_date_end is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateEndEqualTo(Date value) {
+            addCriterion("show_date_end =", value, "showDateEnd");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateEndNotEqualTo(Date value) {
+            addCriterion("show_date_end <>", value, "showDateEnd");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateEndGreaterThan(Date value) {
+            addCriterion("show_date_end >", value, "showDateEnd");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateEndGreaterThanOrEqualTo(Date value) {
+            addCriterion("show_date_end >=", value, "showDateEnd");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateEndLessThan(Date value) {
+            addCriterion("show_date_end <", value, "showDateEnd");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateEndLessThanOrEqualTo(Date value) {
+            addCriterion("show_date_end <=", value, "showDateEnd");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateEndIn(List<Date> values) {
+            addCriterion("show_date_end in", values, "showDateEnd");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateEndNotIn(List<Date> values) {
+            addCriterion("show_date_end not in", values, "showDateEnd");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateEndBetween(Date value1, Date value2) {
+            addCriterion("show_date_end between", value1, value2, "showDateEnd");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowDateEndNotBetween(Date value1, Date value2) {
+            addCriterion("show_date_end not between", value1, value2, "showDateEnd");
             return (Criteria) this;
         }
 

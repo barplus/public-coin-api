@@ -80,7 +80,7 @@ public class ContestNoticeServiceImpl implements ContestNoticeService {
         notice.setNoticeTitle(req.getNoticeTitle());
         notice.setNoticeContent(req.getNoticeContent());
         notice.setIsPublish(req.getIsPublish());
-        if(req.getIsPublish().intValue() == 1){
+        if(req.getIsPublish() != null && req.getIsPublish().intValue() == 1){
             notice.setPublishDate(now);
         }
         notice.setShowDateStart(req.getShowDateStart());

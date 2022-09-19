@@ -6,8 +6,6 @@ import java.util.Date;
 public class TContest implements Serializable {
     private Integer id;
 
-    private Integer parentId;
-
     private String contestType;
 
     private String contestName;
@@ -30,11 +28,13 @@ public class TContest implements Serializable {
 
     private String contestResult;
 
-    private Integer contestPhase;
-
     private Integer isPublish;
 
     private Date publishDate;
+
+    private Date showDateStart;
+
+    private Date showDateEnd;
 
     private Integer status;
 
@@ -56,14 +56,6 @@ public class TContest implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
     }
 
     public String getContestType() {
@@ -154,14 +146,6 @@ public class TContest implements Serializable {
         this.contestResult = contestResult;
     }
 
-    public Integer getContestPhase() {
-        return contestPhase;
-    }
-
-    public void setContestPhase(Integer contestPhase) {
-        this.contestPhase = contestPhase;
-    }
-
     public Integer getIsPublish() {
         return isPublish;
     }
@@ -176,6 +160,22 @@ public class TContest implements Serializable {
 
     public void setPublishDate(Date publishDate) {
         this.publishDate = publishDate;
+    }
+
+    public Date getShowDateStart() {
+        return showDateStart;
+    }
+
+    public void setShowDateStart(Date showDateStart) {
+        this.showDateStart = showDateStart;
+    }
+
+    public Date getShowDateEnd() {
+        return showDateEnd;
+    }
+
+    public void setShowDateEnd(Date showDateEnd) {
+        this.showDateEnd = showDateEnd;
     }
 
     public Integer getStatus() {
@@ -233,7 +233,6 @@ public class TContest implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", parentId=").append(parentId);
         sb.append(", contestType=").append(contestType);
         sb.append(", contestName=").append(contestName);
         sb.append(", contestSchedule=").append(contestSchedule);
@@ -245,9 +244,10 @@ public class TContest implements Serializable {
         sb.append(", isHot=").append(isHot);
         sb.append(", isRecommend=").append(isRecommend);
         sb.append(", contestResult=").append(contestResult);
-        sb.append(", contestPhase=").append(contestPhase);
         sb.append(", isPublish=").append(isPublish);
         sb.append(", publishDate=").append(publishDate);
+        sb.append(", showDateStart=").append(showDateStart);
+        sb.append(", showDateEnd=").append(showDateEnd);
         sb.append(", status=").append(status);
         sb.append(", sortNum=").append(sortNum);
         sb.append(", createUser=").append(createUser);
