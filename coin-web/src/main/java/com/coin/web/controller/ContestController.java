@@ -34,10 +34,23 @@ public class ContestController {
     public MyResp add(@RequestBody ContestReq req){
         logger.info("contest-add-req={}", req);
         try{
-            MyResp valid = ParamUtil.NotBlankValid(req.getContestType(), "比赛类型", req.getContestName(), "比赛名称",
-                    req.getContestDate(), "比赛时间", req.getTeamFirst(), "甲队", req.getTeamSecond(), "乙队");
-            if(valid != null){
-                return valid;
+            MyResp valid1 = ParamUtil.NotBlankValid(req.getContestType(), "比赛类型", req.getContestName(), "联赛名称",
+                    req.getIsHot(), "是否热门", req.getIsRecommend(), "是否推单", req.getTeamFirst(), "主队名称", req.getTeamSecond(), "客户名称",
+                    req.getTeamFirstPic(), "主队Logo", req.getTeamSecondPic(), "客队Logo", req.getContestDate(), "开赛时间",
+                    req.getShowDateStart(), "开始展示时间", req.getShowDateEnd(), "结束展示时间");
+            if(valid1 != null){
+                return valid1;
+            }
+            if(req.getIsRecommend().intValue() == 1){
+                MyResp valid2 = ParamUtil.NotBlankValid(req.getTeamFirstWinNum(), "主队胜利场数", req.getTeamFirstWinRate(), "主队赢盘率",
+                        req.getTeamFirstAvgNum(), "主队场均进球", req.getTeamFirstAvgLossNum(), "主队场均失球", req.getTeamSecondWinNum(), "客队胜利场数",
+                        req.getTeamSecondWinRate(), "客队赢盘率", req.getTeamSecondAvgNum(), "客队场均进球数", req.getTeamSecondAvgLossNum(), "客队场均失球数",
+                        req.getTeamFirstWinOdds(), "主队胜赔率", req.getDrawOdds(), "平局赔率", req.getTeamSecondWinOdds(), "客队胜赔率",
+                        req.getTeamFirstConcedeOdds(), "主队让球和赔率", req.getTeamSecondConcedeOdds(), "客队让球和赔率", req.getTeamFirstBigSmallOdds(),
+                        "主队大/小球和赔率", req.getTeamSecondBigSmallOdds(), "客队大/小球和赔率", req.getRecommendOdds(), "推荐", req.getContestAnalysis(), "赛事分析");
+                if(valid2 != null){
+                    return valid2;
+                }
             }
             contestService.addContest(req);
             return new MyResp(CodeCons.SUCCESS, "添加成功");
@@ -47,7 +60,7 @@ public class ContestController {
         }catch(Exception e){
             logger.error("contest-add-error", e);
         }
-        return new MyResp(CodeCons.ERROR, "修改失败");
+        return new MyResp(CodeCons.ERROR, "添加失败");
     }
 
     @PostMapping("/update")
@@ -67,7 +80,7 @@ public class ContestController {
         }catch(Exception e){
             logger.error("contest-update-error", e);
         }
-        return new MyResp(CodeCons.ERROR, "修改失败");
+        return new MyResp(CodeCons.ERROR, "保存失败");
     }
 
     @PostMapping("/getListByType")

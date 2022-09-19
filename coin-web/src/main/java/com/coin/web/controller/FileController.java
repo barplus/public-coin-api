@@ -10,6 +10,7 @@ import com.coin.service.util.DateUtil;
 import com.coin.service.util.ParamUtil;
 import com.coin.web.annotation.OfficeSecure;
 import com.coin.web.utils.FileUtil;
+import com.google.common.io.Files;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,7 +37,8 @@ public class FileController {
     public MyResp upload(FileReq req, @RequestParam("file") MultipartFile file, HttpServletRequest request) {
         String fileName = "";
         try {
-            fileName = DateUtil.getTodayStr(DateUtil.ms_dt_format) + BizUtil.getStringRandom(3, 0);
+            String suffix = Files.getFileExtension(file.getOriginalFilename());
+            fileName = DateUtil.getTodayStr(DateUtil.ms_dt_format) + BizUtil.getStringRandom(3, 0) + suffix;
             logger.info("file-upload-fileName={}, newFileName={}", file.getOriginalFilename(), fileName);
             File newFile = new File(picUrl +'/'+ fileName);
             if (!newFile.getParentFile().exists()) {

@@ -1,7 +1,9 @@
 package com.coin.service.impl;
 
 import com.coin.entity.TContest;
+import com.coin.entity.TContestDetail;
 import com.coin.entity.TContestExample;
+import com.coin.mapper.TContestDetailMapper;
 import com.coin.mapper.TContestMapper;
 import com.coin.req.ContestReq;
 import com.coin.service.ContestService;
@@ -12,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -24,18 +27,49 @@ public class ContestServiceImpl implements ContestService {
 
     @Resource
     private TContestMapper tContestMapper;
+    @Resource
+    private TContestDetailMapper tContestDetailMapper;
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void addContest(ContestReq req) throws Exception {
         TContest contest = BizUtil.getInsertInfo(new TContest(), req.getLoginName(), new Date());
         contest.setContestType(req.getContestType());
         contest.setContestName(req.getContestName());
-        contest.setContestDate(req.getContestDate());
+        contest.setIsHot(req.getIsHot());
+        contest.setIsRecommend(req.getIsRecommend());
         contest.setTeamFirst(req.getTeamFirst());
+        contest.setTeamFirstPic(req.getTeamFirstPic());
         contest.setTeamSecond(req.getTeamSecond());
-        contest.setStatus(req.getStatus());
-        contest.setSortNum(req.getSortNum());
+        contest.setTeamSecondPic(req.getTeamSecondPic());
+        contest.setContestDate(req.getContestDate());
+        contest.setIsPublish(req.getIsPublish());
+        contest.setShowDateStart(req.getShowDateStart());
+        contest.setShowDateEnd(req.getShowDateEnd());
         tContestMapper.insertSelective(contest);
+
+        if(req.getIsRecommend().intValue() == 1){
+            TContestDetail detail = BizUtil.getInsertInfo(new TContestDetail(), req.getLoginName(), new Date());
+            detail.setpId(contest.getId());
+            detail.setTeamFirstWinNum(req.getTeamFirstWinNum());
+            detail.setTeamSecondWinNum(req.getTeamSecondWinNum());
+            detail.setTeamFirstWinRate(req.getTeamFirstWinRate());
+            detail.setTeamSecondWinRate(req.getTeamSecondWinRate());
+            detail.setTeamFirstAvgNum(req.getTeamFirstAvgNum());
+            detail.setTeamSecondAvgNum(req.getTeamSecondAvgNum());
+            detail.setTeamFirstAvgLossNum(req.getTeamFirstAvgLossNum());
+            detail.setTeamSecondAvgLossNum(req.getTeamSecondAvgLossNum());
+            detail.setTeamFirstWinOdds(req.getTeamFirstWinOdds());
+            detail.setDrawOdds(req.getDrawOdds());
+            detail.setTeamSecondWinOdds(req.getTeamSecondWinOdds());
+            detail.setTeamFirstConcedeOdds(req.getTeamFirstConcedeOdds());
+            detail.setTeamSecondConcedeOdds(req.getTeamSecondConcedeOdds());
+            detail.setTeamFirstBigSmallOdds(req.getTeamFirstBigSmallOdds());
+            detail.setTeamSecondBigSmallOdds(req.getTeamSecondBigSmallOdds());
+            detail.setRecommendOdds(req.getRecommendOdds());
+            detail.setContestAnalysis(req.getContestAnalysis());
+            tContestDetailMapper.insertSelective(detail);
+        }
     }
 
     @Override

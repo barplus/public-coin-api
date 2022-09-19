@@ -10,8 +10,6 @@ public class TContest implements Serializable {
 
     private String contestName;
 
-    private String contestSchedule;
-
     private Date contestDate;
 
     private String teamFirst;
@@ -72,14 +70,6 @@ public class TContest implements Serializable {
 
     public void setContestName(String contestName) {
         this.contestName = contestName;
-    }
-
-    public String getContestSchedule() {
-        return contestSchedule;
-    }
-
-    public void setContestSchedule(String contestSchedule) {
-        this.contestSchedule = contestSchedule;
     }
 
     public Date getContestDate() {
@@ -235,7 +225,6 @@ public class TContest implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", contestType=").append(contestType);
         sb.append(", contestName=").append(contestName);
-        sb.append(", contestSchedule=").append(contestSchedule);
         sb.append(", contestDate=").append(contestDate);
         sb.append(", teamFirst=").append(teamFirst);
         sb.append(", teamFirstPic=").append(teamFirstPic);

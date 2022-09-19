@@ -5,7 +5,6 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="contest_type" jdbcType="VARCHAR" property="contestType" />
     <result column="contest_name" jdbcType="VARCHAR" property="contestName" />
-    <result column="contest_schedule" jdbcType="VARCHAR" property="contestSchedule" />
     <result column="contest_date" jdbcType="TIMESTAMP" property="contestDate" />
     <result column="team_first" jdbcType="VARCHAR" property="teamFirst" />
     <result column="team_first_pic" jdbcType="VARCHAR" property="teamFirstPic" />
@@ -84,8 +83,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, contest_type, contest_name, contest_schedule, contest_date, team_first, team_first_pic, 
-    team_second, team_second_pic, is_hot, is_recommend, contest_result, is_publish, publish_date, 
+    id, contest_type, contest_name, contest_date, team_first, team_first_pic, team_second, 
+    team_second_pic, is_hot, is_recommend, contest_result, is_publish, publish_date, 
     show_date_start, show_date_end, status, sort_num, create_user, create_date, update_user, 
     update_date
   </sql>
@@ -123,22 +122,20 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_contest (contest_type, contest_name, contest_schedule, 
-      contest_date, team_first, team_first_pic, 
-      team_second, team_second_pic, is_hot, 
-      is_recommend, contest_result, is_publish, 
-      publish_date, show_date_start, show_date_end, 
-      status, sort_num, create_user, 
-      create_date, update_user, update_date
-      )
-    values (#{contestType,jdbcType=VARCHAR}, #{contestName,jdbcType=VARCHAR}, #{contestSchedule,jdbcType=VARCHAR}, 
-      #{contestDate,jdbcType=TIMESTAMP}, #{teamFirst,jdbcType=VARCHAR}, #{teamFirstPic,jdbcType=VARCHAR}, 
-      #{teamSecond,jdbcType=VARCHAR}, #{teamSecondPic,jdbcType=VARCHAR}, #{isHot,jdbcType=INTEGER}, 
-      #{isRecommend,jdbcType=INTEGER}, #{contestResult,jdbcType=VARCHAR}, #{isPublish,jdbcType=INTEGER}, 
-      #{publishDate,jdbcType=TIMESTAMP}, #{showDateStart,jdbcType=TIMESTAMP}, #{showDateEnd,jdbcType=TIMESTAMP}, 
-      #{status,jdbcType=INTEGER}, #{sortNum,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}
-      )
+    insert into t_contest (contest_type, contest_name, contest_date, 
+      team_first, team_first_pic, team_second, 
+      team_second_pic, is_hot, is_recommend, 
+      contest_result, is_publish, publish_date, 
+      show_date_start, show_date_end, status, 
+      sort_num, create_user, create_date, 
+      update_user, update_date)
+    values (#{contestType,jdbcType=VARCHAR}, #{contestName,jdbcType=VARCHAR}, #{contestDate,jdbcType=TIMESTAMP}, 
+      #{teamFirst,jdbcType=VARCHAR}, #{teamFirstPic,jdbcType=VARCHAR}, #{teamSecond,jdbcType=VARCHAR}, 
+      #{teamSecondPic,jdbcType=VARCHAR}, #{isHot,jdbcType=INTEGER}, #{isRecommend,jdbcType=INTEGER}, 
+      #{contestResult,jdbcType=VARCHAR}, #{isPublish,jdbcType=INTEGER}, #{publishDate,jdbcType=TIMESTAMP}, 
+      #{showDateStart,jdbcType=TIMESTAMP}, #{showDateEnd,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
+      #{sortNum,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.coin.entity.TContest">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -151,9 +148,6 @@
       </if>
       <if test="contestName != null">
         contest_name,
-      </if>
-      <if test="contestSchedule != null">
-        contest_schedule,
       </if>
       <if test="contestDate != null">
         contest_date,
@@ -216,9 +210,6 @@
       </if>
       <if test="contestName != null">
         #{contestName,jdbcType=VARCHAR},
-      </if>
-      <if test="contestSchedule != null">
-        #{contestSchedule,jdbcType=VARCHAR},
       </if>
       <if test="contestDate != null">
         #{contestDate,jdbcType=TIMESTAMP},
@@ -294,9 +285,6 @@
       <if test="row.contestName != null">
         contest_name = #{row.contestName,jdbcType=VARCHAR},
       </if>
-      <if test="row.contestSchedule != null">
-        contest_schedule = #{row.contestSchedule,jdbcType=VARCHAR},
-      </if>
       <if test="row.contestDate != null">
         contest_date = #{row.contestDate,jdbcType=TIMESTAMP},
       </if>
@@ -361,7 +349,6 @@
     set id = #{row.id,jdbcType=INTEGER},
       contest_type = #{row.contestType,jdbcType=VARCHAR},
       contest_name = #{row.contestName,jdbcType=VARCHAR},
-      contest_schedule = #{row.contestSchedule,jdbcType=VARCHAR},
       contest_date = #{row.contestDate,jdbcType=TIMESTAMP},
       team_first = #{row.teamFirst,jdbcType=VARCHAR},
       team_first_pic = #{row.teamFirstPic,jdbcType=VARCHAR},
@@ -392,9 +379,6 @@
       </if>
       <if test="contestName != null">
         contest_name = #{contestName,jdbcType=VARCHAR},
-      </if>
-      <if test="contestSchedule != null">
-        contest_schedule = #{contestSchedule,jdbcType=VARCHAR},
       </if>
       <if test="contestDate != null">
         contest_date = #{contestDate,jdbcType=TIMESTAMP},
@@ -457,7 +441,6 @@
     update t_contest
     set contest_type = #{contestType,jdbcType=VARCHAR},
       contest_name = #{contestName,jdbcType=VARCHAR},
-      contest_schedule = #{contestSchedule,jdbcType=VARCHAR},
       contest_date = #{contestDate,jdbcType=TIMESTAMP},
       team_first = #{teamFirst,jdbcType=VARCHAR},
       team_first_pic = #{teamFirstPic,jdbcType=VARCHAR},

@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coin.mapper.TContestDetailMapper">
+  <resultMap id="BaseResultMap" type="com.coin.entity.TContestDetail">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="p_id" jdbcType="INTEGER" property="pId" />
+    <result column="team_first_win_num" jdbcType="INTEGER" property="teamFirstWinNum" />
+    <result column="team_first_win_rate" jdbcType="DECIMAL" property="teamFirstWinRate" />
+    <result column="team_first_avg_num" jdbcType="DECIMAL" property="teamFirstAvgNum" />
+    <result column="team_first_avg_loss_num" jdbcType="DECIMAL" property="teamFirstAvgLossNum" />
+    <result column="team_first_win_odds" jdbcType="DECIMAL" property="teamFirstWinOdds" />
+    <result column="team_first_concede_odds" jdbcType="VARCHAR" property="teamFirstConcedeOdds" />
+    <result column="team_first_big_small_odds" jdbcType="VARCHAR" property="teamFirstBigSmallOdds" />
+    <result column="team_second_win_num" jdbcType="INTEGER" property="teamSecondWinNum" />
+    <result column="team_second_win_rate" jdbcType="DECIMAL" property="teamSecondWinRate" />
+    <result column="team_second_avg_num" jdbcType="DECIMAL" property="teamSecondAvgNum" />
+    <result column="team_second_avg_loss_num" jdbcType="DECIMAL" property="teamSecondAvgLossNum" />
+    <result column="team_second_win_odds" jdbcType="DECIMAL" property="teamSecondWinOdds" />
+    <result column="team_second_concede_odds" jdbcType="VARCHAR" property="teamSecondConcedeOdds" />
+    <result column="team_second_big_small_odds" jdbcType="VARCHAR" property="teamSecondBigSmallOdds" />
+    <result column="recommend_odds" jdbcType="VARCHAR" property="recommendOdds" />
+    <result column="contest_analysis" jdbcType="VARCHAR" property="contestAnalysis" />
+    <result column="draw_odds" jdbcType="DECIMAL" property="drawOdds" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, p_id, team_first_win_num, team_first_win_rate, team_first_avg_num, team_first_avg_loss_num, 
+    team_first_win_odds, team_first_concede_odds, team_first_big_small_odds, team_second_win_num, 
+    team_second_win_rate, team_second_avg_num, team_second_avg_loss_num, team_second_win_odds, 
+    team_second_concede_odds, team_second_big_small_odds, recommend_odds, contest_analysis, 
+    draw_odds, create_user, create_date, update_user, update_date
+  </sql>
+  <select id="selectByExample" parameterType="com.coin.entity.TContestDetailExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_contest_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_contest_detail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_contest_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.coin.entity.TContestDetailExample">
+    delete from t_contest_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.coin.entity.TContestDetail">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_contest_detail (p_id, team_first_win_num, team_first_win_rate, 
+      team_first_avg_num, team_first_avg_loss_num, team_first_win_odds, 
+      team_first_concede_odds, team_first_big_small_odds, 
+      team_second_win_num, team_second_win_rate, team_second_avg_num, 
+      team_second_avg_loss_num, team_second_win_odds, 
+      team_second_concede_odds, team_second_big_small_odds, 
+      recommend_odds, contest_analysis, draw_odds, 
+      create_user, create_date, update_user, 
+      update_date)
+    values (#{pId,jdbcType=INTEGER}, #{teamFirstWinNum,jdbcType=INTEGER}, #{teamFirstWinRate,jdbcType=DECIMAL}, 
+      #{teamFirstAvgNum,jdbcType=DECIMAL}, #{teamFirstAvgLossNum,jdbcType=DECIMAL}, #{teamFirstWinOdds,jdbcType=DECIMAL}, 
+      #{teamFirstConcedeOdds,jdbcType=VARCHAR}, #{teamFirstBigSmallOdds,jdbcType=VARCHAR}, 
+      #{teamSecondWinNum,jdbcType=INTEGER}, #{teamSecondWinRate,jdbcType=DECIMAL}, #{teamSecondAvgNum,jdbcType=DECIMAL}, 
+      #{teamSecondAvgLossNum,jdbcType=DECIMAL}, #{teamSecondWinOdds,jdbcType=DECIMAL}, 
+      #{teamSecondConcedeOdds,jdbcType=VARCHAR}, #{teamSecondBigSmallOdds,jdbcType=VARCHAR}, 
+      #{recommendOdds,jdbcType=VARCHAR}, #{contestAnalysis,jdbcType=VARCHAR}, #{drawOdds,jdbcType=DECIMAL}, 
+      #{createUser,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.coin.entity.TContestDetail">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_contest_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pId != null">
+        p_id,
+      </if>
+      <if test="teamFirstWinNum != null">
+        team_first_win_num,
+      </if>
+      <if test="teamFirstWinRate != null">
+        team_first_win_rate,
+      </if>
+      <if test="teamFirstAvgNum != null">
+        team_first_avg_num,
+      </if>
+      <if test="teamFirstAvgLossNum != null">
+        team_first_avg_loss_num,
+      </if>
+      <if test="teamFirstWinOdds != null">
+        team_first_win_odds,
+      </if>
+      <if test="teamFirstConcedeOdds != null">
+        team_first_concede_odds,
+      </if>
+      <if test="teamFirstBigSmallOdds != null">
+        team_first_big_small_odds,
+      </if>
+      <if test="teamSecondWinNum != null">
+        team_second_win_num,
+      </if>
+      <if test="teamSecondWinRate != null">
+        team_second_win_rate,
+      </if>
+      <if test="teamSecondAvgNum != null">
+        team_second_avg_num,
+      </if>
+      <if test="teamSecondAvgLossNum != null">
+        team_second_avg_loss_num,
+      </if>
+      <if test="teamSecondWinOdds != null">
+        team_second_win_odds,
+      </if>
+      <if test="teamSecondConcedeOdds != null">
+        team_second_concede_odds,
+      </if>
+      <if test="teamSecondBigSmallOdds != null">
+        team_second_big_small_odds,
+      </if>
+      <if test="recommendOdds != null">
+        recommend_odds,
+      </if>
+      <if test="contestAnalysis != null">
+        contest_analysis,
+      </if>
+      <if test="drawOdds != null">
+        draw_odds,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pId != null">
+        #{pId,jdbcType=INTEGER},
+      </if>
+      <if test="teamFirstWinNum != null">
+        #{teamFirstWinNum,jdbcType=INTEGER},
+      </if>
+      <if test="teamFirstWinRate != null">
+        #{teamFirstWinRate,jdbcType=DECIMAL},
+      </if>
+      <if test="teamFirstAvgNum != null">
+        #{teamFirstAvgNum,jdbcType=DECIMAL},
+      </if>
+      <if test="teamFirstAvgLossNum != null">
+        #{teamFirstAvgLossNum,jdbcType=DECIMAL},
+      </if>
+      <if test="teamFirstWinOdds != null">
+        #{teamFirstWinOdds,jdbcType=DECIMAL},
+      </if>
+      <if test="teamFirstConcedeOdds != null">
+        #{teamFirstConcedeOdds,jdbcType=VARCHAR},
+      </if>
+      <if test="teamFirstBigSmallOdds != null">
+        #{teamFirstBigSmallOdds,jdbcType=VARCHAR},
+      </if>
+      <if test="teamSecondWinNum != null">
+        #{teamSecondWinNum,jdbcType=INTEGER},
+      </if>
+      <if test="teamSecondWinRate != null">
+        #{teamSecondWinRate,jdbcType=DECIMAL},
+      </if>
+      <if test="teamSecondAvgNum != null">
+        #{teamSecondAvgNum,jdbcType=DECIMAL},
+      </if>
+      <if test="teamSecondAvgLossNum != null">
+        #{teamSecondAvgLossNum,jdbcType=DECIMAL},
+      </if>
+      <if test="teamSecondWinOdds != null">
+        #{teamSecondWinOdds,jdbcType=DECIMAL},
+      </if>
+      <if test="teamSecondConcedeOdds != null">
+        #{teamSecondConcedeOdds,jdbcType=VARCHAR},
+      </if>
+      <if test="teamSecondBigSmallOdds != null">
+        #{teamSecondBigSmallOdds,jdbcType=VARCHAR},
+      </if>
+      <if test="recommendOdds != null">
+        #{recommendOdds,jdbcType=VARCHAR},
+      </if>
+      <if test="contestAnalysis != null">
+        #{contestAnalysis,jdbcType=VARCHAR},
+      </if>
+      <if test="drawOdds != null">
+        #{drawOdds,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.coin.entity.TContestDetailExample" resultType="java.lang.Long">
+    select count(*) from t_contest_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_contest_detail
+    <set>
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
+      </if>
+      <if test="row.pId != null">
+        p_id = #{row.pId,jdbcType=INTEGER},
+      </if>
+      <if test="row.teamFirstWinNum != null">
+        team_first_win_num = #{row.teamFirstWinNum,jdbcType=INTEGER},
+      </if>
+      <if test="row.teamFirstWinRate != null">
+        team_first_win_rate = #{row.teamFirstWinRate,jdbcType=DECIMAL},
+      </if>
+      <if test="row.teamFirstAvgNum != null">
+        team_first_avg_num = #{row.teamFirstAvgNum,jdbcType=DECIMAL},
+      </if>
+      <if test="row.teamFirstAvgLossNum != null">
+        team_first_avg_loss_num = #{row.teamFirstAvgLossNum,jdbcType=DECIMAL},
+      </if>
+      <if test="row.teamFirstWinOdds != null">
+        team_first_win_odds = #{row.teamFirstWinOdds,jdbcType=DECIMAL},
+      </if>
+      <if test="row.teamFirstConcedeOdds != null">
+        team_first_concede_odds = #{row.teamFirstConcedeOdds,jdbcType=VARCHAR},
+      </if>
+      <if test="row.teamFirstBigSmallOdds != null">
+        team_first_big_small_odds = #{row.teamFirstBigSmallOdds,jdbcType=VARCHAR},
+      </if>
+      <if test="row.teamSecondWinNum != null">
+        team_second_win_num = #{row.teamSecondWinNum,jdbcType=INTEGER},
+      </if>
+      <if test="row.teamSecondWinRate != null">
+        team_second_win_rate = #{row.teamSecondWinRate,jdbcType=DECIMAL},
+      </if>
+      <if test="row.teamSecondAvgNum != null">
+        team_second_avg_num = #{row.teamSecondAvgNum,jdbcType=DECIMAL},
+      </if>
+      <if test="row.teamSecondAvgLossNum != null">
+        team_second_avg_loss_num = #{row.teamSecondAvgLossNum,jdbcType=DECIMAL},
+      </if>
+      <if test="row.teamSecondWinOdds != null">
+        team_second_win_odds = #{row.teamSecondWinOdds,jdbcType=DECIMAL},
+      </if>
+      <if test="row.teamSecondConcedeOdds != null">
+        team_second_concede_odds = #{row.teamSecondConcedeOdds,jdbcType=VARCHAR},
+      </if>
+      <if test="row.teamSecondBigSmallOdds != null">
+        team_second_big_small_odds = #{row.teamSecondBigSmallOdds,jdbcType=VARCHAR},
+      </if>
+      <if test="row.recommendOdds != null">
+        recommend_odds = #{row.recommendOdds,jdbcType=VARCHAR},
+      </if>
+      <if test="row.contestAnalysis != null">
+        contest_analysis = #{row.contestAnalysis,jdbcType=VARCHAR},
+      </if>
+      <if test="row.drawOdds != null">
+        draw_odds = #{row.drawOdds,jdbcType=DECIMAL},
+      </if>
+      <if test="row.createUser != null">
+        create_user = #{row.createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="row.createDate != null">
+        create_date = #{row.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.updateUser != null">
+        update_user = #{row.updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="row.updateDate != null">
+        update_date = #{row.updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_contest_detail
+    set id = #{row.id,jdbcType=INTEGER},
+      p_id = #{row.pId,jdbcType=INTEGER},
+      team_first_win_num = #{row.teamFirstWinNum,jdbcType=INTEGER},
+      team_first_win_rate = #{row.teamFirstWinRate,jdbcType=DECIMAL},
+      team_first_avg_num = #{row.teamFirstAvgNum,jdbcType=DECIMAL},
+      team_first_avg_loss_num = #{row.teamFirstAvgLossNum,jdbcType=DECIMAL},
+      team_first_win_odds = #{row.teamFirstWinOdds,jdbcType=DECIMAL},
+      team_first_concede_odds = #{row.teamFirstConcedeOdds,jdbcType=VARCHAR},
+      team_first_big_small_odds = #{row.teamFirstBigSmallOdds,jdbcType=VARCHAR},
+      team_second_win_num = #{row.teamSecondWinNum,jdbcType=INTEGER},
+      team_second_win_rate = #{row.teamSecondWinRate,jdbcType=DECIMAL},
+      team_second_avg_num = #{row.teamSecondAvgNum,jdbcType=DECIMAL},
+      team_second_avg_loss_num = #{row.teamSecondAvgLossNum,jdbcType=DECIMAL},
+      team_second_win_odds = #{row.teamSecondWinOdds,jdbcType=DECIMAL},
+      team_second_concede_odds = #{row.teamSecondConcedeOdds,jdbcType=VARCHAR},
+      team_second_big_small_odds = #{row.teamSecondBigSmallOdds,jdbcType=VARCHAR},
+      recommend_odds = #{row.recommendOdds,jdbcType=VARCHAR},
+      contest_analysis = #{row.contestAnalysis,jdbcType=VARCHAR},
+      draw_odds = #{row.drawOdds,jdbcType=DECIMAL},
+      create_user = #{row.createUser,jdbcType=VARCHAR},
+      create_date = #{row.createDate,jdbcType=TIMESTAMP},
+      update_user = #{row.updateUser,jdbcType=VARCHAR},
+      update_date = #{row.updateDate,jdbcType=TIMESTAMP}
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.coin.entity.TContestDetail">
+    update t_contest_detail
+    <set>
+      <if test="pId != null">
+        p_id = #{pId,jdbcType=INTEGER},
+      </if>
+      <if test="teamFirstWinNum != null">
+        team_first_win_num = #{teamFirstWinNum,jdbcType=INTEGER},
+      </if>
+      <if test="teamFirstWinRate != null">
+        team_first_win_rate = #{teamFirstWinRate,jdbcType=DECIMAL},
+      </if>
+      <if test="teamFirstAvgNum != null">
+        team_first_avg_num = #{teamFirstAvgNum,jdbcType=DECIMAL},
+      </if>
+      <if test="teamFirstAvgLossNum != null">
+        team_first_avg_loss_num = #{teamFirstAvgLossNum,jdbcType=DECIMAL},
+      </if>
+      <if test="teamFirstWinOdds != null">
+        team_first_win_odds = #{teamFirstWinOdds,jdbcType=DECIMAL},
+      </if>
+      <if test="teamFirstConcedeOdds != null">
+        team_first_concede_odds = #{teamFirstConcedeOdds,jdbcType=VARCHAR},
+      </if>
+      <if test="teamFirstBigSmallOdds != null">
+        team_first_big_small_odds = #{teamFirstBigSmallOdds,jdbcType=VARCHAR},
+      </if>
+      <if test="teamSecondWinNum != null">
+        team_second_win_num = #{teamSecondWinNum,jdbcType=INTEGER},
+      </if>
+      <if test="teamSecondWinRate != null">
+        team_second_win_rate = #{teamSecondWinRate,jdbcType=DECIMAL},
+      </if>
+      <if test="teamSecondAvgNum != null">
+        team_second_avg_num = #{teamSecondAvgNum,jdbcType=DECIMAL},
+      </if>
+      <if test="teamSecondAvgLossNum != null">
+        team_second_avg_loss_num = #{teamSecondAvgLossNum,jdbcType=DECIMAL},
+      </if>
+      <if test="teamSecondWinOdds != null">
+        team_second_win_odds = #{teamSecondWinOdds,jdbcType=DECIMAL},
+      </if>
+      <if test="teamSecondConcedeOdds != null">
+        team_second_concede_odds = #{teamSecondConcedeOdds,jdbcType=VARCHAR},
+      </if>
+      <if test="teamSecondBigSmallOdds != null">
+        team_second_big_small_odds = #{teamSecondBigSmallOdds,jdbcType=VARCHAR},
+      </if>
+      <if test="recommendOdds != null">
+        recommend_odds = #{recommendOdds,jdbcType=VARCHAR},
+      </if>
+      <if test="contestAnalysis != null">
+        contest_analysis = #{contestAnalysis,jdbcType=VARCHAR},
+      </if>
+      <if test="drawOdds != null">
+        draw_odds = #{drawOdds,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.coin.entity.TContestDetail">
+    update t_contest_detail
+    set p_id = #{pId,jdbcType=INTEGER},
+      team_first_win_num = #{teamFirstWinNum,jdbcType=INTEGER},
+      team_first_win_rate = #{teamFirstWinRate,jdbcType=DECIMAL},
+      team_first_avg_num = #{teamFirstAvgNum,jdbcType=DECIMAL},
+      team_first_avg_loss_num = #{teamFirstAvgLossNum,jdbcType=DECIMAL},
+      team_first_win_odds = #{teamFirstWinOdds,jdbcType=DECIMAL},
+      team_first_concede_odds = #{teamFirstConcedeOdds,jdbcType=VARCHAR},
+      team_first_big_small_odds = #{teamFirstBigSmallOdds,jdbcType=VARCHAR},
+      team_second_win_num = #{teamSecondWinNum,jdbcType=INTEGER},
+      team_second_win_rate = #{teamSecondWinRate,jdbcType=DECIMAL},
+      team_second_avg_num = #{teamSecondAvgNum,jdbcType=DECIMAL},
+      team_second_avg_loss_num = #{teamSecondAvgLossNum,jdbcType=DECIMAL},
+      team_second_win_odds = #{teamSecondWinOdds,jdbcType=DECIMAL},
+      team_second_concede_odds = #{teamSecondConcedeOdds,jdbcType=VARCHAR},
+      team_second_big_small_odds = #{teamSecondBigSmallOdds,jdbcType=VARCHAR},
+      recommend_odds = #{recommendOdds,jdbcType=VARCHAR},
+      contest_analysis = #{contestAnalysis,jdbcType=VARCHAR},
+      draw_odds = #{drawOdds,jdbcType=DECIMAL},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
