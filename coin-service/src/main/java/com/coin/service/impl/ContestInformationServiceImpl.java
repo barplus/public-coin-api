@@ -31,6 +31,7 @@ public class ContestInformationServiceImpl implements ContestInformationService 
     public PageInfo<TContestInformation> pageList(ContestInformationReq req) throws Exception {
         TContestInformationExample example = new TContestInformationExample();
         TContestInformationExample.Criteria criteria = example.createCriteria();
+        criteria.andIsDeleteEqualTo(0);
         if(StringUtils.isNotBlank(req.getInformationTitle())){
             criteria.andInformationTitleEqualTo(req.getInformationTitle());
         }
@@ -45,6 +46,13 @@ public class ContestInformationServiceImpl implements ContestInformationService 
         }
         if(req.getCreateDateMax() != null){
             criteria.andCreateDateLessThanOrEqualTo(req.getCreateDateMax());
+        }
+        if(req.getShowDate() != null){
+            criteria.andShowDateStartLessThanOrEqualTo(req.getShowDate());
+            criteria.andShowDateEndGreaterThanOrEqualTo(req.getShowDate());
+        }
+        if(req.getIsPublish() != null){
+            criteria.andIsPublishEqualTo(req.getIsPublish());
         }
         example.setOrderByClause(" id");
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
@@ -76,7 +84,7 @@ public class ContestInformationServiceImpl implements ContestInformationService 
         information.setInformationTitle(req.getInformationTitle());
         information.setInformationContent(req.getInformationContent());
         information.setIsPublish(req.getIsPublish());
-        if(req.getIsPublish().intValue() == 1){
+        if(req.getIsPublish() != null && req.getIsPublish().intValue() == 1){
             information.setPublishDate(now);
         }
         information.setInformationPic(req.getInformationPic());

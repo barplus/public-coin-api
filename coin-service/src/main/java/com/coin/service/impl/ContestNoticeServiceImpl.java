@@ -48,7 +48,26 @@ public class ContestNoticeServiceImpl implements ContestNoticeService {
         if(StringUtils.isNotBlank(req.getUpdateUser())){
             criteria.andUpdateUserEqualTo(req.getUpdateUser());
         }
-        example.setOrderByClause(" id");
+        if(req.getShowDate() != null){
+            criteria.andShowDateStartLessThanOrEqualTo(req.getShowDate());
+            criteria.andShowDateEndGreaterThanOrEqualTo(req.getShowDate());
+        }
+        if(req.getIsPublish() != null){
+            criteria.andIsPublishEqualTo(req.getIsPublish());
+        }
+        if(req.getPublishDate() != null){
+            criteria.andPublishDateLessThanOrEqualTo(req.getPublishDate());
+        }
+        if(!CollectionUtils.isEmpty(req.getNotInIdList())){
+            criteria.andIdNotIn(req.getNotInIdList());
+        }
+        if(req.getTopDate() != null){
+            criteria.andTopDateStartLessThanOrEqualTo(req.getTopDate());
+            criteria.andTopDateEndGreaterThanOrEqualTo(req.getTopDate());
+            example.setOrderByClause((" is_top desc, top_date_start"));
+        } else {
+            example.setOrderByClause(" id");
+        }
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
         List<TContestNotice> list = tContestNoticeMapper.selectByExample(example);
         PageInfo<TContestNotice> page = new PageInfo<>(list);

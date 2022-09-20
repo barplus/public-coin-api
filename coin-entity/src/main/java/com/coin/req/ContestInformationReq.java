@@ -53,5 +53,6 @@ public class ContestInformationReq extends CommonReq implements Serializable {
     private String updateUser;
 
     private Date updateDate;
+    private Date showDate;
 
 }

@@ -7,6 +7,7 @@ import com.coin.service.ContestInformationService;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.exception.BizException;
 import com.coin.service.util.ParamUtil;
+import com.coin.web.annotation.CommonSecure;
 import com.coin.web.annotation.OfficeSecure;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/contestInformation")
@@ -44,6 +47,29 @@ public class ContestInformationController {
             return new MyResp(e.getCode(), e.getErrMsg());
         }catch(Exception e){
             logger.error("contestInformation-pageList-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "查询失败");
+    }
+
+    @PostMapping("/getList")
+    @CommonSecure
+    public MyResp getList(@RequestBody ContestInformationReq req){
+        logger.info("contestInformation-getList-req={}", req);
+        try{
+            Date now = new Date();
+            req.setPageNum(1);
+            req.setPageSize(10000);
+            req.setShowDate(now);
+            req.setStatus(1);
+            req.setIsPublish(1);
+            req.setPublishDate(now);
+            List<TContestInformation> list = contestInformationService.pageList(req).getList();
+            return new MyResp(CodeCons.SUCCESS, "", list);
+        }catch(BizException e){
+            logger.error("contestInformation-getList-e", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("contestInformation-getList-error", e);
         }
         return new MyResp(CodeCons.ERROR, "查询失败");
     }

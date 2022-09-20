@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coin.mapper.ext.ContestMapper">
+  <resultMap id="contestResultMap" type="com.coin.entity.TContest">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="contest_type" jdbcType="VARCHAR" property="contestType" />
+    <result column="contest_name" jdbcType="VARCHAR" property="contestName" />
+    <result column="contest_date" jdbcType="TIMESTAMP" property="contestDate" />
+    <result column="team_first" jdbcType="VARCHAR" property="teamFirst" />
+    <result column="team_first_pic" jdbcType="VARCHAR" property="teamFirstPic" />
+    <result column="team_second" jdbcType="VARCHAR" property="teamSecond" />
+    <result column="team_second_pic" jdbcType="VARCHAR" property="teamSecondPic" />
+    <result column="is_hot" jdbcType="INTEGER" property="isHot" />
+    <result column="is_recommend" jdbcType="INTEGER" property="isRecommend" />
+    <result column="team_first_score" jdbcType="INTEGER" property="teamFirstScore" />
+    <result column="team_second_score" jdbcType="INTEGER" property="teamSecondScore" />
+    <result column="is_publish" jdbcType="INTEGER" property="isPublish" />
+    <result column="publish_date" jdbcType="TIMESTAMP" property="publishDate" />
+    <result column="show_date_start" jdbcType="TIMESTAMP" property="showDateStart" />
+    <result column="show_date_end" jdbcType="TIMESTAMP" property="showDateEnd" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="sort_num" jdbcType="INTEGER" property="sortNum" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+
+  <select id="getList" resultMap="contestResultMap">
+    select *
+    from t_contest t
+    where 1=1
+    <if test="contestType != null">
+      and t.contest_type = #{contestType}
+    </if>
+    <if test="contestName != null">
+      and t.contest_name = #{contestName}
+    </if>
+    <if test="contestContent != null">
+      and (
+        t.team_first like concat('%',#{contestContent},'%')
+        or t.team_second like concat('%',#{contestContent},'%')
+      )
+    </if>
+    <if test="createDateMin != null">
+      and t.create_date &gt;= #{createDateMin}
+    </if>
+    <if test="createDateMax != null">
+      and t.create_date &lt;= #{createDateMax}
+    </if>
+    <if test="updateUser != null">
+      and t.update_user = #{updateUser}
+    </if>
+    <if test="isHot != null">
+      and t.is_hot = #{isHot}
+    </if>
+    <if test="isRecommend != null">
+      and t.is_recommend = #{isRecommend}
+    </if>
+    <if test="status != null">
+      and t.status = #{status}
+    </if>
+    order by sort_num
+  </select>
+</mapper>

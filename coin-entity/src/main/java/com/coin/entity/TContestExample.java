@@ -765,73 +765,123 @@ public class TContestExample {
             return (Criteria) this;
         }
 
-        public Criteria andContestResultIsNull() {
-            addCriterion("contest_result is null");
+        public Criteria andTeamFirstScoreIsNull() {
+            addCriterion("team_first_score is null");
             return (Criteria) this;
         }
 
-        public Criteria andContestResultIsNotNull() {
-            addCriterion("contest_result is not null");
+        public Criteria andTeamFirstScoreIsNotNull() {
+            addCriterion("team_first_score is not null");
             return (Criteria) this;
         }
 
-        public Criteria andContestResultEqualTo(String value) {
-            addCriterion("contest_result =", value, "contestResult");
+        public Criteria andTeamFirstScoreEqualTo(Integer value) {
+            addCriterion("team_first_score =", value, "teamFirstScore");
             return (Criteria) this;
         }
 
-        public Criteria andContestResultNotEqualTo(String value) {
-            addCriterion("contest_result <>", value, "contestResult");
+        public Criteria andTeamFirstScoreNotEqualTo(Integer value) {
+            addCriterion("team_first_score <>", value, "teamFirstScore");
             return (Criteria) this;
         }
 
-        public Criteria andContestResultGreaterThan(String value) {
-            addCriterion("contest_result >", value, "contestResult");
+        public Criteria andTeamFirstScoreGreaterThan(Integer value) {
+            addCriterion("team_first_score >", value, "teamFirstScore");
             return (Criteria) this;
         }
 
-        public Criteria andContestResultGreaterThanOrEqualTo(String value) {
-            addCriterion("contest_result >=", value, "contestResult");
+        public Criteria andTeamFirstScoreGreaterThanOrEqualTo(Integer value) {
+            addCriterion("team_first_score >=", value, "teamFirstScore");
             return (Criteria) this;
         }
 
-        public Criteria andContestResultLessThan(String value) {
-            addCriterion("contest_result <", value, "contestResult");
+        public Criteria andTeamFirstScoreLessThan(Integer value) {
+            addCriterion("team_first_score <", value, "teamFirstScore");
             return (Criteria) this;
         }
 
-        public Criteria andContestResultLessThanOrEqualTo(String value) {
-            addCriterion("contest_result <=", value, "contestResult");
+        public Criteria andTeamFirstScoreLessThanOrEqualTo(Integer value) {
+            addCriterion("team_first_score <=", value, "teamFirstScore");
             return (Criteria) this;
         }
 
-        public Criteria andContestResultLike(String value) {
-            addCriterion("contest_result like", value, "contestResult");
+        public Criteria andTeamFirstScoreIn(List<Integer> values) {
+            addCriterion("team_first_score in", values, "teamFirstScore");
             return (Criteria) this;
         }
 
-        public Criteria andContestResultNotLike(String value) {
-            addCriterion("contest_result not like", value, "contestResult");
+        public Criteria andTeamFirstScoreNotIn(List<Integer> values) {
+            addCriterion("team_first_score not in", values, "teamFirstScore");
             return (Criteria) this;
         }
 
-        public Criteria andContestResultIn(List<String> values) {
-            addCriterion("contest_result in", values, "contestResult");
+        public Criteria andTeamFirstScoreBetween(Integer value1, Integer value2) {
+            addCriterion("team_first_score between", value1, value2, "teamFirstScore");
             return (Criteria) this;
         }
 
-        public Criteria andContestResultNotIn(List<String> values) {
-            addCriterion("contest_result not in", values, "contestResult");
+        public Criteria andTeamFirstScoreNotBetween(Integer value1, Integer value2) {
+            addCriterion("team_first_score not between", value1, value2, "teamFirstScore");
             return (Criteria) this;
         }
 
-        public Criteria andContestResultBetween(String value1, String value2) {
-            addCriterion("contest_result between", value1, value2, "contestResult");
+        public Criteria andTeamSecondScoreIsNull() {
+            addCriterion("team_second_score is null");
             return (Criteria) this;
         }
 
-        public Criteria andContestResultNotBetween(String value1, String value2) {
-            addCriterion("contest_result not between", value1, value2, "contestResult");
+        public Criteria andTeamSecondScoreIsNotNull() {
+            addCriterion("team_second_score is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamSecondScoreEqualTo(Integer value) {
+            addCriterion("team_second_score =", value, "teamSecondScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamSecondScoreNotEqualTo(Integer value) {
+            addCriterion("team_second_score <>", value, "teamSecondScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamSecondScoreGreaterThan(Integer value) {
+            addCriterion("team_second_score >", value, "teamSecondScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamSecondScoreGreaterThanOrEqualTo(Integer value) {
+            addCriterion("team_second_score >=", value, "teamSecondScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamSecondScoreLessThan(Integer value) {
+            addCriterion("team_second_score <", value, "teamSecondScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamSecondScoreLessThanOrEqualTo(Integer value) {
+            addCriterion("team_second_score <=", value, "teamSecondScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamSecondScoreIn(List<Integer> values) {
+            addCriterion("team_second_score in", values, "teamSecondScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamSecondScoreNotIn(List<Integer> values) {
+            addCriterion("team_second_score not in", values, "teamSecondScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamSecondScoreBetween(Integer value1, Integer value2) {
+            addCriterion("team_second_score between", value1, value2, "teamSecondScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTeamSecondScoreNotBetween(Integer value1, Integer value2) {
+            addCriterion("team_second_score not between", value1, value2, "teamSecondScore");
             return (Criteria) this;
         }
 

@@ -7,17 +7,22 @@ import com.coin.service.ContestNoticeService;
 import com.coin.service.constant.CodeCons;
 import com.coin.service.exception.BizException;
 import com.coin.service.util.ParamUtil;
+import com.coin.web.annotation.CommonSecure;
 import com.coin.web.annotation.OfficeSecure;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/contestNotice")
@@ -44,6 +49,39 @@ public class ContestNoticeController {
             return new MyResp(e.getCode(), e.getErrMsg());
         }catch(Exception e){
             logger.error("contestNotice-pageList-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "查询失败");
+    }
+
+    @PostMapping("/getList")
+    @CommonSecure
+    public MyResp getList(@RequestBody ContestNoticeReq req){
+        logger.info("contestNotice-getList-req={}", req);
+        try{
+            Date now = new Date();
+            req.setPageNum(1);
+            req.setPageSize(10000);
+            req.setShowDate(now);
+            req.setStatus(1);
+            req.setIsPublish(1);
+            req.setPublishDate(now);
+            req.setTopDate(now);
+            List<TContestNotice> list = contestNoticeService.pageList(req).getList();
+            if(!CollectionUtils.isEmpty(list)){
+                List<Integer> notInIdList = new ArrayList<>();
+                for(TContestNotice contestNotice:list){
+                    notInIdList.add(contestNotice.getId());
+                }
+                req.setNotInIdList(notInIdList);
+            };
+            req.setTopDate(null);
+            list.addAll(contestNoticeService.pageList(req).getList());
+            return new MyResp(CodeCons.SUCCESS, "", list);
+        }catch(BizException e){
+            logger.error("contestNotice-getList-e", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("contestNotice-getList-error", e);
         }
         return new MyResp(CodeCons.ERROR, "查询失败");
     }

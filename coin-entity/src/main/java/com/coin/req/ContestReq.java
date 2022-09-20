@@ -18,6 +18,10 @@ public class ContestReq extends CommonReq implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private String ids;
+    private Integer teamFirstScore;
+    private Integer teamSecondScore;
+    private Integer contestContent;
     private String contestType;
     private String contestName;
     private Integer isHot;
@@ -44,6 +48,14 @@ public class ContestReq extends CommonReq implements Serializable {
     private String teamSecondPic;
     private Integer status;
     private Integer sortNum;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date createDateMin;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date createDateMax;
+    private String updateUser;
+    private Integer needDetail;
 
     private Integer teamFirstWinNum;
     private BigDecimal teamFirstWinRate;

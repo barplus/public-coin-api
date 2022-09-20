@@ -161,4 +161,20 @@ public class DictController {
         return new MyResp(CodeCons.ERROR, "请求失败");
     }
 
+    @PostMapping("/queryContestConfig")
+    @CommonSecure
+    public MyResp getContestConfig(@RequestBody ContestConfigReq req){
+        logger.info("dict-queryContestConfig-req={}", req);
+        try{
+            ContestConfigRsp config = dictService.getContestConfig();
+            return new MyResp(CodeCons.SUCCESS, "", config);
+        }catch(BizException e){
+            logger.error("dict-queryContestConfig-e", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("dict-queryContestConfig-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "请求失败");
+    }
+
 }

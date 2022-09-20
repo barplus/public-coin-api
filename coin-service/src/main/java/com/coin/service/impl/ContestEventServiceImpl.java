@@ -52,6 +52,16 @@ public class ContestEventServiceImpl implements ContestEventService {
         if(req.getShowDateEnd() != null){
             criteria.andShowDateStartLessThanOrEqualTo(req.getShowDateEnd());
         }
+        if(req.getShowDate() != null){
+            criteria.andShowDateStartLessThanOrEqualTo(req.getShowDate());
+            criteria.andShowDateEndLessThanOrEqualTo(req.getShowDate());
+        }
+        if(req.getIsPublish() != null){
+            criteria.andIsPublishEqualTo(req.getIsPublish());
+        }
+        if(req.getPublishDate() != null){
+            criteria.andPublishDateLessThanOrEqualTo(req.getPublishDate());
+        }
         example.setOrderByClause(" sort_num");
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
         List<TContestEvent> list = tContestEventMapper.selectByExample(example);

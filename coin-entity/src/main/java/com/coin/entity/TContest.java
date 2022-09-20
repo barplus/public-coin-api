@@ -24,7 +24,9 @@ public class TContest implements Serializable {
 
     private Integer isRecommend;
 
-    private String contestResult;
+    private Integer teamFirstScore;
+
+    private Integer teamSecondScore;
 
     private Integer isPublish;
 
@@ -128,12 +130,20 @@ public class TContest implements Serializable {
         this.isRecommend = isRecommend;
     }
 
-    public String getContestResult() {
-        return contestResult;
+    public Integer getTeamFirstScore() {
+        return teamFirstScore;
     }
 
-    public void setContestResult(String contestResult) {
-        this.contestResult = contestResult;
+    public void setTeamFirstScore(Integer teamFirstScore) {
+        this.teamFirstScore = teamFirstScore;
+    }
+
+    public Integer getTeamSecondScore() {
+        return teamSecondScore;
+    }
+
+    public void setTeamSecondScore(Integer teamSecondScore) {
+        this.teamSecondScore = teamSecondScore;
     }
 
     public Integer getIsPublish() {
@@ -232,7 +242,8 @@ public class TContest implements Serializable {
         sb.append(", teamSecondPic=").append(teamSecondPic);
         sb.append(", isHot=").append(isHot);
         sb.append(", isRecommend=").append(isRecommend);
-        sb.append(", contestResult=").append(contestResult);
+        sb.append(", teamFirstScore=").append(teamFirstScore);
+        sb.append(", teamSecondScore=").append(teamSecondScore);
         sb.append(", isPublish=").append(isPublish);
         sb.append(", publishDate=").append(publishDate);
         sb.append(", showDateStart=").append(showDateStart);

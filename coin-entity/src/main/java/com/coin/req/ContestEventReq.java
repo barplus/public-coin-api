@@ -50,4 +50,6 @@ public class ContestEventReq extends CommonReq implements Serializable {
 
     private Date updateDate;
 
+    private Date showDate;
+
 }
