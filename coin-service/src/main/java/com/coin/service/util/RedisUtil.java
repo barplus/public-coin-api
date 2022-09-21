@@ -52,7 +52,7 @@ public class RedisUtil {
     }
 
     public long getExpire(String key) {
-        return redisTemplate.getExpire(key);
+        return redisTemplate.getExpire(namespace + key);
     }
 
     public boolean setExpire(String key, long time) {

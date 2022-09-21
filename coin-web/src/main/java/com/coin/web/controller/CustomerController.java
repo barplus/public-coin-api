@@ -43,7 +43,7 @@ public class CustomerController {
     private RedisUtil redisUtil;
 
     @PostMapping("/login")
-    @CommonSecure(needLogin = false)
+    @CommonSecure(needLogin = false, isLogin = true)
     public MyResp login(@RequestBody CustomerReq req){
         logger.info("customer-login-req={}", req);
         try{

@@ -54,7 +54,11 @@ public class CommonAspect {
                 waitMill = BizCons.SYS_REQ_INTERVAL_S;
             }
             if(!commonSecure.needLogin()){
-                loginName = req.getLoginName();
+                if(commonSecure.isLogin()){
+                    loginName = req.getLoginName();
+                }else{
+                    loginName = "sys-api";
+                }
             }
             if(!redisUtil.setNx(loginName+method, "1", waitMill)){
                 return new MyResp(CodeCons.REQ_TOO_FAST, "请求太快，请稍后");

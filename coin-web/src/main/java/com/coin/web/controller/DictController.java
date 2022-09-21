@@ -49,7 +49,7 @@ public class DictController {
     }
 
     @PostMapping("/getDictList")
-    @CommonSecure
+    @CommonSecure(needLogin = false)
     public MyResp getDictList(@RequestBody DictReq req){
         logger.info("dict-getDictList-req={}", req);
         try{
@@ -162,7 +162,7 @@ public class DictController {
     }
 
     @PostMapping("/queryContestConfig")
-    @CommonSecure
+    @CommonSecure(needLogin = false)
     public MyResp getContestConfig(@RequestBody ContestConfigReq req){
         logger.info("dict-queryContestConfig-req={}", req);
         try{

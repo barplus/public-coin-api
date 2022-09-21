@@ -34,7 +34,7 @@ public class ContestSponsorshipLogoServiceImpl implements ContestSponsorshipLogo
     @Override
     public void add(ContestSponsorshipLogoReq req) throws Exception {
         TContestSponsorshipLogo logo = BizUtil.getInsertInfo(new TContestSponsorshipLogo(), req.getLoginName(), new Date());
-        logo.setSortNum(req.getShortNum());
+        logo.setSortNum(req.getSortNum());
         logo.setSponsorshipLogo(req.getUrl());
         tContestSponsorshipLogoMapper.insertSelective(logo);
     }

@@ -159,14 +159,10 @@ public class ContestController {
     }
 
     @PostMapping("/getListByType")
-    @CommonSecure
+    @CommonSecure(needLogin = false, fastQuery = true)
     public MyResp getListByType(@RequestBody ContestReq req){
         logger.info("contest-getListByType-req={}", req);
         try{
-            MyResp valid = ParamUtil.NotBlankValid(req.getContestType(), "比赛类型");
-            if(valid != null){
-                return valid;
-            }
             List<ContestRsp> list = contestService.getListByType(req);
             return new MyResp(CodeCons.SUCCESS, "", list);
         }catch(BizException e){
@@ -174,6 +170,26 @@ public class ContestController {
             return new MyResp(e.getCode(), e.getErrMsg());
         }catch(Exception e){
             logger.error("contest-getListByType-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "查询失败");
+    }
+
+    @PostMapping("/getById")
+    @CommonSecure(needLogin = false, fastQuery = true)
+    public MyResp getById(@RequestBody ContestReq req){
+        logger.info("contest-getById-req={}", req);
+        try{
+            MyResp valid = ParamUtil.NotBlankValid(req.getId(), "id");
+            if(valid != null){
+                return valid;
+            }
+            ContestRsp rsp = contestService.getById(req.getId());
+            return new MyResp(CodeCons.SUCCESS, "", rsp);
+        }catch(BizException e){
+            logger.error("contest-getById-error", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("contest-getById-error", e);
         }
         return new MyResp(CodeCons.ERROR, "查询失败");
     }

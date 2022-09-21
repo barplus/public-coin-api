@@ -16,6 +16,6 @@ public class ContestSponsorshipLogoReq extends CommonReq implements Serializable
 
     private String url;
 
-    private Integer shortNum;
+    private Integer sortNum;
 
 }

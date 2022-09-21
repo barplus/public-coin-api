@@ -3,6 +3,7 @@ package com.coin.service.impl;
 import com.coin.entity.TContest;
 import com.coin.entity.TContestDetail;
 import com.coin.entity.TContestExample;
+import com.coin.entity.TDict;
 import com.coin.mapper.TContestDetailMapper;
 import com.coin.mapper.TContestMapper;
 import com.coin.mapper.ext.ContestMapper;
@@ -10,6 +11,7 @@ import com.coin.req.ContestReq;
 import com.coin.rsp.ContestRsp;
 import com.coin.service.ContestDetailService;
 import com.coin.service.ContestService;
+import com.coin.service.DictService;
 import com.coin.service.util.BizUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -39,6 +41,8 @@ public class ContestServiceImpl implements ContestService {
     private TContestDetailMapper tContestDetailMapper;
     @Resource
     private ContestDetailService contestDetailService;
+    @Resource
+    private DictService dictService;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -190,9 +194,15 @@ public class ContestServiceImpl implements ContestService {
     @Override
     public List<ContestRsp> getListByType(ContestReq req) throws Exception {
         Date now = new Date();
+        boolean queryResult = req.getNeedDetail() != null && req.getNeedDetail().intValue() == 2;
         TContestExample example = new TContestExample();
         TContestExample.Criteria criteria = example.createCriteria();
-        criteria.andContestTypeEqualTo(req.getContestType());
+        if(!queryResult && StringUtils.isNotBlank(req.getContestType())){
+            criteria.andContestTypeEqualTo(req.getContestType());
+        }
+        if(StringUtils.isNotBlank(req.getContestName())){
+            criteria.andContestNameEqualTo(req.getContestName());
+        }
         criteria.andStatusEqualTo(1);
         criteria.andIsPublishEqualTo(1);
         criteria.andPublishDateLessThanOrEqualTo(now);
@@ -204,7 +214,17 @@ public class ContestServiceImpl implements ContestService {
         example.setOrderByClause(" is_recommend desc, sort_num");
         List<TContest> list = tContestMapper.selectByExample(example);
         List<ContestRsp> result = list.stream().map(contest->this.convertRsp(contest, req.getNeedDetail())).collect(Collectors.toList());
+        if(queryResult){
+            result = result.stream().filter(c->c.getContestDetail() != null).collect(Collectors.toList());
+        }
         return result;
+    }
+
+    @Override
+    public ContestRsp getById(Integer id) throws Exception {
+        TContest contest = tContestMapper.selectByPrimaryKey(id);
+        ContestRsp rsp = this.convertRsp(contest, 1);
+        return rsp;
     }
 
     @Override
@@ -218,10 +238,12 @@ public class ContestServiceImpl implements ContestService {
     private ContestRsp convertRsp(TContest contest, Integer needDetail) {
         ContestRsp rsp = new ContestRsp();
         BeanUtils.copyProperties(contest, rsp);
-        if(needDetail != null && needDetail.intValue() == 1){
+        if(needDetail != null && needDetail.intValue() > 0){
             try{
                 TContestDetail detail = contestDetailService.getByPid(contest.getId());
                 rsp.setContestDetail(detail);
+                TDict dict = dictService.getByTypeAndCode("CONTEST_NAME", rsp.getContestName());
+                rsp.setContestNameStr(dict.getDictName());
             }catch(Exception e){
                 logger.error("ContestRsp-convertRsp-error", e);
             }

@@ -17,6 +17,8 @@ public class ContestRsp implements Serializable {
 
     private String contestName;
 
+    private String contestNameStr;
+
     private Date contestDate;
 
     private String teamFirst;

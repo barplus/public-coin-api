@@ -32,6 +32,7 @@ public class ContestEventServiceImpl implements ContestEventService {
     public PageInfo<TContestEvent> pageList(ContestEventReq req) throws Exception {
         TContestEventExample example = new TContestEventExample();
         TContestEventExample.Criteria criteria = example.createCriteria();
+        criteria.andIsDeleteEqualTo(0);
         if(req.getShowDateStart() != null && req.getShowDateEnd() != null){
             if(req.getShowDateStart().after(req.getShowDateEnd())){
                 throw new BizException(CodeCons.ERROR, "展示结束时间不能小于开始时间");
@@ -74,6 +75,7 @@ public class ContestEventServiceImpl implements ContestEventService {
         Date now = new Date();
         TContestEvent event = BizUtil.getInsertInfo(new TContestEvent(), req.getLoginName(), now);
         event.setEventTitle(req.getEventTitle());
+        event.setSortNum(req.getSortNum());
         event.setEventTag(req.getEventTag());
         event.setShowDateStart(req.getShowDateStart());
         event.setShowDateEnd(req.getShowDateEnd());
@@ -98,6 +100,7 @@ public class ContestEventServiceImpl implements ContestEventService {
         TContestEvent oldEvent = tContestEventMapper.selectByPrimaryKey(req.getId());
         TContestEvent event = BizUtil.getUpdateInfo(new TContestEvent(), req.getId(), req.getLoginName(), now);
         event.setEventTitle(req.getEventTitle());
+        event.setSortNum(req.getSortNum());
         event.setEventTag(req.getEventTag());
         event.setShowDateStart(req.getShowDateStart());
         event.setShowDateEnd(req.getShowDateEnd());
@@ -108,11 +111,12 @@ public class ContestEventServiceImpl implements ContestEventService {
                 throw new BizException(CodeCons.ERROR, "显示结束时间不能早于开始时间");
             }
         }
+        event.setStatus(req.getStatus());
         event.setIsJump(req.getIsJump());
         event.setJumpUrl(req.getJumpUrl());
         event.setEventPic(req.getEventPic());
         event.setIsPublish(req.getIsPublish());
-        if(req.getIsPublish().intValue() == 1){
+        if(req.getPublishDate() != null && req.getIsPublish().intValue() == 1){
             event.setPublishDate(now);
         }
         tContestEventMapper.updateByPrimaryKeySelective(event);

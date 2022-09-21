@@ -25,6 +25,8 @@ public class ContestEventReq extends CommonReq implements Serializable {
 
     private Integer isJump;
 
+    private Integer sortNum;
+
     private String jumpUrl;
 
     private Integer isPublish;

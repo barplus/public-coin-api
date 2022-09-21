@@ -31,7 +31,7 @@ public class ContestSponsorshipLogoController {
     public MyResp add(@RequestBody ContestSponsorshipLogoReq req){
         logger.info("contestSponsorshipLogo-add-req={}", req);
         try{
-            MyResp valid = ParamUtil.NotBlankValid(req.getUrl(), "url", req.getShortNum(), "序号");
+            MyResp valid = ParamUtil.NotBlankValid(req.getUrl(), "url", req.getSortNum(), "序号");
             if(valid != null){
                 return valid;
             }

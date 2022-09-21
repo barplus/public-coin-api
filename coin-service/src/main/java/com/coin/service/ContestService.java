@@ -21,6 +21,8 @@ public interface ContestService {
 
     List<ContestRsp> getListByType(ContestReq req) throws Exception;
 
+    ContestRsp getById(Integer id) throws Exception;
+
     PageInfo<TContest> pageList(ContestReq req) throws Exception;
 
 }

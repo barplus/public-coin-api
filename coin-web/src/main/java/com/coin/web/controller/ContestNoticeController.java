@@ -54,7 +54,7 @@ public class ContestNoticeController {
     }
 
     @PostMapping("/getList")
-    @CommonSecure
+    @CommonSecure(needLogin = false)
     public MyResp getList(@RequestBody ContestNoticeReq req){
         logger.info("contestNotice-getList-req={}", req);
         try{

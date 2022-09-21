@@ -93,6 +93,8 @@ public class DictServiceImpl implements DictService {
         rsp.setSponsorshipLogoLink(dict.getDictVal());
         dict = this.getByTypeAndCode("CONTEST_CONFIG", "BRAND_EXPLAIN");
         rsp.setBrandExplain(dict.getDictValBig());
+        dict = this.getByTypeAndCode("CONTEST_CONFIG", "SHARE_LINK");
+        rsp.setShareLink(dict.getDictVal());
         List<TContestSponsorshipLogo> list = contestSponsorshipLogoService.getAllList();
         rsp.setContestSponsorshipLogos(list);
         return rsp;
@@ -177,6 +179,11 @@ public class DictServiceImpl implements DictService {
         updateDict = BizUtil.getUpdateInfo(new TDict(), dict.getId(), req.getLoginName(), now);
         updateDict.setDictValBig(req.getBrandExplain());
         tDictMapper.updateByPrimaryKeySelective(updateDict);
+        dict = this.getByTypeAndCode("CONTEST_CONFIG", "SHARE_LINK");
+        updateDict = BizUtil.getUpdateInfo(new TDict(), dict.getId(), req.getLoginName(), now);
+        updateDict.setDictVal(req.getShareLink());
+        tDictMapper.updateByPrimaryKeySelective(updateDict);
+
     }
 
     /**

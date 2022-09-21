@@ -51,10 +51,8 @@ public class ContestEventController {
         return new MyResp(CodeCons.ERROR, "查询失败");
     }
 
-
-
     @PostMapping("/getList")
-    @CommonSecure
+    @CommonSecure(needLogin = false)
     public MyResp getList(@RequestBody ContestEventReq req){
         logger.info("contestEvent-getList-req={}", req);
         try{

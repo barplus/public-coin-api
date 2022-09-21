@@ -20,5 +20,7 @@ public class ContestConfigReq extends CommonReq implements Serializable {
     private String sponsorshipLogoLink;
     /**品牌介绍*/
     private String brandExplain;
+    /**分享链接*/
+    private String shareLink;
 
 }
