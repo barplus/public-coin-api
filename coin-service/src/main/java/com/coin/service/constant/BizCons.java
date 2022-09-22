@@ -7,7 +7,7 @@ public class BizCons {
     public static final String SYS_OFFICE = "sys_office";
     public static final String SYS_API = "sys_api";
     /**频繁请求间隔毫秒-短*/
-    public static final long SYS_REQ_INTERVAL_S = 200l;
+    public static final long SYS_REQ_INTERVAL_S = 100l;
     /**频繁请求间隔毫秒-中*/
     public static final long SYS_REQ_INTERVAL_M = 900l;
     /**频繁请求间隔毫秒-长*/

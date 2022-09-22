@@ -73,7 +73,7 @@ public class ContestController {
             MyResp valid1 = ParamUtil.NotBlankValid(req.getId(), "id", req.getContestType(), "比赛类型", req.getContestName(), "联赛名称",
                     req.getIsHot(), "是否热门", req.getIsRecommend(), "是否推单", req.getTeamFirst(), "主队名称", req.getTeamSecond(), "客户名称",
                     req.getTeamFirstPic(), "主队Logo", req.getTeamSecondPic(), "客队Logo", req.getContestDate(), "开赛时间",
-                    req.getShowDateStart(), "开始展示时间", req.getShowDateEnd(), "结束展示时间");
+                    req.getShowDateStart(), "开始展示时间", req.getShowDateEnd(), "结束展示时间", req.getIsPublish(), "是否发布");
             if(valid1 != null){
                 return valid1;
             }
@@ -174,6 +174,25 @@ public class ContestController {
         return new MyResp(CodeCons.ERROR, "查询失败");
     }
 
+    @PostMapping("/getResultByType")
+    @CommonSecure(needLogin = false, fastQuery = true)
+    public MyResp getResultByType(@RequestBody ContestReq req){
+        logger.info("contest-getResultByType-req={}", req);
+        try{
+            req.setQueryResult(true);
+            req.setIsHot(1);
+            req.setNeedDetail(2);
+            List<ContestRsp> list = contestService.getListByType(req);
+            return new MyResp(CodeCons.SUCCESS, "", list);
+        }catch(BizException e){
+            logger.error("contest-getResultByType-error", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("contest-getResultByType-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "查询失败");
+    }
+
     @PostMapping("/getById")
     @CommonSecure(needLogin = false, fastQuery = true)
     public MyResp getById(@RequestBody ContestReq req){
@@ -210,6 +229,29 @@ public class ContestController {
             return new MyResp(e.getCode(), e.getErrMsg());
         }catch(Exception e){
             logger.error("contest-pageList-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "查询失败");
+    }
+
+    @PostMapping("/pageResultList")
+    @OfficeSecure
+    public MyResp pageResultList(@RequestBody ContestReq req){
+        logger.info("contest-pageResultList-req={}", req);
+        try{
+            MyResp valid = ParamUtil.NotBlankValid(req.getPageNum(), "pageNum", req.getPageSize(), "pageSize");
+            if(valid != null){
+                return valid;
+            }
+            req.setQueryResult(true);
+            req.setIsHot(1);
+            req.setNeedDetail(2);
+            PageInfo<TContest> page = contestService.pageList(req);
+            return new MyResp(CodeCons.SUCCESS, "", page);
+        }catch(BizException e){
+            logger.error("contest-pageResultList-error", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("contest-pageResultList-error", e);
         }
         return new MyResp(CodeCons.ERROR, "查询失败");
     }

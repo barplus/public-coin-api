@@ -194,10 +194,10 @@ public class ContestServiceImpl implements ContestService {
     @Override
     public List<ContestRsp> getListByType(ContestReq req) throws Exception {
         Date now = new Date();
-        boolean queryResult = req.getNeedDetail() != null && req.getNeedDetail().intValue() == 2;
+        boolean queryResult = req.getQueryResult() == null?false:req.getQueryResult();
         TContestExample example = new TContestExample();
         TContestExample.Criteria criteria = example.createCriteria();
-        if(!queryResult && StringUtils.isNotBlank(req.getContestType())){
+        if(StringUtils.isNotBlank(req.getContestType())){
             criteria.andContestTypeEqualTo(req.getContestType());
         }
         if(StringUtils.isNotBlank(req.getContestName())){
@@ -206,8 +206,10 @@ public class ContestServiceImpl implements ContestService {
         criteria.andStatusEqualTo(1);
         criteria.andIsPublishEqualTo(1);
         criteria.andPublishDateLessThanOrEqualTo(now);
-        criteria.andShowDateStartLessThanOrEqualTo(now);
-        criteria.andShowDateEndGreaterThanOrEqualTo(now);
+        if(!queryResult){
+            criteria.andShowDateStartLessThanOrEqualTo(now);
+            criteria.andShowDateEndGreaterThanOrEqualTo(now);
+        }
         if(req.getIsHot() != null){
             criteria.andIsHotEqualTo(req.getIsHot());
         }

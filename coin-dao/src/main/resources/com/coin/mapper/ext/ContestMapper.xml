@@ -30,13 +30,13 @@
     select *
     from t_contest t
     where 1=1
-    <if test="contestType != null">
+    <if test="contestType != null and contestType !=''">
       and t.contest_type = #{contestType}
     </if>
-    <if test="contestName != null">
+    <if test="contestName != null and contestName !=''">
       and t.contest_name = #{contestName}
     </if>
-    <if test="contestContent != null">
+    <if test="contestContent != null and contestContent !=''">
       and (
         t.team_first like concat('%',#{contestContent},'%')
         or t.team_second like concat('%',#{contestContent},'%')
@@ -48,7 +48,7 @@
     <if test="createDateMax != null">
       and t.create_date &lt;= #{createDateMax}
     </if>
-    <if test="updateUser != null">
+    <if test="updateUser != null and updateUser !=''">
       and t.update_user = #{updateUser}
     </if>
     <if test="isHot != null">
@@ -59,6 +59,10 @@
     </if>
     <if test="status != null">
       and t.status = #{status}
+    </if>
+    <if test="queryResult == null">
+      and t.show_date_start &lt;= now()
+      and t.show_date_end &gt;= now()
     </if>
     order by sort_num
   </select>

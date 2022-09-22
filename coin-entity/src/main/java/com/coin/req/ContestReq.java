@@ -27,6 +27,7 @@ public class ContestReq extends CommonReq implements Serializable {
     private Integer isHot;
     private Integer isRecommend;
     private Integer isPublish;
+    private Boolean queryResult;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date contestDate;

@@ -32,7 +32,7 @@ public class DictController {
     private DictService dictService;
 
     @PostMapping("/getDicts")
-    @OfficeSecure
+    @OfficeSecure(fastQuery = true)
     public MyResp pageList(@RequestBody DictReq req){
         logger.info("dict-getDicts-req={}", req);
         try{
