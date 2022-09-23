@@ -55,7 +55,7 @@ public class ContestEventServiceImpl implements ContestEventService {
         }
         if(req.getShowDate() != null){
             criteria.andShowDateStartLessThanOrEqualTo(req.getShowDate());
-            criteria.andShowDateEndLessThanOrEqualTo(req.getShowDate());
+            criteria.andShowDateEndGreaterThanOrEqualTo(req.getShowDate());
         }
         if(req.getIsPublish() != null){
             criteria.andIsPublishEqualTo(req.getIsPublish());
