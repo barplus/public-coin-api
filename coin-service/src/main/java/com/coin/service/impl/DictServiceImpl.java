@@ -162,6 +162,9 @@ public class DictServiceImpl implements DictService {
         if("CONTEST_TAG".equals(dict.getDictType())){
             tDictMapper.deleteByPrimaryKey(id);
         }
+        if("CONTEST_NAME".equals(dict.getDictType())){
+            tDictMapper.deleteByPrimaryKey(id);
+        }
     }
 
     @Override

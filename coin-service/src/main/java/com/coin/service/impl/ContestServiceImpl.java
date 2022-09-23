@@ -13,6 +13,7 @@ import com.coin.service.ContestDetailService;
 import com.coin.service.ContestService;
 import com.coin.service.DictService;
 import com.coin.service.util.BizUtil;
+import com.coin.service.util.PageUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -182,6 +183,18 @@ public class ContestServiceImpl implements ContestService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
+    public void delResultBatch(ContestReq req) throws Exception {
+        List<Integer> idList = BizUtil.strToListInt(req.getIds(), ",");
+        TContest contest = BizUtil.getUpdateInfo(new TContest(), -1, req.getLoginName(), new Date());
+        for(Integer id:idList){
+            contest.setId(id);
+            contest.setIsHot(0);
+            tContestMapper.updateByPrimaryKeySelective(contest);
+        }
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
     public void delete(ContestReq req) throws Exception {
         List<Integer> idList = new ArrayList<>();
         if(req.getId() != null){
@@ -242,9 +255,9 @@ public class ContestServiceImpl implements ContestService {
     public PageInfo<ContestRsp> pageList(ContestReq req) throws Exception {
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
         List<TContest> contests = contestMapper.getList(req);
-        List<ContestRsp> result = contests.stream().map(contest->this.convertRsp(contest, 1)).collect(Collectors.toList());
-        PageInfo<ContestRsp> page = new PageInfo<>(result);
-        return page;
+        PageInfo<TContest> page = new PageInfo<>(contests);
+        List<ContestRsp> rspList = contests.stream().map(contest->this.convertRsp(contest, 1)).collect(Collectors.toList());
+        return PageUtil.pageInfo2PageRsp(page, rspList);
     }
 
     private ContestRsp convertRsp(TContest contest, Integer needDetail) {
@@ -256,6 +269,7 @@ public class ContestServiceImpl implements ContestService {
                 rsp.setContestDetail(detail);
                 TDict dict = dictService.getByTypeAndCode("CONTEST_NAME", rsp.getContestName());
                 rsp.setContestNameStr(dict.getDictName());
+                rsp.setContestNameColor(dict.getDictVal());
             }catch(Exception e){
                 logger.error("ContestRsp-convertRsp-error", e);
             }

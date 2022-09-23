@@ -17,6 +17,8 @@ public interface ContestService {
 
     void updateResult(ContestReq req) throws Exception;
 
+    void delResultBatch(ContestReq req) throws Exception;
+
     void delete(ContestReq req) throws Exception;
 
     List<ContestRsp> getListByType(ContestReq req) throws Exception;

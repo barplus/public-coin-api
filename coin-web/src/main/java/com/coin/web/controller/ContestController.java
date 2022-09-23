@@ -1,6 +1,5 @@
 package com.coin.web.controller;
 
-import com.coin.entity.TContest;
 import com.coin.req.ContestReq;
 import com.coin.rsp.ContestRsp;
 import com.coin.service.BizEntity.MyResp;
@@ -115,6 +114,26 @@ public class ContestController {
             return new MyResp(e.getCode(), e.getErrMsg());
         }catch(Exception e){
             logger.error("contest-updateResult-error", e);
+        }
+        return new MyResp(CodeCons.ERROR, "保存失败");
+    }
+
+    @PostMapping("/delResultBatch")
+    @OfficeSecure
+    public MyResp delResultBatch(@RequestBody ContestReq req){
+        logger.info("contest-delResultBatch-req={}", req);
+        try{
+            MyResp valid = ParamUtil.NotBlankValid(req.getIds(), "ids");
+            if(valid != null){
+                return valid;
+            }
+            contestService.delResultBatch(req);
+            return new MyResp(CodeCons.SUCCESS, "保存成功");
+        }catch(BizException e){
+            logger.error("contest-delResultBatch-error", e);
+            return new MyResp(e.getCode(), e.getErrMsg());
+        }catch(Exception e){
+            logger.error("contest-delResultBatch-error", e);
         }
         return new MyResp(CodeCons.ERROR, "保存失败");
     }
