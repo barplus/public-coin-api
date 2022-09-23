@@ -95,6 +95,8 @@ public class DictServiceImpl implements DictService {
         rsp.setBrandExplain(dict.getDictValBig());
         dict = this.getByTypeAndCode("CONTEST_CONFIG", "SHARE_LINK");
         rsp.setShareLink(dict.getDictVal());
+        dict = this.getByTypeAndCode("CONTEST_CONFIG", "REGISTER_LINK");
+        rsp.setRegisterLink(dict.getDictVal());
         List<TContestSponsorshipLogo> list = contestSponsorshipLogoService.getAllList();
         rsp.setContestSponsorshipLogos(list);
         return rsp;
@@ -161,32 +163,33 @@ public class DictServiceImpl implements DictService {
         TDict dict = tDictMapper.selectByPrimaryKey(id);
         if("CONTEST_TAG".equals(dict.getDictType())){
             tDictMapper.deleteByPrimaryKey(id);
-        }
-        if("CONTEST_NAME".equals(dict.getDictType())){
+        } if("CONTEST_NAME".equals(dict.getDictType())){
             tDictMapper.deleteByPrimaryKey(id);
+        } else {
+            throw new BizException(CodeCons.ERROR, "不允许删除的字典");
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveContestConfig(ContestConfigReq req) throws Exception{
         Date now = new Date();
-        TDict dict = this.getByTypeAndCode("CONTEST_CONFIG", "TOP_LOGO_LINK");
-        TDict updateDict = BizUtil.getUpdateInfo(new TDict(), dict.getId(), req.getLoginName(), now);
-        updateDict.setDictVal(req.getTopLogoLink());
-        tDictMapper.updateByPrimaryKeySelective(updateDict);
-        dict = this.getByTypeAndCode("CONTEST_CONFIG", "SPONSORSHIP_LOGO_LINK");
-        updateDict = BizUtil.getUpdateInfo(new TDict(), dict.getId(), req.getLoginName(), now);
-        updateDict.setDictVal(req.getSponsorshipLogoLink());
-        tDictMapper.updateByPrimaryKeySelective(updateDict);
-        dict = this.getByTypeAndCode("CONTEST_CONFIG", "BRAND_EXPLAIN");
-        updateDict = BizUtil.getUpdateInfo(new TDict(), dict.getId(), req.getLoginName(), now);
-        updateDict.setDictValBig(req.getBrandExplain());
-        tDictMapper.updateByPrimaryKeySelective(updateDict);
-        dict = this.getByTypeAndCode("CONTEST_CONFIG", "SHARE_LINK");
-        updateDict = BizUtil.getUpdateInfo(new TDict(), dict.getId(), req.getLoginName(), now);
-        updateDict.setDictVal(req.getShareLink());
-        tDictMapper.updateByPrimaryKeySelective(updateDict);
+        this.updateDict("TOP_LOGO_LINK", req.getLoginName(), now, req.getTopLogoLink(), false);
+        this.updateDict("SPONSORSHIP_LOGO_LINK", req.getLoginName(), now, req.getSponsorshipLogoLink(), false);
+        this.updateDict("BRAND_EXPLAIN", req.getLoginName(), now, req.getBrandExplain(), true);
+        this.updateDict("REGISTER_LINK", req.getLoginName(), now, req.getRegisterLink(), false);
+        this.updateDict("SHARE_LINK", req.getLoginName(), now, req.getShareLink(), false);
+    }
 
+    private void updateDict(String dictCode, String updateUser, Date now, String val, boolean isBigVal) throws Exception {
+        TDict dict = this.getByTypeAndCode("CONTEST_CONFIG", dictCode);
+        TDict updateDict = BizUtil.getUpdateInfo(new TDict(), dict.getId(), updateUser, now);
+        if(isBigVal){
+            updateDict.setDictValBig(val);
+        } else {
+            updateDict.setDictVal(val);
+        }
+        tDictMapper.updateByPrimaryKeySelective(updateDict);
     }
 
     /**

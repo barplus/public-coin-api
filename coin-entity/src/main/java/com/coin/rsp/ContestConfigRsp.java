@@ -17,6 +17,8 @@ public class ContestConfigRsp implements Serializable {
     private String sponsorshipLogoLink;
     /**品牌介绍*/
     private String brandExplain;
+    /**注册链接*/
+    private String registerLink;
     /**分享链接*/
     private String shareLink;
     /**赞助配置列表*/

@@ -239,6 +239,10 @@ public class ContestServiceImpl implements ContestService {
         if(req.getIsHot() != null){
             criteria.andIsHotEqualTo(req.getIsHot());
         }
+        if(queryResult){
+            criteria.andTeamFirstScoreGreaterThan(-1);
+            criteria.andTeamSecondScoreGreaterThan(-1);
+        }
         example.setOrderByClause(" is_recommend desc, sort_num");
         List<TContest> list = tContestMapper.selectByExample(example);
         List<ContestRsp> result = list.stream().map(contest->this.convertRsp(contest, req.getNeedDetail())).collect(Collectors.toList());
