@@ -222,7 +222,7 @@ public class ContestController {
             if(valid != null){
                 return valid;
             }
-            PageInfo<TContest> page = contestService.pageList(req);
+            PageInfo<ContestRsp> page = contestService.pageList(req);
             return new MyResp(CodeCons.SUCCESS, "", page);
         }catch(BizException e){
             logger.error("contest-pageList-error", e);
@@ -245,7 +245,7 @@ public class ContestController {
             req.setQueryResult(true);
             req.setIsHot(1);
             req.setNeedDetail(2);
-            PageInfo<TContest> page = contestService.pageList(req);
+            PageInfo<ContestRsp> page = contestService.pageList(req);
             return new MyResp(CodeCons.SUCCESS, "", page);
         }catch(BizException e){
             logger.error("contest-pageResultList-error", e);

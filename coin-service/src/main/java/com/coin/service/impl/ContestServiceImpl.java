@@ -47,7 +47,8 @@ public class ContestServiceImpl implements ContestService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void addContest(ContestReq req) throws Exception {
-        TContest contest = BizUtil.getInsertInfo(new TContest(), req.getLoginName(), new Date());
+        Date now = new Date();
+        TContest contest = BizUtil.getInsertInfo(new TContest(), req.getLoginName(), now);
         contest.setContestType(req.getContestType());
         contest.setContestName(req.getContestName());
         contest.setIsHot(req.getIsHot());
@@ -58,6 +59,9 @@ public class ContestServiceImpl implements ContestService {
         contest.setTeamSecondPic(req.getTeamSecondPic());
         contest.setContestDate(req.getContestDate());
         contest.setIsPublish(req.getIsPublish());
+        if(req.getIsPublish() != null && req.getIsPublish().intValue() == 1){
+            contest.setPublishDate(now);
+        }
         contest.setShowDateStart(req.getShowDateStart());
         contest.setShowDateEnd(req.getShowDateEnd());
         tContestMapper.insertSelective(contest);
@@ -89,7 +93,9 @@ public class ContestServiceImpl implements ContestService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void update(ContestReq req) throws Exception {
-        TContest contest = BizUtil.getUpdateInfo(new TContest(), req.getId(), req.getLoginName(), new Date());
+        TContest oldContest = tContestMapper.selectByPrimaryKey(req.getId());
+        Date now = new Date();
+        TContest contest = BizUtil.getUpdateInfo(new TContest(), req.getId(), req.getLoginName(), now);
         contest.setContestType(req.getContestType());
         contest.setContestName(req.getContestName());
         contest.setIsHot(req.getIsHot());
@@ -100,6 +106,9 @@ public class ContestServiceImpl implements ContestService {
         contest.setTeamSecondPic(req.getTeamSecondPic());
         contest.setContestDate(req.getContestDate());
         contest.setIsPublish(req.getIsPublish());
+        if(req.getIsPublish() != null && req.getIsPublish().intValue() == 1 && oldContest.getPublishDate() == null){
+            contest.setPublishDate(now);
+        }
         contest.setShowDateStart(req.getShowDateStart());
         contest.setShowDateEnd(req.getShowDateEnd());
         tContestMapper.updateByPrimaryKeySelective(contest);
@@ -230,10 +239,11 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public PageInfo<TContest> pageList(ContestReq req) throws Exception {
+    public PageInfo<ContestRsp> pageList(ContestReq req) throws Exception {
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
         List<TContest> contests = contestMapper.getList(req);
-        PageInfo<TContest> page = new PageInfo<>(contests);
+        List<ContestRsp> result = contests.stream().map(contest->this.convertRsp(contest, 1)).collect(Collectors.toList());
+        PageInfo<ContestRsp> page = new PageInfo<>(result);
         return page;
     }
 

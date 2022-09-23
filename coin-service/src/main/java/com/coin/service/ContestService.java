@@ -23,6 +23,6 @@ public interface ContestService {
 
     ContestRsp getById(Integer id) throws Exception;
 
-    PageInfo<TContest> pageList(ContestReq req) throws Exception;
+    PageInfo<ContestRsp> pageList(ContestReq req) throws Exception;
 
 }

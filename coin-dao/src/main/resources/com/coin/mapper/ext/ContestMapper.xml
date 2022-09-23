@@ -60,10 +60,6 @@
     <if test="status != null">
       and t.status = #{status}
     </if>
-    <if test="queryResult == null">
-      and t.show_date_start &lt;= now()
-      and t.show_date_end &gt;= now()
-    </if>
     order by sort_num
   </select>
 </mapper>
