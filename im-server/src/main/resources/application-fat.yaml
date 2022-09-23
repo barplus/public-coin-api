@@ -12,7 +12,7 @@ spring:
       max-request-size: 20MB
   redis:
     database: 0
-    host: 154.19.200.244
+    host: 127.0.0.1
     port: 6379
     password: redisPlus
     timeout: 1000

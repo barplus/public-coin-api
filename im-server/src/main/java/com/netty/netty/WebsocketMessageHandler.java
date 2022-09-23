@@ -1,6 +1,6 @@
 package com.netty.netty;
 
-import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.netty.message.NettyMsg;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler.Sharable;
@@ -12,7 +12,10 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 //TextWebSocketFrame是netty用于处理websocket发来的文本对象
 @Sharable
@@ -25,10 +28,13 @@ public class WebsocketMessageHandler extends SimpleChannelInboundHandler<TextWeb
     public static ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
     //在线人数
     public static int online;
+    @Resource
+    RedisTemplate redisTemplate;
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws Exception {
-        NettyMsg message = new NettyMsg("0001", "1", "我收到了你的消息："+msg.text(), ""+ctx.channel().id(), ""+ctx.channel().id());
+        NettyMsg message = JSONObject.parseObject(msg.text(), NettyMsg.class);
+        message.setMsgCode("0001");
         this.sendAllMessages(ctx, message);
         //        ctx.channel().writeAndFlush(new TextWebSocketFrame("我收到了你的消息：" + msg.text() + "" + System.currentTimeMillis()));
 //        if (msg instanceof TextWebSocketFrame) {
@@ -76,7 +82,7 @@ public class WebsocketMessageHandler extends SimpleChannelInboundHandler<TextWeb
      * @param msg
      */
     private void sendMessage(ChannelHandlerContext ctx, NettyMsg msg) {
-        ctx.channel().writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(msg)));
+        ctx.channel().writeAndFlush(new TextWebSocketFrame(msg.getMsgTxt()));
     }
 
     /**
@@ -87,8 +93,15 @@ public class WebsocketMessageHandler extends SimpleChannelInboundHandler<TextWeb
     private void sendAllMessages(ChannelHandlerContext ctx,NettyMsg msg) {
         for(Channel channel:channelGroup){
 //            if(!channel.id().asLongText().equals(ctx.channel().id().asLongText())){
-                channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(msg)));
+                channel.writeAndFlush(new TextWebSocketFrame(msg.getMsgTxt()));
 //            }
+        }
+    }
+
+    private void saveChannelInfoToRedis(String channelId, String token){
+        Object info = redisTemplate.opsForValue().get(token);
+        if(info == null){
+            redisTemplate.opsForValue().set(token, channelId);
         }
     }
 

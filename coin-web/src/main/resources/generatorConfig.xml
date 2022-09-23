@@ -36,7 +36,31 @@
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.coin.mapper"
                              targetProject="coin-dao\src\main\java"/>
         <!--生成全部表tableName设为%-->
+        <!--<table tableName="t_agent_event_config">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <!--<table tableName="t_agent_page_config">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
         <!--<table tableName="t_cust_prize">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <!--<table tableName="t_contest">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <!--<table tableName="t_contest_notice">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <!--<table tableName="t_contest_information">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <!--<table tableName="t_contest_event">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <table tableName="t_contest">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <!--<table tableName="t_contest_detail">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
         <!--<table tableName="t_customer">
@@ -48,10 +72,22 @@
         <!--<table tableName="t_prize">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
-        <table tableName="t_sys_log">
+        <!--<table tableName="t_sys_log">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+        </table>-->
         <!--<table tableName="t_sys_user">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <!--<table tableName="t_sys_role">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <!--<table tableName="t_sys_resource">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <!--<table tableName="t_sys_role_resource">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <!--<table tableName="t_sys_domain">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
     </context>

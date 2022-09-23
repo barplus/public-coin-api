@@ -7,20 +7,25 @@ public class NettyMsg implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String msgCode;
+    /**1-建立连接发送消息 2-普通文本消息 3-普通图片路径*/
     private String msgType;
     private String msgTxt;
-    private String msgFrom;
-    private String msgTo;
+    private String fromToken;
+    private String fromChannelId;
+    private String toToken;
+    private String toChannelId;
     private Long sendDate;
 
     public NettyMsg(){}
 
-    public NettyMsg(String msgCode, String msgType, String msgTxt, String msgFrom, String msgTo){
+    public NettyMsg(String msgCode, String msgType, String msgTxt, String fromToken, String fromChannelId, String toToken, String toChannelId){
         this.msgCode = msgCode;
         this.msgType = msgType;
         this.msgTxt = msgTxt;
-        this.msgFrom = msgFrom;
-        this.msgTo = msgTo;
+        this.fromToken = fromToken;
+        this.fromChannelId = fromChannelId;
+        this.toToken = toToken;
+        this.toChannelId = toChannelId;
         this.sendDate = System.currentTimeMillis();
     }
 
@@ -48,20 +53,36 @@ public class NettyMsg implements Serializable {
         this.msgTxt = msgTxt;
     }
 
-    public String getMsgFrom() {
-        return msgFrom;
+    public String getFromToken() {
+        return fromToken;
     }
 
-    public void setMsgFrom(String msgFrom) {
-        this.msgFrom = msgFrom;
+    public void setFromToken(String fromToken) {
+        this.fromToken = fromToken;
     }
 
-    public String getMsgTo() {
-        return msgTo;
+    public String getFromChannelId() {
+        return fromChannelId;
     }
 
-    public void setMsgTo(String msgTo) {
-        this.msgTo = msgTo;
+    public void setFromChannelId(String fromChannelId) {
+        this.fromChannelId = fromChannelId;
+    }
+
+    public String getToToken() {
+        return toToken;
+    }
+
+    public void setToToken(String toToken) {
+        this.toToken = toToken;
+    }
+
+    public String getToChannelId() {
+        return toChannelId;
+    }
+
+    public void setToChannelId(String toChannelId) {
+        this.toChannelId = toChannelId;
     }
 
     public Long getSendDate() {
