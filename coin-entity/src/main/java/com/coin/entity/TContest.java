@@ -40,6 +40,8 @@ public class TContest implements Serializable {
 
     private Integer sortNum;
 
+    private Integer isDelete;
+
     private String createUser;
 
     private Date createDate;
@@ -194,6 +196,14 @@ public class TContest implements Serializable {
         this.sortNum = sortNum;
     }
 
+    public Integer getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
+    }
+
     public String getCreateUser() {
         return createUser;
     }
@@ -250,6 +260,7 @@ public class TContest implements Serializable {
         sb.append(", showDateEnd=").append(showDateEnd);
         sb.append(", status=").append(status);
         sb.append(", sortNum=").append(sortNum);
+        sb.append(", isDelete=").append(isDelete);
         sb.append(", createUser=").append(createUser);
         sb.append(", createDate=").append(createDate);
         sb.append(", updateUser=").append(updateUser);

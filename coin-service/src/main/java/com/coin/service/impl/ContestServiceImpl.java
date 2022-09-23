@@ -204,12 +204,15 @@ public class ContestServiceImpl implements ContestService {
             List<Integer> list = BizUtil.strToListInt(req.getIds(), ",");
             idList.addAll(list);
         }
+        TContest contest = BizUtil.getUpdateInfo(new TContest(), -1, req.getLoginName(), new Date());
         for(Integer id:idList){
-            TContestDetail detail = contestDetailService.getByPid(id);
-            if(detail != null){
-                tContestDetailMapper.deleteByPrimaryKey(detail.getId());
-            }
-            tContestMapper.deleteByPrimaryKey(id);
+//            TContestDetail detail = contestDetailService.getByPid(id);
+//            if(detail != null){
+//                tContestDetailMapper.deleteByPrimaryKey(detail.getId());
+//            }
+            contest.setId(id);
+            contest.setIsDelete(1);
+            tContestMapper.updateByPrimaryKeySelective(contest);
         }
     }
 
@@ -219,6 +222,7 @@ public class ContestServiceImpl implements ContestService {
         boolean queryResult = req.getQueryResult() == null?false:req.getQueryResult();
         TContestExample example = new TContestExample();
         TContestExample.Criteria criteria = example.createCriteria();
+        criteria.andIsDeleteEqualTo(0);
         if(StringUtils.isNotBlank(req.getContestType())){
             criteria.andContestTypeEqualTo(req.getContestType());
         }

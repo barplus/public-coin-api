@@ -20,6 +20,7 @@
     <result column="show_date_end" jdbcType="TIMESTAMP" property="showDateEnd" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="sort_num" jdbcType="INTEGER" property="sortNum" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
@@ -86,8 +87,8 @@
   <sql id="Base_Column_List">
     id, contest_type, contest_name, contest_date, team_first, team_first_pic, team_second, 
     team_second_pic, is_hot, is_recommend, team_first_score, team_second_score, is_publish, 
-    publish_date, show_date_start, show_date_end, status, sort_num, create_user, create_date, 
-    update_user, update_date
+    publish_date, show_date_start, show_date_end, status, sort_num, is_delete, create_user, 
+    create_date, update_user, update_date
   </sql>
   <select id="selectByExample" parameterType="com.coin.entity.TContestExample" resultMap="BaseResultMap">
     select
@@ -128,17 +129,17 @@
       team_second_pic, is_hot, is_recommend, 
       team_first_score, team_second_score, is_publish, 
       publish_date, show_date_start, show_date_end, 
-      status, sort_num, create_user, 
-      create_date, update_user, update_date
-      )
+      status, sort_num, is_delete, 
+      create_user, create_date, update_user, 
+      update_date)
     values (#{contestType,jdbcType=VARCHAR}, #{contestName,jdbcType=VARCHAR}, #{contestDate,jdbcType=TIMESTAMP}, 
       #{teamFirst,jdbcType=VARCHAR}, #{teamFirstPic,jdbcType=VARCHAR}, #{teamSecond,jdbcType=VARCHAR}, 
       #{teamSecondPic,jdbcType=VARCHAR}, #{isHot,jdbcType=INTEGER}, #{isRecommend,jdbcType=INTEGER}, 
       #{teamFirstScore,jdbcType=INTEGER}, #{teamSecondScore,jdbcType=INTEGER}, #{isPublish,jdbcType=INTEGER}, 
       #{publishDate,jdbcType=TIMESTAMP}, #{showDateStart,jdbcType=TIMESTAMP}, #{showDateEnd,jdbcType=TIMESTAMP}, 
-      #{status,jdbcType=INTEGER}, #{sortNum,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}
-      )
+      #{status,jdbcType=INTEGER}, #{sortNum,jdbcType=INTEGER}, #{isDelete,jdbcType=INTEGER}, 
+      #{createUser,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateDate,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.coin.entity.TContest">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -196,6 +197,9 @@
       </if>
       <if test="sortNum != null">
         sort_num,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
       </if>
       <if test="createUser != null">
         create_user,
@@ -261,6 +265,9 @@
       </if>
       <if test="sortNum != null">
         #{sortNum,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
       </if>
       <if test="createUser != null">
         #{createUser,jdbcType=VARCHAR},
@@ -339,6 +346,9 @@
       <if test="row.sortNum != null">
         sort_num = #{row.sortNum,jdbcType=INTEGER},
       </if>
+      <if test="row.isDelete != null">
+        is_delete = #{row.isDelete,jdbcType=INTEGER},
+      </if>
       <if test="row.createUser != null">
         create_user = #{row.createUser,jdbcType=VARCHAR},
       </if>
@@ -376,6 +386,7 @@
       show_date_end = #{row.showDateEnd,jdbcType=TIMESTAMP},
       status = #{row.status,jdbcType=INTEGER},
       sort_num = #{row.sortNum,jdbcType=INTEGER},
+      is_delete = #{row.isDelete,jdbcType=INTEGER},
       create_user = #{row.createUser,jdbcType=VARCHAR},
       create_date = #{row.createDate,jdbcType=TIMESTAMP},
       update_user = #{row.updateUser,jdbcType=VARCHAR},
@@ -438,6 +449,9 @@
       <if test="sortNum != null">
         sort_num = #{sortNum,jdbcType=INTEGER},
       </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
       <if test="createUser != null">
         create_user = #{createUser,jdbcType=VARCHAR},
       </if>
@@ -472,6 +486,7 @@
       show_date_end = #{showDateEnd,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=INTEGER},
       sort_num = #{sortNum,jdbcType=INTEGER},
+      is_delete = #{isDelete,jdbcType=INTEGER},
       create_user = #{createUser,jdbcType=VARCHAR},
       create_date = #{createDate,jdbcType=TIMESTAMP},
       update_user = #{updateUser,jdbcType=VARCHAR},
